@@ -1,0 +1,115 @@
+🛠️ Replit Instructions: Graffiti Reporting Tool (Web-Based, Mobile-Friendly)
+We need two separate web-based tools:
+
+🔹 App 1: Public Reporting Form for Users
+Goal:
+Build a simple mobile-optimized web page that users can open via a QR code, and use to report graffiti or vandalism from their current location.
+
+✅ Features:
+Image Upload:
+
+Allow the user to upload or take one or more photos using their phone’s camera.
+
+Accept image files (jpg/png).
+
+Location Detection and Map Preview:
+
+Detect the user's current location using browser geolocation.
+
+Show the user’s location on an interactive map (using Leaflet or Google Maps).
+
+Save coordinates (latitude and longitude).
+
+District/Neighborhood Selection:
+
+Dropdown menu with predefined list of city districts or neighborhoods.
+
+Free Text Description:
+
+A text area where users can describe the case in more detail (e.g., “On the side of the electrical box near the park”).
+
+Optional Contact Information:
+
+Optional input field for phone number or email.
+
+Contact info will not be required and the report can remain anonymous.
+
+Used only for sending status updates if the city takes action on the reported case.
+
+Submit Button:
+
+Sends all form data (images, location, district, description, optional contact info, timestamp) to a backend system.
+
+In the prototype, data can be sent to a webhook.site link or to Firebase/Google Sheets.
+
+Thank You Message After Submission:
+
+Example: “Thank you for your report! It helps us keep the city clean.”
+
+🔧 Technical Notes:
+Use Replit with HTML / CSS / JS project.
+
+Must be mobile-friendly/responsive.
+
+No login or authentication required.
+
+Ready to be linked via a QR code.
+
+First, test with webhook.site, and later connect to a proper backend (e.g., Firebase or Google Sheets).
+
+🔹 App 2: Private Admin Dashboard for Internal Use
+Goal:
+Create a private dashboard to view and manage all reported cases. This tool is not public and is for internal/city/commercial use only.
+
+✅ Features:
+Map View:
+
+Show all reported graffiti cases on a map (Leaflet or Google Maps).
+
+Each marker shows:
+
+Submitted photo(s)
+
+Timestamp
+
+Description
+
+Selected district
+
+Contact info (if given)
+
+Table/List View:
+
+Show all reports in a scrollable list or table format.
+
+Include sorting/filtering by time, district, or status.
+
+Report Status Tracking (Basic):
+
+Allow manually updating the status of each report, e.g., "New", "In Progress", "Cleaned".
+
+Data Source:
+
+Pull data from the same backend used by the public form (e.g., Firebase, Google Sheets, etc.).
+
+🧩 Future Add-ons (not needed now):
+Contractor bidding tool
+
+Graffiti reappearance tracking (same location reporting)
+
+Cleaning budget planning tools
+
+Status update emails/SMS to reporters
+
+Public API for cleaning partners
+
+✨ Primary Goals for Now:
+Public reporting form must be very simple and fast to use on mobile
+
+No installation or login required
+
+Works via QR code link
+
+Saves all needed data for internal processing
+
+Admin tool shows reports on a map and list for internal use
