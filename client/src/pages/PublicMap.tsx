@@ -215,7 +215,7 @@ export default function PublicMap() {
               Käyttämällä tätä palvelua hyväksyt, että ilmoittamasi tiedot ja lähettämäsi kuvat käsitellään palvelun tarjoajan toimesta viihtyisyyden parantamiseksi ja töhryjen poistamisen edistämiseksi. Kaikki ilmoitukset tarkistetaan ja asiattomat ilmoitukset poistetaan ilman ennakkoilmoitusta. Palvelu ei takaa välitöntä toimenpiteiden aloittamista.
             </p>
             <p>
-              © 2025 Töhryvahti. Kaikki oikeudet pidätetään. Palvelun käyttö tapahtuu omalla vastuulla.
+              © 2025 Töhryvahti. Kaikki oikeudet pidätetään.
             </p>
           </div>
           
