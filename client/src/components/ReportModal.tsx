@@ -189,6 +189,7 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg">{t('contactInfo')}</CardTitle>
+                <p className="text-sm text-municipal-gray">{t('contactStatusUpdates')}</p>
               </CardHeader>
               <CardContent className="space-y-3">
                 {report.name || report.email ? (
