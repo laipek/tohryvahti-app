@@ -69,24 +69,20 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
-    background-image: url('/src/assets/kangasala-landscape.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
     min-height: 100vh;
     touch-action: manipulation;
     position: relative;
+    background: url('/src/assets/kangasala-landscape.png') center/cover no-repeat fixed;
   }
   
-  /* Ensure background is visible on mobile */
+  /* Ensure background is visible on all devices */
   @media (max-width: 768px) {
     body {
       background-attachment: scroll;
-      background-size: cover;
     }
   }
-
+  
+  /* Add overlay to make background more visible */
   body::before {
     content: '';
     position: fixed;
@@ -105,21 +101,7 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* Copyright notice */
-  .image-copyright {
-    position: fixed;
-    bottom: 10px;
-    right: 15px;
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-family: system-ui, -apple-system, sans-serif;
-    z-index: 1000;
-    pointer-events: none;
-    line-height: 1.2;
-  }
+
 
   /* Floating clean air particles */
   .clean-particle {

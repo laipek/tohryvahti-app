@@ -51,7 +51,7 @@ export default function PublicMap() {
     : 24.0658;
 
   return (
-    <div className="min-h-screen py-6 px-4">
+    <div className="min-h-screen py-6 px-4 pb-20">
       <div className="max-w-7xl mx-auto">
         <Card className="bg-white/85 backdrop-blur-md border-municipal-border/50 shadow-lg mb-6">
           <CardHeader>

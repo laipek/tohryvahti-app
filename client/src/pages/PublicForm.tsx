@@ -36,8 +36,8 @@ export default function PublicForm() {
           <ReportForm onSubmitSuccess={handleSubmitSuccess} />
         </div>
       </div>
-      {/* Add some bottom padding for mobile */}
-      <div className="h-8 sm:h-4"></div>
+      {/* Add bottom padding for footer */}
+      <div className="h-16"></div>
     </div>
   );
 }
