@@ -154,8 +154,9 @@ Copyright notice: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi" di
 ✓ Commercial independence: Clarified municipalities have no involvement in the service
 ✓ Copyright formatting: Moved "Kuva:" prefix to beginning of image attribution
 ✓ Report validation: Added disclaimer about report verification and inappropriate content removal
-✓ Header simplification: Updated to show only "Töhryvahti" with serif font styling
+✓ Header simplification: Updated to show only "Töhryvahti" with original font styling and larger size
 ✓ Form language update: Changed "Ilmoita graffitista" to "Ilmoita ilkivallasta" across all languages
+✓ Logo planning: Custom logo development deferred for future iteration
 ✓ System ready for beta testing deployment on Replit platform
 
 ### Scalability Considerations

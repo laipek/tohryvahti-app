@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/Logo";
+import { PaintbrushVertical } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'wouter';
 import PublicForm from "@/pages/PublicForm";
@@ -23,7 +23,7 @@ function Header() {
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
         <div className="flex justify-between items-center h-14 sm:h-16">
           <div className="flex items-center min-w-0 flex-shrink">
-            <Logo className="h-6 w-6 sm:h-8 sm:w-8 mr-2 sm:mr-3 flex-shrink-0" />
+            <PaintbrushVertical className="h-6 w-6 sm:h-8 sm:w-8 text-municipal-blue mr-2 sm:mr-3 flex-shrink-0" />
             <h1 className="text-xl sm:text-3xl font-bold text-gray-900 truncate">Töhryvahti</h1>
           </div>
           <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
