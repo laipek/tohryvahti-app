@@ -360,7 +360,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                   className="border-municipal-border flex-1"
-                  placeholder={t('name')}
+                  placeholder={`${t('name')} (${t('optional')})`}
                 />
               </div>
               <div className="flex items-center space-x-2">
@@ -370,12 +370,12 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                   value={formData.email}
                   onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                   className="border-municipal-border flex-1"
-                  placeholder={t('email')}
+                  placeholder={`${t('email')} (${t('optional')})`}
                 />
               </div>
             </div>
             <p className="text-xs text-municipal-gray mt-2">
-              {t('contactNote')}
+              {t('contactInfoHelp')}
             </p>
           </div>
 
