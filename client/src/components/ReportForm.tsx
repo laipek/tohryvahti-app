@@ -272,11 +272,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                 <button
                   type="button"
                   onClick={() => {
-                    const input = fileInputRef.current;
-                    if (input) {
-                      input.removeAttribute('capture');
-                      input.click();
-                    }
+                    setShowPrivacyDialog(true);
                   }}
                   className="flex-1 flex flex-col items-center cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors"
                 >
@@ -430,7 +426,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
           <p className="text-sm text-gray-600 leading-relaxed">
             {t('privacyPhotoText')}
           </p>
-          <DialogFooter>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
             <Button
               onClick={() => {
                 setShowPrivacyDialog(false);
@@ -442,7 +438,23 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
               }}
               className="w-full bg-municipal-blue hover:bg-blue-700"
             >
-              {t('understood')}
+              <Camera className="mr-2 h-4 w-4" />
+              {t('tapToTakePhoto')}
+            </Button>
+            <Button
+              onClick={() => {
+                setShowPrivacyDialog(false);
+                const input = fileInputRef.current;
+                if (input) {
+                  input.removeAttribute('capture');
+                  input.click();
+                }
+              }}
+              variant="outline"
+              className="w-full border-municipal-border"
+            >
+              <FileText className="mr-2 h-4 w-4" />
+              {t('orSelectFile')}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -10,7 +10,7 @@
   "tapToTakePhoto": "Tap to take photo",
   "orSelectFile": "or select file",
   "privacyNotice": "Privacy Notice",
-  "privacyPhotoText": "Please ensure no people are visible in the photo. This is important for compliance with data protection regulations.",
+  "privacyPhotoText": "Please ensure no people or personal data are visible in the photo. Reports containing images of people will be automatically rejected due to privacy regulations.",
   "understood": "Understood",
   "location": "Location",
   "getCurrentLocation": "Get current location",
