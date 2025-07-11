@@ -22,9 +22,12 @@ function Header() {
     <header className="bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
         <div className="flex justify-between items-center h-14 sm:h-16">
-          <div className="flex items-center min-w-0 flex-shrink">
-            <PaintbrushVertical className="h-6 w-6 sm:h-8 sm:w-8 text-municipal-blue mr-2 sm:mr-3 flex-shrink-0" />
-            <h1 className="text-xl sm:text-3xl font-bold text-gray-900 truncate">Töhryvahti</h1>
+          <div className="flex flex-col items-start min-w-0 flex-shrink">
+            <div className="flex items-center">
+              <PaintbrushVertical className="h-6 w-6 sm:h-8 sm:w-8 text-municipal-blue mr-2 sm:mr-3 flex-shrink-0" />
+              <h1 className="text-xl sm:text-3xl font-bold text-gray-900 truncate">Töhryvahti</h1>
+            </div>
+            <p className="text-xs sm:text-sm text-municipal-gray ml-8 sm:ml-11 -mt-1">Yhdessä siistimpi kaupunki</p>
           </div>
           <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
             <div className="flex bg-municipal-border/70 backdrop-blur-sm rounded-lg p-0.5 sm:p-1">
@@ -58,7 +61,7 @@ function Router() {
     <Switch>
       <Route path="/" component={PublicForm} />
       <Route path="/map" component={PublicMap} />
-      <Route path="/hallinta-x9k2m" component={AdminPanel} />
+      <Route path="/admin" component={AdminPanel} />
       <Route component={NotFound} />
     </Switch>
   );
