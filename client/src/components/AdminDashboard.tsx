@@ -454,7 +454,11 @@ export function AdminDashboard() {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {filteredReports.map((report) => (
-                        <tr key={report.id} className="hover:bg-gray-50">
+                        <tr 
+                          key={report.id} 
+                          className="hover:bg-gray-50 cursor-pointer"
+                          onClick={() => openReportModal(report)}
+                        >
                           <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
                             {report.photos && report.photos.length > 0 && (
                               <img 
@@ -485,7 +489,10 @@ export function AdminDashboard() {
                                   <Button
                                     size="sm"
                                     variant="outline"
-                                    onClick={() => approveReportMutation.mutate(report.id)}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      approveReportMutation.mutate(report.id);
+                                    }}
                                     disabled={approveReportMutation.isPending}
                                     className="text-green-600 hover:text-green-700 border-green-200 h-6 w-6 p-0"
                                   >
@@ -494,7 +501,10 @@ export function AdminDashboard() {
                                   <Button
                                     size="sm"
                                     variant="outline"
-                                    onClick={() => rejectReportMutation.mutate(report.id)}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      rejectReportMutation.mutate(report.id);
+                                    }}
                                     disabled={rejectReportMutation.isPending}
                                     className="text-red-600 hover:text-red-700 border-red-200 h-6 w-6 p-0"
                                   >
@@ -510,7 +520,10 @@ export function AdminDashboard() {
                               onValueChange={(value) => updateStatusMutation.mutate({ reportId: report.id, status: value })}
                               disabled={updateStatusMutation.isPending}
                             >
-                              <SelectTrigger className="w-24 lg:w-32 h-8 text-xs">
+                              <SelectTrigger 
+                                className="w-24 lg:w-32 h-8 text-xs"
+                                onClick={(e) => e.stopPropagation()}
+                              >
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
@@ -524,7 +537,10 @@ export function AdminDashboard() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => openReportModal(report)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openReportModal(report);
+                              }}
                               className="text-blue-600 hover:text-blue-700 h-8 w-8 p-0"
                             >
                               <Eye className="h-4 w-4" />
