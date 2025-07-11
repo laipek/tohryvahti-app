@@ -36,7 +36,7 @@ export default function PublicForm() {
   }
 
   return (
-    <div className="min-h-screen h-full py-4 px-4 flex flex-col overflow-x-hidden" style={{ minHeight: '100vh' }}>
+    <div className="min-h-screen py-4 px-4 flex flex-col overflow-x-hidden" style={{ minHeight: '100vh', background: 'transparent' }}>
       <div className="flex-1 flex items-start justify-center">
         <div className="w-full max-w-lg">
           <ReportForm onSubmitSuccess={handleSubmitSuccess} />
