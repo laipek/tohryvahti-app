@@ -206,28 +206,28 @@ export function AdminDashboard() {
       {/* Admin Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <h2 className="text-xl font-bold text-gray-900">{t('adminPanel')}</h2>
-            <div className="flex items-center space-x-4">
+          <div className="flex justify-between items-center h-14 lg:h-16">
+            <h2 className="text-lg lg:text-xl font-bold text-gray-900">{t('adminPanel')}</h2>
+            <div className="flex items-center space-x-2 lg:space-x-4">
               {/* View Toggle */}
               <div className="flex bg-gray-100 rounded-lg p-1">
                 <Button
                   variant={viewMode === 'table' ? 'default' : 'ghost'}
                   size="sm"
                   onClick={() => setViewMode('table')}
-                  className={viewMode === 'table' ? 'bg-blue-600 text-white' : 'text-gray-600'}
+                  className={`${viewMode === 'table' ? 'bg-blue-600 text-white' : 'text-gray-600'} text-xs lg:text-sm px-2 lg:px-3`}
                 >
-                  <Table className="mr-1 h-4 w-4" />
-                  {t('table')}
+                  <Table className="mr-1 h-3 w-3 lg:h-4 lg:w-4" />
+                  <span className="hidden sm:inline">{t('table')}</span>
                 </Button>
                 <Button
                   variant={viewMode === 'map' ? 'default' : 'ghost'}
                   size="sm"
                   onClick={() => setViewMode('map')}
-                  className={viewMode === 'map' ? 'bg-blue-600 text-white' : 'text-gray-600'}
+                  className={`${viewMode === 'map' ? 'bg-blue-600 text-white' : 'text-gray-600'} text-xs lg:text-sm px-2 lg:px-3`}
                 >
-                  <Map className="mr-1 h-4 w-4" />
-                  {t('map')}
+                  <Map className="mr-1 h-3 w-3 lg:h-4 lg:w-4" />
+                  <span className="hidden sm:inline">{t('map')}</span>
                 </Button>
               </div>
             </div>
@@ -237,51 +237,79 @@ export function AdminDashboard() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <Card className="bg-white shadow-sm">
-            <CardContent className="p-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6">
+          <Card 
+            className="bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow"
+            onClick={() => {
+              setValidationFilter('all');
+              setStatusFilter('all');
+              setViewMode('table');
+            }}
+          >
+            <CardContent className="p-4 lg:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">{t('totalReports')}</p>
-                  <p className="text-2xl font-bold text-blue-600">{stats.total}</p>
+                  <p className="text-xs lg:text-sm font-medium text-gray-600">{t('totalReports')}</p>
+                  <p className="text-xl lg:text-2xl font-bold text-blue-600">{stats.total}</p>
                 </div>
-                <CircleAlert className="h-8 w-8 text-blue-600" />
+                <CircleAlert className="h-6 w-6 lg:h-8 lg:w-8 text-blue-600" />
               </div>
             </CardContent>
           </Card>
           
-          <Card className="bg-white shadow-sm">
-            <CardContent className="p-6">
+          <Card 
+            className="bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow"
+            onClick={() => {
+              setValidationFilter('pending');
+              setStatusFilter('all');
+              setViewMode('table');
+            }}
+          >
+            <CardContent className="p-4 lg:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">{t('pendingApproval')}</p>
-                  <p className="text-2xl font-bold text-yellow-600">{stats.pending}</p>
+                  <p className="text-xs lg:text-sm font-medium text-gray-600">{t('pendingApproval')}</p>
+                  <p className="text-xl lg:text-2xl font-bold text-yellow-600">{stats.pending}</p>
                 </div>
-                <AlertTriangle className="h-8 w-8 text-yellow-600" />
+                <AlertTriangle className="h-6 w-6 lg:h-8 lg:w-8 text-yellow-600" />
               </div>
             </CardContent>
           </Card>
           
-          <Card className="bg-white shadow-sm">
-            <CardContent className="p-6">
+          <Card 
+            className="bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow"
+            onClick={() => {
+              setValidationFilter('approved');
+              setStatusFilter('all');
+              setViewMode('table');
+            }}
+          >
+            <CardContent className="p-4 lg:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">{t('approved')}</p>
-                  <p className="text-2xl font-bold text-green-600">{stats.approved}</p>
+                  <p className="text-xs lg:text-sm font-medium text-gray-600">{t('approved')}</p>
+                  <p className="text-xl lg:text-2xl font-bold text-green-600">{stats.approved}</p>
                 </div>
-                <Check className="h-8 w-8 text-green-600" />
+                <Check className="h-6 w-6 lg:h-8 lg:w-8 text-green-600" />
               </div>
             </CardContent>
           </Card>
           
-          <Card className="bg-white shadow-sm">
-            <CardContent className="p-6">
+          <Card 
+            className="bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow"
+            onClick={() => {
+              setValidationFilter('rejected');
+              setStatusFilter('all');
+              setViewMode('table');
+            }}
+          >
+            <CardContent className="p-4 lg:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">{t('rejected')}</p>
-                  <p className="text-2xl font-bold text-red-600">{stats.rejected}</p>
+                  <p className="text-xs lg:text-sm font-medium text-gray-600">{t('rejected')}</p>
+                  <p className="text-xl lg:text-2xl font-bold text-red-600">{stats.rejected}</p>
                 </div>
-                <X className="h-8 w-8 text-red-600" />
+                <X className="h-6 w-6 lg:h-8 lg:w-8 text-red-600" />
               </div>
             </CardContent>
           </Card>
@@ -296,18 +324,18 @@ export function AdminDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-              <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 lg:gap-4">
+              <div className="md:col-span-2 lg:col-span-1">
                 <Input
                   placeholder={t('searchReports')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full"
+                  className="w-full text-sm"
                 />
               </div>
               
               <Select value={validationFilter} onValueChange={setValidationFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="text-sm">
                   <SelectValue placeholder={t('approvalStatus')} />
                 </SelectTrigger>
                 <SelectContent>
@@ -319,7 +347,7 @@ export function AdminDashboard() {
               </Select>
               
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="text-sm">
                   <SelectValue placeholder={t('workStatus')} />
                 </SelectTrigger>
                 <SelectContent>
@@ -331,7 +359,7 @@ export function AdminDashboard() {
               </Select>
               
               <Select value={districtFilter} onValueChange={setDistrictFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="text-sm">
                   <SelectValue placeholder={t('district')} />
                 </SelectTrigger>
                 <SelectContent>
@@ -352,7 +380,8 @@ export function AdminDashboard() {
                   setStatusFilter('all');
                   setDistrictFilter('all');
                 }}
-                className="w-full"
+                className="w-full text-sm"
+                size="sm"
               >
                 {t('clearFilters')}
               </Button>
@@ -381,7 +410,7 @@ export function AdminDashboard() {
                     onClick={() => handleSort('validated')}
                     className="flex items-center"
                   >
-                    {t('validation')} <ArrowUpDown className="h-3 w-3 ml-1" />
+                    {t('validationStatus')} <ArrowUpDown className="h-3 w-3 ml-1" />
                   </Button>
                 </div>
               </CardTitle>
@@ -400,25 +429,25 @@ export function AdminDashboard() {
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           {t('photo')}
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
                           {t('date')}
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           {t('district')}
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">
                           {t('description')}
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          {t('validation')}
+                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          {t('validationStatus')}
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
                           {t('status')}
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           {t('actions')}
                         </th>
                       </tr>
@@ -426,28 +455,30 @@ export function AdminDashboard() {
                     <tbody className="bg-white divide-y divide-gray-200">
                       {filteredReports.map((report) => (
                         <tr key={report.id} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
                             {report.photos && report.photos.length > 0 && (
                               <img 
                                 src={report.photos[0]} 
                                 alt="Report" 
-                                className="w-16 h-16 rounded-lg object-cover"
+                                className="w-12 h-12 lg:w-16 lg:h-16 rounded-lg object-cover"
                               />
                             )}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm text-gray-900 hidden sm:table-cell">
                             {formatDate(report.timestamp)}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {t(`districts.${report.district}`)}
+                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm text-gray-900">
+                            <div className="max-w-20 lg:max-w-none truncate">
+                              {t(`districts.${report.district}`)}
+                            </div>
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-900 max-w-xs">
+                          <td className="px-3 lg:px-6 py-4 text-xs lg:text-sm text-gray-900 max-w-xs hidden md:table-cell">
                             <div className="truncate" title={report.description}>
                               {report.description}
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center space-x-2">
+                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
+                            <div className="flex flex-col lg:flex-row items-start lg:items-center space-y-1 lg:space-y-0 lg:space-x-2">
                               {getValidationBadge(report.validated)}
                               {report.validated === 'pending' && (
                                 <div className="flex space-x-1">
@@ -456,7 +487,7 @@ export function AdminDashboard() {
                                     variant="outline"
                                     onClick={() => approveReportMutation.mutate(report.id)}
                                     disabled={approveReportMutation.isPending}
-                                    className="text-green-600 hover:text-green-700 border-green-200"
+                                    className="text-green-600 hover:text-green-700 border-green-200 h-6 w-6 p-0"
                                   >
                                     <Check className="h-3 w-3" />
                                   </Button>
@@ -465,7 +496,7 @@ export function AdminDashboard() {
                                     variant="outline"
                                     onClick={() => rejectReportMutation.mutate(report.id)}
                                     disabled={rejectReportMutation.isPending}
-                                    className="text-red-600 hover:text-red-700 border-red-200"
+                                    className="text-red-600 hover:text-red-700 border-red-200 h-6 w-6 p-0"
                                   >
                                     <X className="h-3 w-3" />
                                   </Button>
@@ -473,13 +504,13 @@ export function AdminDashboard() {
                               )}
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap hidden lg:table-cell">
                             <Select 
                               value={report.status} 
                               onValueChange={(value) => updateStatusMutation.mutate({ reportId: report.id, status: value })}
                               disabled={updateStatusMutation.isPending}
                             >
-                              <SelectTrigger className="w-32 h-8 text-xs">
+                              <SelectTrigger className="w-24 lg:w-32 h-8 text-xs">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
@@ -489,12 +520,12 @@ export function AdminDashboard() {
                               </SelectContent>
                             </Select>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => openReportModal(report)}
-                              className="text-blue-600 hover:text-blue-700"
+                              className="text-blue-600 hover:text-blue-700 h-8 w-8 p-0"
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
