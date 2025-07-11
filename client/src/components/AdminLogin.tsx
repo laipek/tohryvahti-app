@@ -8,12 +8,13 @@ import { Shield, Eye, EyeOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface AdminLoginProps {
-  onLogin: (password: string) => void;
+  onLogin: (username: string, password: string) => void;
 }
 
 export function AdminLogin({ onLogin }: AdminLoginProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,10 +22,10 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!password.trim()) {
+    if (!username.trim() || !password.trim()) {
       toast({
         title: t('error'),
-        description: t('enterPassword'),
+        description: t('enterUsernameAndPassword'),
         variant: "destructive"
       });
       return;
@@ -32,9 +33,9 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
 
     setIsLoading(true);
     
-    // Simple password check - in production this would be more secure
-    if (password === 'admin123') {
-      onLogin(password);
+    // Simple username/password check - in production this would be more secure
+    if (username === 'admin' && password === 'admin123') {
+      onLogin(username, password);
       toast({
         title: t('loginSuccess'),
         description: t('welcomeAdmin'),
@@ -42,7 +43,7 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
     } else {
       toast({
         title: t('loginError'),
-        description: t('invalidPassword'),
+        description: t('invalidCredentials'),
         variant: "destructive"
       });
     }
@@ -63,6 +64,20 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="username" className="text-sm font-medium text-gray-700">
+                {t('username')}
+              </Label>
+              <Input
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="border-municipal-border mt-1"
+                placeholder={t('enterUsername')}
+              />
+            </div>
+            
             <div>
               <Label htmlFor="password" className="text-sm font-medium text-gray-700">
                 {t('password')}

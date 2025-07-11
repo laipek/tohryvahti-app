@@ -13,7 +13,7 @@ export default function AdminPanel() {
     }
   }, []);
 
-  const handleLogin = (password: string) => {
+  const handleLogin = (username: string, password: string) => {
     setIsAuthenticated(true);
     sessionStorage.setItem('admin_auth', 'authenticated');
   };
