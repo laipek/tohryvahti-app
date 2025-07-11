@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" fill="none">
+  <!-- Sky gradient -->
+  <defs>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#E0F6FF;stop-opacity:0.1" />
+    </linearGradient>
+    <linearGradient id="grassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#90EE90;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#228B22;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Sky background -->
+  <rect width="1200" height="500" fill="url(#skyGradient)" />
+  
+  <!-- Mountains/hills in background -->
+  <path d="M0 300 Q300 250 600 280 T1200 300 L1200 800 L0 800 Z" fill="#E6F3E6" opacity="0.4"/>
+  <path d="M0 350 Q400 300 800 330 T1200 350 L1200 800 L0 800 Z" fill="#D4F1D4" opacity="0.3"/>
+  
+  <!-- Grass/ground -->
+  <rect y="500" width="1200" height="300" fill="url(#grassGradient)" />
+  
+  <!-- Trees -->
+  <g opacity="0.3">
+    <!-- Tree 1 -->
+    <rect x="100" y="420" width="8" height="80" fill="#8B4513"/>
+    <circle cx="104" cy="420" r="25" fill="#228B22"/>
+    
+    <!-- Tree 2 -->
+    <rect x="300" y="430" width="10" height="70" fill="#8B4513"/>
+    <circle cx="305" cy="430" r="30" fill="#32CD32"/>
+    
+    <!-- Tree 3 -->
+    <rect x="900" y="410" width="12" height="90" fill="#8B4513"/>
+    <circle cx="906" cy="410" r="35" fill="#228B22"/>
+    
+    <!-- Tree 4 -->
+    <rect x="1050" y="425" width="8" height="75" fill="#8B4513"/>
+    <circle cx="1054" cy="425" r="28" fill="#32CD32"/>
+  </g>
+  
+  <!-- Clean city buildings silhouette -->
+  <g opacity="0.2">
+    <rect x="200" y="350" width="40" height="150" fill="#4682B4"/>
+    <rect x="260" y="340" width="50" height="160" fill="#5F9EA0"/>
+    <rect x="330" y="360" width="35" height="140" fill="#4682B4"/>
+    <rect x="700" y="345" width="45" height="155" fill="#5F9EA0"/>
+    <rect x="770" y="355" width="38" height="145" fill="#4682B4"/>
+    <rect x="830" y="330" width="55" height="170" fill="#5F9EA0"/>
+  </g>
+  
+  <!-- Floating leaves/particles for clean air -->
+  <g opacity="0.4">
+    <circle cx="150" cy="200" r="2" fill="#90EE90"/>
+    <circle cx="400" cy="180" r="1.5" fill="#98FB98"/>
+    <circle cx="650" cy="220" r="2" fill="#90EE90"/>
+    <circle cx="850" cy="160" r="1.5" fill="#98FB98"/>
+    <circle cx="1000" cy="190" r="2" fill="#90EE90"/>
+  </g>
+</svg>

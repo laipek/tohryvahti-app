@@ -116,9 +116,9 @@ export function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-municipal-light">
+    <div className="min-h-screen">
       {/* Admin Header */}
-      <div className="bg-white shadow-sm border-b border-municipal-border">
+      <div className="bg-white/95 backdrop-blur-sm shadow-sm border-b border-municipal-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <h2 className="text-xl font-bold text-gray-900">{t('adminPanel')}</h2>
@@ -165,7 +165,7 @@ export function AdminDashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <Card>
+          <Card className="bg-white/90 backdrop-blur-sm border-municipal-border shadow-lg">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -177,7 +177,7 @@ export function AdminDashboard() {
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="bg-white/90 backdrop-blur-sm border-municipal-border shadow-lg">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -189,7 +189,7 @@ export function AdminDashboard() {
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="bg-white/90 backdrop-blur-sm border-municipal-border shadow-lg">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -201,7 +201,7 @@ export function AdminDashboard() {
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="bg-white/90 backdrop-blur-sm border-municipal-border shadow-lg">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -216,7 +216,7 @@ export function AdminDashboard() {
 
         {/* Map View */}
         {viewMode === 'map' && (
-          <Card>
+          <Card className="bg-white/90 backdrop-blur-sm border-municipal-border shadow-lg">
             <CardContent className="p-0">
               {filteredReports.length > 0 ? (
                 <MapView
@@ -237,7 +237,7 @@ export function AdminDashboard() {
 
         {/* Table View */}
         {viewMode === 'table' && (
-          <Card>
+          <Card className="bg-white/90 backdrop-blur-sm border-municipal-border shadow-lg">
             <CardContent className="p-0">
               <div className="px-6 py-4 border-b border-municipal-border">
                 <h3 className="text-lg font-medium text-gray-900">{t('graffitiReports')}</h3>

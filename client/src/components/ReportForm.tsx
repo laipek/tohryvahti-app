@@ -234,7 +234,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-md mx-auto bg-white/95 backdrop-blur-sm border-municipal-border shadow-lg">
       <CardContent className="p-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
           {t('reportGraffiti')}
