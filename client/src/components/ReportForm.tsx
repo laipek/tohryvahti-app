@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Camera, MapPin, Building, FileText, Mail, User, Send, Crosshair, Check, AlertTriangle } from 'lucide-react';
 import { MapView } from './MapView';
 import { useToast } from '@/hooks/use-toast';
@@ -45,6 +46,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [locationStatus, setLocationStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
+  const [showPrivacyDialog, setShowPrivacyDialog] = useState(false);
 
   const districts = [
     'asema', 'haapaniemi', 'huutijarvi', 'ilkko', 'kangasalan_keskusta',
@@ -252,20 +254,36 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                 ref={fileInputRef}
                 type="file"
                 accept="image/*"
-                capture="environment"
                 multiple
                 className="hidden"
                 onChange={handlePhotoUpload}
               />
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="w-full flex flex-col items-center cursor-pointer"
-              >
-                <Camera className="h-8 w-8 sm:h-12 sm:w-12 text-municipal-gray mb-2 sm:mb-4" />
-                <p className="text-sm sm:text-base text-municipal-gray mb-1 sm:mb-2">{t('tapToTakePhoto')}</p>
-                <p className="text-xs sm:text-sm text-municipal-gray">{t('orSelectFile')}</p>
-              </button>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowPrivacyDialog(true);
+                  }}
+                  className="flex-1 flex flex-col items-center cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <Camera className="h-8 w-8 sm:h-10 sm:w-10 text-municipal-blue mb-2" />
+                  <p className="text-sm sm:text-base text-municipal-gray mb-1">{t('tapToTakePhoto')}</p>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const input = fileInputRef.current;
+                    if (input) {
+                      input.removeAttribute('capture');
+                      input.click();
+                    }
+                  }}
+                  className="flex-1 flex flex-col items-center cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <FileText className="h-8 w-8 sm:h-10 sm:w-10 text-municipal-gray mb-2" />
+                  <p className="text-sm sm:text-base text-municipal-gray mb-1">{t('orSelectFile')}</p>
+                </button>
+              </div>
             </div>
             
             {imagePreviewUrls.length > 0 && (
@@ -399,6 +417,36 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
           </Button>
         </form>
       </CardContent>
+
+      {/* Privacy Dialog */}
+      <Dialog open={showPrivacyDialog} onOpenChange={setShowPrivacyDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <AlertTriangle className="h-5 w-5 text-amber-500 mr-2" />
+              {t('privacyNotice')}
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-gray-600 leading-relaxed">
+            {t('privacyPhotoText')}
+          </p>
+          <DialogFooter>
+            <Button
+              onClick={() => {
+                setShowPrivacyDialog(false);
+                const input = fileInputRef.current;
+                if (input) {
+                  input.setAttribute('capture', 'environment');
+                  input.click();
+                }
+              }}
+              className="w-full bg-municipal-blue hover:bg-blue-700"
+            >
+              {t('understood')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }
