@@ -157,6 +157,9 @@ Copyright notice: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi" di
 ✓ Header simplification: Updated to show only "Töhryvahti" with original font styling and larger size
 ✓ Form language update: Changed "Ilmoita graffitista" to "Ilmoita ilkivallasta" across all languages
 ✓ Logo planning: Custom logo development deferred for future iteration
+✓ GDPR compliance: Updated disclaimers to meet Finnish tietosuoja.fi requirements
+✓ Legal basis specified: Added proper consent mechanism and legitimate interest basis
+✓ Privacy enhancement: Strengthened photo privacy notices with GDPR references
 ✓ System ready for beta testing deployment on Replit platform
 
 ### Scalability Considerations
