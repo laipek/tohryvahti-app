@@ -24,7 +24,7 @@ function Header() {
         <div className="flex justify-between items-center h-14 sm:h-16">
           <div className="flex items-center min-w-0 flex-shrink">
             <PaintbrushVertical className="h-5 w-5 sm:h-6 sm:w-6 text-municipal-blue mr-2 sm:mr-3 flex-shrink-0" />
-            <h1 className="text-base sm:text-xl font-bold text-gray-900 truncate">{t('title')}</h1>
+            <h1 className="text-xl sm:text-3xl font-bold text-gray-900 truncate font-serif">Töhryvahti</h1>
           </div>
           <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
             <div className="flex bg-municipal-border/70 backdrop-blur-sm rounded-lg p-0.5 sm:p-1">
