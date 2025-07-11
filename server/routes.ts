@@ -21,6 +21,17 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Admin route debugging for deployment
+  app.get("/admin", (req, res, next) => {
+    console.log("Admin route accessed:", req.url);
+    next();
+  });
+
+  // Health check endpoint to verify server is running
+  app.get("/api/health", (req, res) => {
+    res.json({ status: "ok", timestamp: new Date().toISOString() });
+  });
+
   // Get all graffiti reports (admin only)
   app.get("/api/reports", async (req, res) => {
     try {
