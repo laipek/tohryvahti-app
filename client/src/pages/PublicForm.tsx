@@ -51,7 +51,7 @@ export default function PublicForm() {
             <strong>BETA-versio:</strong> Töhryvahti on beta-vaiheessa oleva palvelu, jonka tarkoituksena on luoda viihtyisämpi ja töhrytön ympäristö kaikille kaupunkilaisille. Palvelu voi sisältää virheitä tai keskeytyä ilman ennakkoilmoitusta.
           </p>
           <p className="mb-2">
-            Käyttämällä tätä palvelua hyväksyt, että ilmoittamasi tiedot ja lähettämäsi kuvien käyttöoikeuksiin annetaan lupa palvelun tarjoajalle ja käsittelyyn viihtyisyyden parantamiseksi ja töhryjen poistamiseksi. Kunnalla ei ole osuutta asiaan. Palvelu ei takaa välitöntä toimenpiteiden aloittamista.
+            Käyttämällä tätä palvelua hyväksyt, että ilmoittamasi tiedot ja lähettämäsi kuvien käyttöoikeuksiin annetaan lupa palvelun tarjoajalle ja käsittelyyn viihtyisyyden parantamiseksi ja töhryjen poistamiseksi. Kaikki ilmoitukset tarkistetaan ja asiattomat ilmoitukset poistetaan ilman ennakkoilmoitusta. Palvelu ei takaa välitöntä toimenpiteiden aloittamista.
           </p>
           <p>
             © 2025 Töhryvahti. Kaikki oikeudet pidätetään. Palvelun käyttö tapahtuu omalla vastuulla.
@@ -61,7 +61,7 @@ export default function PublicForm() {
         {/* Image copyright */}
         <div className="text-center">
           <div className="text-xs text-white/60 bg-black/30 backdrop-blur-sm rounded px-3 py-2 inline-block">
-            Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi
+            Kuva: Vehoniemenharju. Lassi Välimaa / visitkangasala.fi
           </div>
         </div>
       </div>

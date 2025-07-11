@@ -152,6 +152,8 @@ Copyright notice: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi" di
 ✓ Mobile optimization: Language selector moved to inline footer for better header space
 ✓ Legal clarity: Updated disclaimer to specify service provider (not municipality) gets data/image rights
 ✓ Commercial independence: Clarified municipalities have no involvement in the service
+✓ Copyright formatting: Moved "Kuva:" prefix to beginning of image attribution
+✓ Report validation: Added disclaimer about report verification and inappropriate content removal
 ✓ System ready for beta testing deployment on Replit platform
 
 ### Scalability Considerations
