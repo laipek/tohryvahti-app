@@ -44,14 +44,7 @@ function Header() {
               >
                 {t('map')}
               </Button>
-              <Button
-                variant={location === '/admin' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setLocation('/admin')}
-                className={`text-xs sm:text-sm px-1.5 sm:px-3 py-1 sm:py-2 h-auto ${location === '/admin' ? 'bg-municipal-blue text-white' : 'text-municipal-gray hover:text-municipal-blue'}`}
-              >
-                {t('admin')}
-              </Button>
+
             </div>
           </div>
         </div>
@@ -65,7 +58,7 @@ function Router() {
     <Switch>
       <Route path="/" component={PublicForm} />
       <Route path="/map" component={PublicMap} />
-      <Route path="/admin" component={AdminPanel} />
+      <Route path="/hallinta-x9k2m" component={AdminPanel} />
       <Route component={NotFound} />
     </Switch>
   );
