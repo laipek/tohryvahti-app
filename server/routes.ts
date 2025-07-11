@@ -139,7 +139,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update report validation status (admin only)
-  app.patch("/api/reports/:id/validation", async (req, res) => {
+  app.patch("/api/reports/:id/validate", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) {
