@@ -13,6 +13,8 @@ export const graffitiReports = pgTable("graffiti_reports", {
   email: text("email"),
   status: text("status").notNull().default("new"), // new, progress, cleaned
   confirmed: text("confirmed").notNull().default("pending"), // pending, approved, rejected
+  propertyOwner: text("property_owner"), // "city", "ely-keskus", "private"
+  propertyDescription: text("property_description"), // Additional details about the property
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
 

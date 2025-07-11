@@ -152,6 +152,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update report property ownership (admin only)
+  app.patch("/api/reports/:id/property", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid report ID" });
+      }
+
+      const { propertyOwner, propertyDescription } = req.body;
+      if (!["city", "ely-keskus", "private"].includes(propertyOwner)) {
+        return res.status(400).json({ message: "Invalid property owner. Must be: city, ely-keskus, or private" });
+      }
+
+      const updatedReport = await storage.updateReportProperty(id, propertyOwner, propertyDescription);
+      if (!updatedReport) {
+        return res.status(404).json({ message: "Report not found" });
+      }
+
+      res.json(updatedReport);
+    } catch (error) {
+      console.error("Error updating report property:", error);
+      res.status(500).json({ message: "Failed to update report property" });
+    }
+  });
+
   // Get reports by status
   app.get("/api/reports/status/:status", async (req, res) => {
     try {

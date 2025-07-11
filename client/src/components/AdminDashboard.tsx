@@ -262,6 +262,12 @@ export function AdminDashboard() {
                         {t('status')}
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-municipal-gray uppercase tracking-wider">
+                        {t('contactInfo')}
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-municipal-gray uppercase tracking-wider">
+                        {t('propertyOwner')}
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-municipal-gray uppercase tracking-wider">
                         {t('actions')}
                       </th>
                     </tr>
@@ -302,6 +308,32 @@ export function AdminDashboard() {
                             </SelectContent>
                           </Select>
                         </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {report.name || report.email ? (
+                            <div className="text-xs">
+                              {report.name && <div className="font-medium">{report.name}</div>}
+                              {report.email && <div className="text-gray-500">{report.email}</div>}
+                            </div>
+                          ) : (
+                            <span className="text-gray-400 text-xs">{t('anonymous')}</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {report.propertyOwner ? (
+                            <div className="text-xs">
+                              <div className="font-medium">
+                                {t(report.propertyOwner === 'ely-keskus' ? 'elyKeskus' : report.propertyOwner)}
+                              </div>
+                              {report.propertyDescription && (
+                                <div className="text-gray-500 truncate max-w-32" title={report.propertyDescription}>
+                                  {report.propertyDescription}
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-gray-400 text-xs">-</span>
+                          )}
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <Button
                             variant="ghost"
@@ -334,8 +366,18 @@ export function AdminDashboard() {
         <ReportModal
           report={selectedReport}
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedReport(null);
+          }}
           onStatusUpdate={(status) => updateReportStatus(selectedReport.id, status)}
+          onPropertyUpdate={(updatedReport) => {
+            setSelectedReport(updatedReport);
+            // Force refresh to show updated property info in table
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          }}
         />
       )}
     </div>

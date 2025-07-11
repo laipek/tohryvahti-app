@@ -6,6 +6,7 @@ export interface IStorage {
   createReport(report: InsertGraffitiReport): Promise<GraffitiReport>;
   updateReportStatus(id: number, status: string): Promise<GraffitiReport | undefined>;
   updateReportConfirmation(id: number, confirmed: string): Promise<GraffitiReport | undefined>;
+  updateReportProperty(id: number, propertyOwner: string, propertyDescription?: string): Promise<GraffitiReport | undefined>;
   getReportsByStatus(status: string): Promise<GraffitiReport[]>;
   getReportsByDistrict(district: string): Promise<GraffitiReport[]>;
   getConfirmedReports(): Promise<GraffitiReport[]>;
@@ -44,6 +45,8 @@ export class MemStorage implements IStorage {
       email: insertReport.email || null,
       status: insertReport.status || "new",
       confirmed: insertReport.confirmed || "pending",
+      propertyOwner: insertReport.propertyOwner || null,
+      propertyDescription: insertReport.propertyDescription || null,
       timestamp: new Date()
     };
     
@@ -77,6 +80,19 @@ export class MemStorage implements IStorage {
     if (!report) return undefined;
     
     const updatedReport = { ...report, confirmed };
+    this.reports.set(id, updatedReport);
+    return updatedReport;
+  }
+
+  async updateReportProperty(id: number, propertyOwner: string, propertyDescription?: string): Promise<GraffitiReport | undefined> {
+    const report = this.reports.get(id);
+    if (!report) return undefined;
+    
+    const updatedReport = { 
+      ...report, 
+      propertyOwner,
+      propertyDescription: propertyDescription !== undefined ? propertyDescription : report.propertyDescription
+    };
     this.reports.set(id, updatedReport);
     return updatedReport;
   }
