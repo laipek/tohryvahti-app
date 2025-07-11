@@ -201,6 +201,23 @@ export function AdminDashboard() {
     setIsModalOpen(true);
   };
 
+  const closeReportModal = () => {
+    setIsModalOpen(false);
+    setSelectedReport(null);
+    // Refresh data when modal closes to show any updates
+    queryClient.invalidateQueries({ queryKey: ['/api/reports'] });
+  };
+
+  const handleReportUpdate = (updatedReport: GraffitiReport) => {
+    // Update the report in the query cache
+    queryClient.setQueryData(['/api/reports'], (oldData: GraffitiReport[] | undefined) => {
+      if (!oldData) return oldData;
+      return oldData.map(report => 
+        report.id === updatedReport.id ? updatedReport : report
+      );
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Admin Header */}
@@ -583,8 +600,9 @@ export function AdminDashboard() {
         <ReportModal
           report={selectedReport}
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={closeReportModal}
           onStatusUpdate={(status) => updateStatusMutation.mutate({ reportId: selectedReport.id, status })}
+          onPropertyUpdate={handleReportUpdate}
         />
       )}
     </div>

@@ -78,15 +78,36 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
     try {
       const response = await apiRequest({
         method: 'PATCH',
-        url: `/api/reports/${report.id}/validation`,
+        url: `/api/reports/${report.id}/validate`,
         body: { validated },
       });
 
       if (response.ok) {
+        const updatedReport = await response.json();
+        
+        let titleKey = 'statusUpdated';
+        let descriptionText = `Report ${validated}`;
+        
+        if (validated === 'approved') {
+          titleKey = 'reportApproved';
+          descriptionText = t('reportApproved');
+        } else if (validated === 'rejected') {
+          titleKey = 'reportRejected';
+          descriptionText = t('reportRejected');
+        } else if (validated === 'pending') {
+          titleKey = 'statusUpdated';
+          descriptionText = t('resetToPending');
+        }
+        
         toast({
-          title: validated === 'approved' ? t('validateReport') : t('rejectReport'),
-          description: `Report ${validated}`,
+          title: t(titleKey),
+          description: descriptionText,
         });
+        
+        // Update the report data and close modal
+        if (onPropertyUpdate) {
+          onPropertyUpdate(updatedReport);
+        }
         onClose();
       }
     } catch (error) {
@@ -260,29 +281,61 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
               </CardContent>
             </Card>
 
-            {/* Report Validation Actions */}
-            {report.validated === 'pending' && (
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">Report Validation</CardTitle>
-                </CardHeader>
-                <CardContent className="flex gap-3">
-                  <Button 
-                    onClick={() => handleValidationUpdate('approved')}
-                    className="flex-1 bg-municipal-green hover:bg-green-600 text-white"
-                  >
-                    {t('validateReport')}
-                  </Button>
-                  <Button 
-                    onClick={() => handleValidationUpdate('rejected')}
-                    variant="destructive"
-                    className="flex-1"
-                  >
-                    {t('rejectReport')}
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
+            {/* Report Validation Management */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">{t('reportValidation')}</CardTitle>
+                <p className="text-sm text-municipal-gray">{t('validationHelp')}</p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label className="text-sm font-medium text-municipal-gray">{t('currentStatus')}</Label>
+                  <div className="mt-1">
+                    {report.validated === 'pending' && (
+                      <Badge className="bg-yellow-100 text-yellow-800">{t('pending')}</Badge>
+                    )}
+                    {report.validated === 'approved' && (
+                      <Badge className="bg-green-100 text-green-800">{t('approved')}</Badge>
+                    )}
+                    {report.validated === 'rejected' && (
+                      <Badge className="bg-red-100 text-red-800">{t('rejected')}</Badge>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="flex gap-3">
+                  {report.validated !== 'approved' && (
+                    <Button 
+                      onClick={() => handleValidationUpdate('approved')}
+                      className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                      size="sm"
+                    >
+                      {report.validated === 'pending' ? t('approve') : t('changeToApproved')}
+                    </Button>
+                  )}
+                  {report.validated !== 'rejected' && (
+                    <Button 
+                      onClick={() => handleValidationUpdate('rejected')}
+                      variant="destructive"
+                      className="flex-1"
+                      size="sm"
+                    >
+                      {report.validated === 'pending' ? t('reject') : t('changeToRejected')}
+                    </Button>
+                  )}
+                  {report.validated !== 'pending' && (
+                    <Button 
+                      onClick={() => handleValidationUpdate('pending')}
+                      variant="outline"
+                      className="flex-1"
+                      size="sm"
+                    >
+                      {t('resetToPending')}
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </DialogContent>
