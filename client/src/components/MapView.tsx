@@ -91,15 +91,15 @@ export function MapView({
       markers.forEach(marker => {
         const markerInstance = L.marker([marker.lat, marker.lng]).addTo(map);
         
-        // Create enhanced popup content
-        let popupContent = '';
+        // Create comprehensive popup content
+        let popupContent = `<div style="min-width: 250px; max-width: 300px;">`;
         
         if (marker.photo) {
-          popupContent += `<img src="${marker.photo}" alt="Report photo" style="width: 150px; height: 100px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;">`;
+          popupContent += `<img src="${marker.photo}" alt="Report photo" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 12px;">`;
         }
         
         if (marker.title) {
-          popupContent += `<div style="font-weight: bold; margin-bottom: 4px;">${marker.title}</div>`;
+          popupContent += `<div style="font-weight: bold; font-size: 16px; margin-bottom: 8px; color: #1f2937;">${marker.title}</div>`;
         }
         
         if (marker.timestamp) {
@@ -111,19 +111,45 @@ export function MapView({
             hour: '2-digit',
             minute: '2-digit'
           });
-          popupContent += `<div style="color: #666; font-size: 12px; margin-bottom: 4px;">📅 ${formattedDate}</div>`;
+          popupContent += `<div style="color: #6b7280; font-size: 14px; margin-bottom: 6px; display: flex; align-items: center;">
+            <span style="margin-right: 6px;">📅</span> ${formattedDate}
+          </div>`;
         }
         
         if (marker.district) {
-          popupContent += `<div style="color: #666; font-size: 12px; margin-bottom: 4px;">📍 ${marker.district}</div>`;
+          popupContent += `<div style="color: #6b7280; font-size: 14px; margin-bottom: 6px; display: flex; align-items: center;">
+            <span style="margin-right: 6px;">📍</span> ${marker.district}
+          </div>`;
+        }
+        
+        if (marker.status) {
+          const statusColors = {
+            'new': 'background-color: #fef3c7; color: #92400e; border: 1px solid #fbbf24;',
+            'progress': 'background-color: #fef3c7; color: #92400e; border: 1px solid #fbbf24;',
+            'cleaned': 'background-color: #d1fae5; color: #065f46; border: 1px solid #10b981;'
+          };
+          const statusText = {
+            'new': 'Uusi',
+            'progress': 'Käsittelyssä', 
+            'cleaned': 'Puhdistettu'
+          };
+          popupContent += `<div style="margin-bottom: 8px;">
+            <span style="padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 500; ${statusColors[marker.status] || statusColors['new']}">
+              ${statusText[marker.status] || marker.status}
+            </span>
+          </div>`;
         }
         
         if (marker.popup) {
-          popupContent += `<div style="margin-top: 8px;">${marker.popup}</div>`;
+          popupContent += `<div style="margin-top: 8px; padding: 8px; background-color: #f9fafb; border-radius: 6px; font-size: 14px; line-height: 1.4; color: #374151;">
+            ${marker.popup}
+          </div>`;
         }
         
+        popupContent += `</div>`;
+        
         if (popupContent) {
-          markerInstance.bindPopup(popupContent, { maxWidth: 200 });
+          markerInstance.bindPopup(popupContent, { maxWidth: 350, className: 'custom-popup' });
         }
         
         // Add click handler to marker
