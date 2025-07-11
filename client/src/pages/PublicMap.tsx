@@ -222,7 +222,7 @@ export default function PublicMap() {
           {/* Image copyright */}
           <div className="text-center">
             <div className="text-xs text-white/60 bg-black/30 backdrop-blur-sm rounded px-3 py-2 inline-block">
-              Kuva: Vehoniemenharju. Lassi Välimaa / visitkangasala.fi
+              Kuva: Vehoniemenharju. visitkangasala.fi
             </div>
           </div>
         </div>
