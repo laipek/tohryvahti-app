@@ -209,10 +209,10 @@ export default function PublicMap() {
           {/* Disclaimer and beta notice */}
           <div className="px-4 py-3 bg-black/20 backdrop-blur-sm rounded-lg text-xs text-white/80 leading-relaxed">
             <p className="mb-2">
-              <strong>BETA-versio:</strong> Töhryvahti on beta-vaiheessa oleva palvelu, jonka tarkoituksena on edistää ympäristön puhtautta ja luoda puhtaampi kaupunki kaikille. Palvelu voi sisältää virheitä tai keskeytyä ilman ennakkoilmoitusta.
+              <strong>BETA-versio:</strong> Töhryvahti on beta-vaiheessa oleva palvelu, jonka tarkoituksena on luoda viihtyisämpi ja töhrytön ympäristö kaikille kaupunkilaisille. Palvelu voi sisältää virheitä tai keskeytyä ilman ennakkoilmoitusta.
             </p>
             <p className="mb-2">
-              Käyttämällä tätä palvelua hyväksyt, että ilmoittamasi tiedot käsitellään kunnan toimesta ilkivallan poistamiseksi. Palvelu ei takaa välitöntä toimenpiteiden aloittamista.
+              Käyttämällä tätä palvelua hyväksyt, että ilmoittamasi tiedot käsitellään kunnan toimesta viihtyisyyden parantamiseksi ja töhryjen poistamiseksi. Palvelu ei takaa välitöntä toimenpiteiden aloittamista.
             </p>
             <p>
               © 2025 Töhryvahti. Kaikki oikeudet pidätetään. Palvelun käyttö tapahtuu omalla vastuulla.

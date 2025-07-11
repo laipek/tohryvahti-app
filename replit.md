@@ -146,6 +146,10 @@ Copyright notice: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi" di
 ✓ Updated terminology from "confirmed" to "validated" reports for clarity
 ✓ Created commercial-ready system with proper budget allocation tracking
 ✓ Clarified contact information as optional with transparency about status update usage
+✓ Enhanced transparency: Increased card opacity to 75% for better background visibility
+✓ Improved footer structure: Added comprehensive beta disclaimer and legal text
+✓ Refined language: Updated disclaimer to emphasize "viihtyisämpi ja töhrytön ympäristö" 
+✓ Mobile optimization: Language selector moved to inline footer for better header space
 ✓ System ready for beta testing deployment on Replit platform
 
 ### Scalability Considerations
