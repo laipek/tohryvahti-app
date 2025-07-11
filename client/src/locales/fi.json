@@ -10,7 +10,7 @@
   "tapToTakePhoto": "Napauttamalla ota kuva",
   "orSelectFile": "tai valitse tiedosto",
   "privacyNotice": "Tietosuojailmoitus",
-  "privacyPhotoText": "Varmista, että kuvassa ei näy ihmisiä tai muita henkilötietoja. Tämä on pakollista EU:n tietosuoja-asetuksen (GDPR) noudattamiseksi. Kuvat käsitellään yleisen edun mukaisesti ympäristön viihtyisyyden parantamiseksi.",
+  "privacyPhotoText": "Varmista, että kuvassa ei näy ihmisiä. Tämä on tärkeää tietosuojakäytäntöjen noudattamiseksi.",
   "understood": "Ymmärretty",
   "location": "Sijainti",
   "getCurrentLocation": "Hae nykyinen sijainti",

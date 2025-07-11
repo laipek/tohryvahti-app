@@ -10,7 +10,7 @@
   "tapToTakePhoto": "Tryck för att ta foto",
   "orSelectFile": "eller välj fil",
   "privacyNotice": "Integritetsmeddelande",
-  "privacyPhotoText": "Se till att inga personer eller andra personuppgifter syns på fotot. Detta är obligatoriskt för att följa EU:s GDPR-bestämmelser. Bilder behandlas under berättigat allmänt intresse för att förbättra miljökvaliteten.",
+  "privacyPhotoText": "Se till att inga personer syns på fotot. Detta är viktigt för att följa dataskyddsbestämmelser.",
   "understood": "Förstått",
   "location": "Plats",
   "getCurrentLocation": "Hämta nuvarande plats",

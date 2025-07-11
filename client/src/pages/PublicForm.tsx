@@ -51,7 +51,7 @@ export default function PublicForm() {
             <strong>BETA-versio:</strong> Töhryvahti on avoin beta-vaiheessa oleva maksuton yleishyödyllinen palvelu, jonka tarkoituksena on luoda viihtyisämpi ja töhrytön ympäristö kaikille kaupunkilaisille. Palvelu voi sisältää virheitä tai keskeytyä ilman ennakkoilmoitusta.
           </p>
           <p className="mb-2">
-            <strong>Henkilötietojen käsittely:</strong> Käyttämällä tätä palvelua annat suostumuksesi henkilötietojesi käsittelyyn EU:n tietosuoja-asetuksen (GDPR) mukaisesti. Käsittelemme ilmoittamiasi tietoja ja kuvia yleisen edun mukaisesti viihtyisyyden parantamiseksi ja töhryjen poistamiseksi. Sinulla on oikeus peruuttaa suostumuksesi milloin tahansa. Kaikki ilmoitukset tarkistetaan ja asiattomat ilmoitukset poistetaan ilman ennakkoilmoitusta.
+            Käyttämällä tätä palvelua hyväksyt, että ilmoittamasi tiedot ja lähettämäsi kuvien käyttöoikeuksiin annetaan lupa palvelun tarjoajalle ja käsittelyyn viihtyisyyden parantamiseksi ja töhryjen poistamiseksi. Kaikki ilmoitukset tarkistetaan ja asiattomat ilmoitukset poistetaan ilman ennakkoilmoitusta. Palvelu ei takaa välitöntä toimenpiteiden aloittamista.
           </p>
           <p>
             © 2025 Töhryvahti. Kaikki oikeudet pidätetään. Palvelun käyttö tapahtuu omalla vastuulla.

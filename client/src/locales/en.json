@@ -10,7 +10,7 @@
   "tapToTakePhoto": "Tap to take photo",
   "orSelectFile": "or select file",
   "privacyNotice": "Privacy Notice",
-  "privacyPhotoText": "Please ensure no people or other personal data are visible in the photo. This is mandatory for compliance with EU GDPR regulations. Images are processed under legitimate public interest to improve environmental quality.",
+  "privacyPhotoText": "Please ensure no people are visible in the photo. This is important for compliance with data protection regulations.",
   "understood": "Understood",
   "location": "Location",
   "getCurrentLocation": "Get current location",
