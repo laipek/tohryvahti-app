@@ -16,7 +16,7 @@ export function AdminDashboard() {
   const [reports, setReports] = useState<GraffitiReport[]>([]);
   const [filteredReports, setFilteredReports] = useState<GraffitiReport[]>([]);
   const [viewMode, setViewMode] = useState<'map' | 'table'>('map');
-  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedReport, setSelectedReport] = useState<GraffitiReport | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -48,7 +48,7 @@ export function AdminDashboard() {
 
   useEffect(() => {
     let filtered = reports;
-    if (statusFilter) {
+    if (statusFilter && statusFilter !== 'all') {
       filtered = reports.filter(report => report.status === statusFilter);
     }
     setFilteredReports(filtered);
@@ -151,7 +151,7 @@ export function AdminDashboard() {
                   <SelectValue placeholder={t('allStatuses')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">{t('allStatuses')}</SelectItem>
+                  <SelectItem value="all">{t('allStatuses')}</SelectItem>
                   <SelectItem value="new">{t('new')}</SelectItem>
                   <SelectItem value="progress">{t('progress')}</SelectItem>
                   <SelectItem value="cleaned">{t('cleaned')}</SelectItem>
