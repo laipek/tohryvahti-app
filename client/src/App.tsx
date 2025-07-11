@@ -67,15 +67,14 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <div className="min-h-screen relative">
-          {/* Clean environment decorative particles */}
-          <div className="clean-particle"></div>
-          <div className="clean-particle"></div>
-          <div className="clean-particle"></div>
-          <div className="clean-particle"></div>
-          <div className="clean-particle"></div>
-          
           <Header />
           <Router />
+          
+          {/* Image copyright notice */}
+          <div className="image-copyright">
+            Vehoniemenharju. Kuva: Lassi Välimaa<br />
+            Source: Visit Kangasala
+          </div>
         </div>
         <Toaster />
       </TooltipProvider>
