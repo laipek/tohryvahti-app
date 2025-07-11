@@ -82,6 +82,12 @@
   "updateProperty": "Uppdatera fastighetsinfo",
   "propertyUpdated": "Fastighetsinformation uppdaterad",
   "updating": "Uppdaterar...",
+  "cookieConsent": {
+    "title": "Cookies och integritet",
+    "description": "Vi använder cookies för att spara dina språkpreferenser och säkerställa tjänstens funktionalitet. Data behandlas enligt GDPR-reglerna.",
+    "accept": "Acceptera cookies",
+    "decline": "Avböj cookies"
+  },
   "photo": "Foto",
   "date": "Datum",
   "reportLocation": "Plats",

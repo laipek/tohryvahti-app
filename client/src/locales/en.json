@@ -82,6 +82,12 @@
   "updateProperty": "Update property info",
   "propertyUpdated": "Property information updated",
   "updating": "Updating...",
+  "cookieConsent": {
+    "title": "Cookies and Privacy",
+    "description": "We use cookies to save your language preference and ensure service functionality. Data is processed according to GDPR regulations.",
+    "accept": "Accept Cookies",
+    "decline": "Decline Cookies"
+  },
   "photo": "Photo",
   "date": "Date",
   "reportLocation": "Location",

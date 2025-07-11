@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { PaintbrushVertical } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'wouter';
+import { CookieConsent } from "@/components/CookieConsent";
 import PublicForm from "@/pages/PublicForm";
 import AdminPanel from "@/pages/AdminPanel";
 import PublicMap from "@/pages/PublicMap";
@@ -74,6 +75,7 @@ function App() {
         <div className="min-h-screen relative">
           <Header />
           <Router />
+          <CookieConsent />
         </div>
         <Toaster />
       </TooltipProvider>
