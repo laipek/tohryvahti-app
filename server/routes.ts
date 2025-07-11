@@ -32,14 +32,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get confirmed reports (public)
-  app.get("/api/reports/confirmed", async (req, res) => {
+  // Get validated reports (public)
+  app.get("/api/reports/validated", async (req, res) => {
     try {
-      const reports = await storage.getConfirmedReports();
+      const reports = await storage.getValidatedReports();
       res.json(reports);
     } catch (error) {
-      console.error("Error fetching confirmed reports:", error);
-      res.status(500).json({ message: "Failed to fetch confirmed reports" });
+      console.error("Error fetching validated reports:", error);
+      res.status(500).json({ message: "Failed to fetch validated reports" });
     }
   });
 
@@ -127,28 +127,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Update report confirmation status (admin only)
-  app.patch("/api/reports/:id/confirmation", async (req, res) => {
+  // Update report validation status (admin only)
+  app.patch("/api/reports/:id/validation", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) {
         return res.status(400).json({ message: "Invalid report ID" });
       }
 
-      const { confirmed } = req.body;
-      if (!["pending", "approved", "rejected"].includes(confirmed)) {
-        return res.status(400).json({ message: "Invalid confirmation status" });
+      const { validated } = req.body;
+      if (!["pending", "approved", "rejected"].includes(validated)) {
+        return res.status(400).json({ message: "Invalid validation status" });
       }
 
-      const updatedReport = await storage.updateReportConfirmation(id, confirmed);
+      const updatedReport = await storage.updateReportValidation(id, validated);
       if (!updatedReport) {
         return res.status(404).json({ message: "Report not found" });
       }
 
       res.json(updatedReport);
     } catch (error) {
-      console.error("Error updating report confirmation:", error);
-      res.status(500).json({ message: "Failed to update report confirmation" });
+      console.error("Error updating report validation:", error);
+      res.status(500).json({ message: "Failed to update report validation" });
     }
   });
 

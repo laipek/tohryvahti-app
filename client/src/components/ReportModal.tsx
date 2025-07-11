@@ -74,26 +74,26 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
     }
   };
 
-  const handleConfirmationUpdate = async (confirmed: string) => {
+  const handleValidationUpdate = async (validated: string) => {
     try {
       const response = await apiRequest({
         method: 'PATCH',
-        url: `/api/reports/${report.id}/confirmation`,
-        body: { confirmed },
+        url: `/api/reports/${report.id}/validation`,
+        body: { validated },
       });
 
       if (response.ok) {
         toast({
-          title: confirmed === 'approved' ? t('confirmReport') : t('rejectReport'),
-          description: `Report ${confirmed}`,
+          title: validated === 'approved' ? t('validateReport') : t('rejectReport'),
+          description: `Report ${validated}`,
         });
         onClose();
       }
     } catch (error) {
-      console.error('Error updating confirmation:', error);
+      console.error('Error updating validation:', error);
       toast({
         title: t('error'),
-        description: 'Failed to update report confirmation',
+        description: 'Failed to update report validation',
         variant: 'destructive',
       });
     }
@@ -105,9 +105,9 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             {t('reportDetails')}
-            <Badge variant={report.confirmed === 'approved' ? 'default' : 
-                          report.confirmed === 'rejected' ? 'destructive' : 'secondary'}>
-              {t(report.confirmed)}
+            <Badge variant={report.validated === 'approved' ? 'default' : 
+                          report.validated === 'rejected' ? 'destructive' : 'secondary'}>
+              {t(report.validated)}
             </Badge>
           </DialogTitle>
         </DialogHeader>
@@ -259,21 +259,21 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
               </CardContent>
             </Card>
 
-            {/* Report Confirmation Actions */}
-            {report.confirmed === 'pending' && (
+            {/* Report Validation Actions */}
+            {report.validated === 'pending' && (
               <Card>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">Report Approval</CardTitle>
+                  <CardTitle className="text-lg">Report Validation</CardTitle>
                 </CardHeader>
                 <CardContent className="flex gap-3">
                   <Button 
-                    onClick={() => handleConfirmationUpdate('approved')}
+                    onClick={() => handleValidationUpdate('approved')}
                     className="flex-1 bg-municipal-green hover:bg-green-600 text-white"
                   >
-                    {t('confirmReport')}
+                    {t('validateReport')}
                   </Button>
                   <Button 
-                    onClick={() => handleConfirmationUpdate('rejected')}
+                    onClick={() => handleValidationUpdate('rejected')}
                     variant="destructive"
                     className="flex-1"
                   >

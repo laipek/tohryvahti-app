@@ -57,7 +57,7 @@
   "pending": "Pending approval",
   "approved": "Approved",
   "rejected": "Rejected",
-  "confirmReport": "Approve report",
+  "validateReport": "Validate report",
   "rejectReport": "Reject report",
   "propertyOwner": "Property Owner",
   "propertyDescription": "Property Description",

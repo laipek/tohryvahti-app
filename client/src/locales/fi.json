@@ -57,7 +57,7 @@
   "pending": "Odottaa hyväksyntää",
   "approved": "Hyväksytty",
   "rejected": "Hylätty",
-  "confirmReport": "Hyväksy ilmoitus",
+  "validateReport": "Vahvista ilmoitus",
   "rejectReport": "Hylkää ilmoitus",
   "propertyOwner": "Kiinteistön omistaja",
   "propertyDescription": "Kiinteistön kuvaus",

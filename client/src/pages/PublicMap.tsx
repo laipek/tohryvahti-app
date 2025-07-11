@@ -12,7 +12,7 @@ export default function PublicMap() {
   const [selectedReport, setSelectedReport] = useState<GraffitiReport | null>(null);
 
   const { data: reports = [], isLoading } = useQuery({
-    queryKey: ['/api/reports/confirmed'],
+    queryKey: ['/api/reports/validated'],
     enabled: true
   });
 

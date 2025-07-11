@@ -57,7 +57,7 @@
   "pending": "Väntar på godkännande",
   "approved": "Godkänd",
   "rejected": "Avvisad",
-  "confirmReport": "Godkänn rapport",
+  "validateReport": "Validera rapport",
   "rejectReport": "Avvisa rapport",
   "propertyOwner": "Fastighetsägare",
   "propertyDescription": "Fastighetsbeskrivning",
