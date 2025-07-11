@@ -116,7 +116,7 @@ export function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen pb-16">
+    <div className="min-h-screen">
       {/* Admin Header */}
       <div className="bg-white/80 backdrop-blur-md shadow-sm border-b border-municipal-border/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

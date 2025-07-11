@@ -78,19 +78,6 @@ function App() {
         <div className="min-h-screen relative">
           <Header />
           <Router />
-          
-          {/* Footer with language selector and copyright */}
-          <footer className="fixed bottom-0 left-0 right-0 z-40 bg-black/60 backdrop-blur-sm text-white">
-            <div className="flex justify-between items-center px-4 py-2">
-              <div className="text-xs leading-tight">
-                Vehoniemenharju. Kuva: Lassi Välimaa<br />
-                visitkangasala.fi
-              </div>
-              <div className="flex items-center">
-                <LanguageSelector />
-              </div>
-            </div>
-          </footer>
         </div>
         <Toaster />
       </TooltipProvider>

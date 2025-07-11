@@ -6,6 +6,7 @@ import { MapView } from '@/components/MapView';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Calendar, Building } from 'lucide-react';
 import type { GraffitiReport } from '@shared/schema';
+import { LanguageSelector } from '@/components/LanguageSelector';
 
 export default function PublicMap() {
   const { t } = useTranslation();
@@ -51,7 +52,7 @@ export default function PublicMap() {
     : 24.0658;
 
   return (
-    <div className="min-h-screen py-6 px-4 pb-20">
+    <div className="min-h-screen py-6 px-4">
       <div className="max-w-7xl mx-auto">
         <Card className="bg-white/85 backdrop-blur-md border-municipal-border/50 shadow-lg mb-6">
           <CardHeader>
@@ -194,6 +195,17 @@ export default function PublicMap() {
                 </div>
               </CardContent>
             </Card>
+          </div>
+        </div>
+        
+        {/* Language selector and copyright */}
+        <div className="mt-8 flex justify-between items-center px-4 py-4 bg-black/30 backdrop-blur-sm rounded-lg">
+          <div className="text-xs leading-tight text-white">
+            Vehoniemenharju. Kuva: Lassi Välimaa<br />
+            visitkangasala.fi
+          </div>
+          <div className="flex items-center">
+            <LanguageSelector />
           </div>
         </div>
       </div>

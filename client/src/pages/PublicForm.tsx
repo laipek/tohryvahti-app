@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ReportForm } from '@/components/ReportForm';
 import { Card, CardContent } from '@/components/ui/card';
 import { CheckCircle } from 'lucide-react';
+import { LanguageSelector } from '@/components/LanguageSelector';
 
 export default function PublicForm() {
   const { t } = useTranslation();
@@ -36,8 +37,16 @@ export default function PublicForm() {
           <ReportForm onSubmitSuccess={handleSubmitSuccess} />
         </div>
       </div>
-      {/* Add bottom padding for footer */}
-      <div className="h-16"></div>
+      {/* Language selector and copyright */}
+      <div className="mt-8 flex justify-between items-center px-4 py-4 bg-black/30 backdrop-blur-sm rounded-lg">
+        <div className="text-xs leading-tight text-white">
+          Vehoniemenharju. Kuva: Lassi Välimaa<br />
+          visitkangasala.fi
+        </div>
+        <div className="flex items-center">
+          <LanguageSelector />
+        </div>
+      </div>
     </div>
   );
 }
