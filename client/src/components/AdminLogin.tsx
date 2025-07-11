@@ -53,7 +53,7 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
-      <Card className="w-full max-w-md bg-white/75 backdrop-blur-md border-municipal-border/50 shadow-lg">
+      <Card className="w-full max-w-md bg-white/60 backdrop-blur-md border-municipal-border/40 shadow-lg">
         <CardHeader className="text-center">
           <div className="mx-auto w-12 h-12 bg-municipal-blue rounded-full flex items-center justify-center mb-4">
             <Shield className="w-6 h-6 text-white" />

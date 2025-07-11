@@ -19,7 +19,7 @@ export default function PublicForm() {
   if (showThankYou) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
-        <Card className="w-full max-w-md mx-auto bg-white/75 backdrop-blur-md border-municipal-border/30 shadow-lg">
+        <Card className="w-full max-w-md mx-auto bg-white/60 backdrop-blur-md border-municipal-border/30 shadow-lg">
           <CardContent className="p-6 text-center">
             <CheckCircle className="h-16 w-16 text-municipal-green mx-auto mb-4" />
             <h3 className="text-xl font-bold text-gray-900 mb-2">{t('thankYou')}</h3>
