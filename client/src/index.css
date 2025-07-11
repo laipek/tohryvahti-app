@@ -30,6 +30,9 @@
   --municipal-gray: hsl(0, 0%, 46%);
   --municipal-light: hsl(0, 0%, 96%);
   --municipal-border: hsl(0, 0%, 88%);
+  
+  /* Parallax offset variable */
+  --parallax-offset: 0px;
 }
 
 .dark {
@@ -71,21 +74,37 @@
     @apply font-sans antialiased;
     min-height: 100vh;
     touch-action: manipulation;
-    position: relative;
-    background: url('/src/assets/kangasala-landscape.png') center/cover no-repeat fixed;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* Create parallax background container */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
+    z-index: -1;
+    will-change: transform;
+    transform: translate3d(0, var(--parallax-offset, 0px), 0);
     background-color: #f5f5f5;
   }
   
-  /* Ensure background is visible on all devices */
-  @media (max-width: 768px) {
-    body {
-      background-attachment: scroll;
-    }
+  /* Parallax animation keyframes */
+  @keyframes parallaxMove {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(0, -5px, 0); }
   }
   
   /* Make the main app container transparent to show background */
   #root {
     background: transparent;
+    position: relative;
+    z-index: 1;
   }
 
   @keyframes cleanEnvironment {
