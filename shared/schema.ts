@@ -9,8 +9,8 @@ export const graffitiReports = pgTable("graffiti_reports", {
   longitude: real("longitude").notNull(),
   district: text("district").notNull(),
   description: text("description").notNull(),
+  name: text("name"),
   email: text("email"),
-  phone: text("phone"),
   status: text("status").notNull().default("new"), // new, progress, cleaned
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 });

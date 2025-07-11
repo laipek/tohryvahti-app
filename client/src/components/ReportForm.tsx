@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
-import { Camera, MapPin, Building, FileText, Mail, Phone, Send, Crosshair, Check, AlertTriangle } from 'lucide-react';
+import { Camera, MapPin, Building, FileText, Mail, User, Send, Crosshair, Check, AlertTriangle } from 'lucide-react';
 import { MapView } from './MapView';
 import { useToast } from '@/hooks/use-toast';
 import { collection, addDoc } from 'firebase/firestore';
@@ -19,8 +19,8 @@ interface ReportFormData {
   longitude: number | null;
   district: string;
   description: string;
+  name: string;
   email: string;
-  phone: string;
 }
 
 interface ReportFormProps {
@@ -38,8 +38,8 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     longitude: null,
     district: '',
     description: '',
-    email: '',
-    phone: ''
+    name: '',
+    email: ''
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -165,8 +165,8 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         longitude: formData.longitude,
         district: formData.district,
         description: formData.description,
+        name: formData.name || null,
         email: formData.email || null,
-        phone: formData.phone || null,
         status: 'new',
         timestamp: new Date()
       });
@@ -353,20 +353,26 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
               {t('contactInfo')}
             </Label>
             <div className="space-y-3">
-              <Input
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                className="border-municipal-border"
-                placeholder={t('email')}
-              />
-              <Input
-                type="tel"
-                value={formData.phone}
-                onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                className="border-municipal-border"
-                placeholder={t('phone')}
-              />
+              <div className="flex items-center space-x-2">
+                <User className="h-4 w-4 text-municipal-gray" />
+                <Input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  className="border-municipal-border flex-1"
+                  placeholder={t('name')}
+                />
+              </div>
+              <div className="flex items-center space-x-2">
+                <Mail className="h-4 w-4 text-municipal-gray" />
+                <Input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  className="border-municipal-border flex-1"
+                  placeholder={t('email')}
+                />
+              </div>
             </div>
             <p className="text-xs text-municipal-gray mt-2">
               {t('contactNote')}

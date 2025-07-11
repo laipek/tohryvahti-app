@@ -37,8 +37,8 @@ export class MemStorage implements IStorage {
       longitude: insertReport.longitude,
       district: insertReport.district,
       description: insertReport.description,
+      name: insertReport.name || null,
       email: insertReport.email || null,
-      phone: insertReport.phone || null,
       status: insertReport.status || "new",
       timestamp: new Date()
     };
