@@ -165,6 +165,8 @@ Copyright notice: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi" di
 ✓ Added clickable table rows in admin panel that open detailed case modals
 ✓ Implemented parallax scrolling effect for background image across all pages
 ✓ Background now moves at different pace than content for improved visual depth
+✓ Optimized background scaling to 150% for complete coverage without excessive oversizing
+✓ Fixed background coverage issues on submit page with enhanced transparency settings
 
 ### Scalability Considerations
 - Serverless database (Neon) scales automatically
