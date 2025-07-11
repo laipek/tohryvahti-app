@@ -15,13 +15,14 @@ i18n
       sv: { translation: sv },
       en: { translation: en }
     },
+    lng: 'fi', // Set default language explicitly
     fallbackLng: 'fi',
     debug: false,
     interpolation: {
       escapeValue: false
     },
     detection: {
-      order: ['localStorage', 'navigator', 'htmlTag'],
+      order: ['localStorage', 'htmlTag', 'navigator'],
       caches: ['localStorage'],
       lookupLocalStorage: 'i18nextLng',
     }
