@@ -54,7 +54,7 @@ export default function PublicMap() {
   return (
     <div className="min-h-screen py-6 px-4">
       <div className="max-w-7xl mx-auto">
-        <Card className="bg-white/85 backdrop-blur-md border-municipal-border/50 shadow-lg mb-6">
+        <Card className="bg-white/75 backdrop-blur-md border-municipal-border/30 shadow-lg mb-6">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-gray-900 text-center">
               {t('publicMap')}
@@ -68,7 +68,7 @@ export default function PublicMap() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Map */}
           <div className="lg:col-span-2">
-            <Card className="bg-white/85 backdrop-blur-md border-municipal-border/50 shadow-lg">
+            <Card className="bg-white/75 backdrop-blur-md border-municipal-border/30 shadow-lg">
               <CardContent className="p-0">
                 {!isLoading && reports.length > 0 && (
                   <MapView
@@ -108,7 +108,7 @@ export default function PublicMap() {
 
           {/* Report Details Sidebar */}
           <div>
-            <Card className="bg-white/85 backdrop-blur-md border-municipal-border/50 shadow-lg">
+            <Card className="bg-white/75 backdrop-blur-md border-municipal-border/30 shadow-lg">
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-gray-900">
                   {selectedReport ? t('reportDetails') : t('selectReportOnMap')}
@@ -198,14 +198,32 @@ export default function PublicMap() {
           </div>
         </div>
         
-        {/* Language selector and copyright */}
-        <div className="mt-8 flex justify-between items-center px-4 py-4 bg-black/30 backdrop-blur-sm rounded-lg">
-          <div className="text-xs leading-tight text-white">
-            Vehoniemenharju. Kuva: Lassi Välimaa<br />
-            visitkangasala.fi
+        {/* Language selector and footer */}
+        <div className="mt-8 space-y-4">
+          <div className="flex justify-between items-center px-4 py-4 bg-black/40 backdrop-blur-sm rounded-lg">
+            <div className="flex items-center">
+              <LanguageSelector />
+            </div>
           </div>
-          <div className="flex items-center">
-            <LanguageSelector />
+          
+          {/* Disclaimer and beta notice */}
+          <div className="px-4 py-3 bg-black/20 backdrop-blur-sm rounded-lg text-xs text-white/80 leading-relaxed">
+            <p className="mb-2">
+              <strong>BETA-versio:</strong> Töhryvahti on beta-vaiheessa oleva palvelu, jonka tarkoituksena on edistää ympäristön puhtautta ja luoda puhtaampi kaupunki kaikille. Palvelu voi sisältää virheitä tai keskeytyä ilman ennakkoilmoitusta.
+            </p>
+            <p className="mb-2">
+              Käyttämällä tätä palvelua hyväksyt, että ilmoittamasi tiedot käsitellään kunnan toimesta ilkivallan poistamiseksi. Palvelu ei takaa välitöntä toimenpiteiden aloittamista.
+            </p>
+            <p>
+              © 2025 Töhryvahti. Kaikki oikeudet pidätetään. Palvelun käyttö tapahtuu omalla vastuulla.
+            </p>
+          </div>
+          
+          {/* Image copyright */}
+          <div className="text-center">
+            <div className="text-xs text-white/60 bg-black/30 backdrop-blur-sm rounded px-3 py-2 inline-block">
+              Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi
+            </div>
           </div>
         </div>
       </div>
