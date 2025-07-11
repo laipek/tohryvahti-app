@@ -30,8 +30,14 @@ export default function PublicForm() {
   }
 
   return (
-    <div className="min-h-screen py-6 px-4">
-      <ReportForm onSubmitSuccess={handleSubmitSuccess} />
+    <div className="min-h-screen py-4 px-4 flex flex-col overflow-x-hidden">
+      <div className="flex-1 flex items-start justify-center">
+        <div className="w-full max-w-lg">
+          <ReportForm onSubmitSuccess={handleSubmitSuccess} />
+        </div>
+      </div>
+      {/* Add some bottom padding for mobile */}
+      <div className="h-8 sm:h-4"></div>
     </div>
   );
 }

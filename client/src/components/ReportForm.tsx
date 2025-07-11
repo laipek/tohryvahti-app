@@ -234,20 +234,20 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto bg-white/95 backdrop-blur-sm border-municipal-border shadow-lg">
-      <CardContent className="p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+    <Card className="w-full bg-white/95 backdrop-blur-sm border-municipal-border shadow-lg">
+      <CardContent className="p-4 sm:p-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">
           {t('reportGraffiti')}
         </h2>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Photo Upload */}
           <div>
             <Label className="flex items-center text-sm font-medium text-gray-700 mb-2">
               <Camera className="mr-2 h-4 w-4" />
               {t('takePhoto')}
             </Label>
-            <div className="border-2 border-dashed border-municipal-border rounded-lg p-6 text-center">
+            <div className="border-2 border-dashed border-municipal-border rounded-lg p-4 sm:p-6 text-center">
               <input
                 ref={fileInputRef}
                 type="file"
@@ -262,20 +262,20 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                 onClick={() => fileInputRef.current?.click()}
                 className="w-full flex flex-col items-center cursor-pointer"
               >
-                <Camera className="h-12 w-12 text-municipal-gray mb-4" />
-                <p className="text-municipal-gray mb-2">{t('tapToTakePhoto')}</p>
-                <p className="text-sm text-municipal-gray">{t('orSelectFile')}</p>
+                <Camera className="h-8 w-8 sm:h-12 sm:w-12 text-municipal-gray mb-2 sm:mb-4" />
+                <p className="text-sm sm:text-base text-municipal-gray mb-1 sm:mb-2">{t('tapToTakePhoto')}</p>
+                <p className="text-xs sm:text-sm text-municipal-gray">{t('orSelectFile')}</p>
               </button>
             </div>
             
             {imagePreviewUrls.length > 0 && (
-              <div className="mt-4 grid grid-cols-2 gap-4">
+              <div className="mt-3 sm:mt-4 grid grid-cols-2 gap-2 sm:gap-4">
                 {imagePreviewUrls.map((url, index) => (
                   <img
                     key={index}
                     src={url}
                     alt={`Preview ${index + 1}`}
-                    className="w-full h-24 object-cover rounded-lg"
+                    className="w-full h-20 sm:h-24 object-cover rounded-lg"
                   />
                 ))}
               </div>
@@ -298,11 +298,11 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
             </Button>
             
             {formData.latitude && formData.longitude && (
-              <div className="mt-4">
+              <div className="mt-3 sm:mt-4">
                 <MapView
                   latitude={formData.latitude}
                   longitude={formData.longitude}
-                  className="h-48 rounded-lg"
+                  className="h-32 sm:h-48 rounded-lg"
                 />
                 <p className="text-sm text-municipal-gray mt-2">
                   {t('coordinates')}: {formData.latitude.toFixed(6)}, {formData.longitude.toFixed(6)}
@@ -383,7 +383,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-municipal-green hover:bg-green-700 text-white font-medium"
+            className="w-full bg-municipal-green hover:bg-green-700 text-white font-medium py-3 sm:py-2"
           >
             {isSubmitting ? (
               <>
