@@ -38,7 +38,7 @@ export default function PublicForm() {
         </div>
       </div>
       {/* Language selector and footer */}
-      <div className="mt-8 space-y-4">
+      <div className="mt-12 space-y-6">
         <div className="flex justify-between items-center px-4 py-4 bg-black/40 backdrop-blur-sm rounded-lg">
           <div className="flex items-center">
             <LanguageSelector />
@@ -46,7 +46,7 @@ export default function PublicForm() {
         </div>
         
         {/* Disclaimer and beta notice */}
-        <div className="px-4 py-3 bg-black/20 backdrop-blur-sm rounded-lg text-xs text-white/80 leading-relaxed">
+        <div className="px-4 py-3 bg-black/20 backdrop-blur-sm rounded-lg text-xs text-white/70 leading-relaxed">
           <p className="mb-2">
             <strong>BETA-versio:</strong> Töhryvahti on avoin beta-vaiheessa oleva maksuton yleishyödyllinen palvelu, jonka tarkoituksena on mahdollistaa viihtyisämpi ja töhrytön ympäristö kaikille kaupunkilaisille. Palvelu voi sisältää virheitä tai keskeytyä ilman ennakkoilmoitusta.
           </p>
