@@ -39,7 +39,10 @@ export default function PublicMap() {
     lng: report.longitude,
     title: `${t(`districts.${report.district}`)} - ${formatDate(report.timestamp)}`,
     popup: report.description.substring(0, 100) + '...',
-    status: report.status as 'new' | 'progress' | 'cleaned'
+    status: report.status as 'new' | 'progress' | 'cleaned',
+    photo: report.photos && report.photos.length > 0 ? report.photos[0] : undefined,
+    timestamp: report.timestamp,
+    district: t(`districts.${report.district}`)
   }));
 
   // Calculate center point from all reports

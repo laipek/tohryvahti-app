@@ -39,6 +39,9 @@ interface MapViewProps {
     title?: string;
     popup?: string;
     status?: 'new' | 'progress' | 'cleaned';
+    photo?: string;
+    timestamp?: Date;
+    district?: string;
   }>;
   className?: string;
   onClick?: (lat: number, lng: number) => void;
@@ -81,12 +84,43 @@ export function MapView({
         .bindPopup(t('reportLocationLabel'))
         .openPopup();
 
-      // Add additional markers
+      // Add additional markers with enhanced popups
       markers.forEach(marker => {
         const markerInstance = L.marker([marker.lat, marker.lng]).addTo(map);
         
+        // Create enhanced popup content
+        let popupContent = '';
+        
+        if (marker.photo) {
+          popupContent += `<img src="${marker.photo}" alt="Report photo" style="width: 150px; height: 100px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;">`;
+        }
+        
+        if (marker.title) {
+          popupContent += `<div style="font-weight: bold; margin-bottom: 4px;">${marker.title}</div>`;
+        }
+        
+        if (marker.timestamp) {
+          const date = new Date(marker.timestamp);
+          const formattedDate = date.toLocaleDateString('fi-FI', {
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+          popupContent += `<div style="color: #666; font-size: 12px; margin-bottom: 4px;">📅 ${formattedDate}</div>`;
+        }
+        
+        if (marker.district) {
+          popupContent += `<div style="color: #666; font-size: 12px; margin-bottom: 4px;">📍 ${marker.district}</div>`;
+        }
+        
         if (marker.popup) {
-          markerInstance.bindPopup(marker.popup);
+          popupContent += `<div style="margin-top: 8px;">${marker.popup}</div>`;
+        }
+        
+        if (popupContent) {
+          markerInstance.bindPopup(popupContent, { maxWidth: 200 });
         }
       });
 

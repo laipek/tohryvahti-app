@@ -97,7 +97,10 @@ export function AdminDashboard() {
           </div>
         </div>
       `,
-      status: report.status as 'new' | 'progress' | 'cleaned'
+      status: report.status as 'new' | 'progress' | 'cleaned',
+      photo: report.photos && report.photos.length > 0 ? report.photos[0] : undefined,
+      timestamp: report.timestamp,
+      district: t('districts.' + report.district)
     }));
   };
 

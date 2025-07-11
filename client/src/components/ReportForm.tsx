@@ -166,7 +166,8 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         description: formData.description,
         name: formData.name || null,
         email: formData.email || null,
-        status: 'new'
+        status: 'new',
+        validated: 'pending'
       };
 
       const response = await fetch('/api/reports', {
