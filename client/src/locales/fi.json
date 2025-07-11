@@ -74,7 +74,7 @@
   "reporterEmail": "Ilmoittajan sähköposti (valinnainen)",
   "anonymous": "Anonyymi",
   "optional": "valinnainen",
-  "contactInfoHelp": "Yhteystietojen antaminen on vapaaehtoista. Käytämme tietoja vain ilmoituksen tilapäivitysten lähettämiseen. Voit jättää ilmoituksen myös nimettömänä.",
+  "contactInfoHelp": "Yhteystiedot ovat vapaaehtoisia. Käytämme tietoja vain mahdollisen ilmoituksen tilapäivitysten lähettämiseen.",
   "contactStatusUpdates": "Yhteystiedot käytetään vain ilmoituksen etenemisen tiedottamiseen",
   "updateProperty": "Päivitä kiinteistötiedot",
   "propertyUpdated": "Kiinteistötiedot päivitetty",
