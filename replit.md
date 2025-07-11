@@ -161,6 +161,10 @@ Copyright notice: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi" di
 ✓ Legal basis specified: Added proper consent mechanism and legitimate interest basis
 ✓ Privacy enhancement: Strengthened photo privacy notices with GDPR references
 ✓ System ready for beta testing deployment on Replit platform
+✓ Enhanced verification status management - admins can change between approved/rejected/pending states
+✓ Added clickable table rows in admin panel that open detailed case modals
+✓ Implemented parallax scrolling effect for background image across all pages
+✓ Background now moves at different pace than content for improved visual depth
 
 ### Scalability Considerations
 - Serverless database (Neon) scales automatically
