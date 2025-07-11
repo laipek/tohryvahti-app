@@ -157,21 +157,29 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     setIsSubmitting(true);
     
     try {
-      // Upload photos to Firebase Storage
-      const photoUrls = await uploadPhotos(formData.photos);
-      
-      // Save report to Firestore
-      await addDoc(collection(db, 'graffiti-reports'), {
-        photos: photoUrls,
+      // For now, use the backend API instead of Firebase
+      const reportData = {
+        photos: formData.photos.map(file => URL.createObjectURL(file)), // Convert files to URLs for demo
         latitude: formData.latitude,
         longitude: formData.longitude,
         district: formData.district,
         description: formData.description,
         name: formData.name || null,
         email: formData.email || null,
-        status: 'new',
-        timestamp: new Date()
+        status: 'new'
+      };
+
+      const response = await fetch('/api/reports', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reportData),
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       
       toast({
         title: t('thankYou'),
