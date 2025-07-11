@@ -42,7 +42,8 @@ export default function PublicMap() {
     status: report.status as 'new' | 'progress' | 'cleaned',
     photo: report.photos && report.photos.length > 0 ? report.photos[0] : undefined,
     timestamp: report.timestamp,
-    district: t(`districts.${report.district}`)
+    district: t(`districts.${report.district}`),
+    id: report.id
   }));
 
   // Calculate center point from all reports
@@ -92,6 +93,13 @@ export default function PublicMap() {
                         return currDist < prevDist ? curr : prev;
                       });
                       setSelectedReport(closest);
+                    }}
+                    onMarkerClick={(markerId) => {
+                      // Find the report by ID and set it as selected
+                      const report = reports.find((r: GraffitiReport) => r.id === markerId);
+                      if (report) {
+                        setSelectedReport(report);
+                      }
                     }}
                   />
                 )}

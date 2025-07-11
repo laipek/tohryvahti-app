@@ -42,9 +42,11 @@ interface MapViewProps {
     photo?: string;
     timestamp?: Date;
     district?: string;
+    id?: number;
   }>;
   className?: string;
   onClick?: (lat: number, lng: number) => void;
+  onMarkerClick?: (markerId: number) => void;
 }
 
 export function MapView({ 
@@ -53,7 +55,8 @@ export function MapView({
   zoom = 16, 
   markers = [], 
   className,
-  onClick 
+  onClick,
+  onMarkerClick
 }: MapViewProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
@@ -122,6 +125,14 @@ export function MapView({
         if (popupContent) {
           markerInstance.bindPopup(popupContent, { maxWidth: 200 });
         }
+        
+        // Add click handler to marker
+        if (onMarkerClick && marker.id) {
+          markerInstance.on('click', (e: any) => {
+            e.originalEvent.stopPropagation();
+            onMarkerClick(marker.id!);
+          });
+        }
       });
 
       // Handle click events
@@ -142,7 +153,7 @@ export function MapView({
         mapInstanceRef.current = null;
       }
     };
-  }, [latitude, longitude, zoom, markers, onClick, t]);
+  }, [latitude, longitude, zoom, markers, onClick, onMarkerClick, t]);
 
   return (
     <div 
