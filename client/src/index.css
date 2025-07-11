@@ -76,8 +76,15 @@
     background-attachment: fixed;
     min-height: 100vh;
     touch-action: manipulation;
-    background-attachment: fixed;
     position: relative;
+  }
+  
+  /* Ensure background is visible on mobile */
+  @media (max-width: 768px) {
+    body {
+      background-attachment: scroll;
+      background-size: cover;
+    }
   }
 
   body::before {

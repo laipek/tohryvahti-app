@@ -118,7 +118,7 @@ export function AdminDashboard() {
   return (
     <div className="min-h-screen">
       {/* Admin Header */}
-      <div className="bg-white/95 backdrop-blur-sm shadow-sm border-b border-municipal-border">
+      <div className="bg-white/80 backdrop-blur-md shadow-sm border-b border-municipal-border/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <h2 className="text-xl font-bold text-gray-900">{t('adminPanel')}</h2>

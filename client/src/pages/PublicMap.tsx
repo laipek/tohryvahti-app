@@ -53,7 +53,7 @@ export default function PublicMap() {
   return (
     <div className="min-h-screen py-6 px-4">
       <div className="max-w-7xl mx-auto">
-        <Card className="bg-white/95 backdrop-blur-sm border-municipal-border shadow-lg mb-6">
+        <Card className="bg-white/85 backdrop-blur-md border-municipal-border/50 shadow-lg mb-6">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-gray-900 text-center">
               {t('publicMap')}
@@ -67,7 +67,7 @@ export default function PublicMap() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Map */}
           <div className="lg:col-span-2">
-            <Card className="bg-white/95 backdrop-blur-sm border-municipal-border shadow-lg">
+            <Card className="bg-white/85 backdrop-blur-md border-municipal-border/50 shadow-lg">
               <CardContent className="p-0">
                 {!isLoading && reports.length > 0 && (
                   <MapView
@@ -107,7 +107,7 @@ export default function PublicMap() {
 
           {/* Report Details Sidebar */}
           <div>
-            <Card className="bg-white/95 backdrop-blur-sm border-municipal-border shadow-lg">
+            <Card className="bg-white/85 backdrop-blur-md border-municipal-border/50 shadow-lg">
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-gray-900">
                   {selectedReport ? t('reportDetails') : t('selectReportOnMap')}

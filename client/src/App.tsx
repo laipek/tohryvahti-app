@@ -19,21 +19,21 @@ function Header() {
   const [location, setLocation] = useLocation();
 
   return (
-    <header className="bg-white/95 backdrop-blur-sm shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
-            <PaintbrushVertical className="h-6 w-6 text-municipal-blue mr-3" />
-            <h1 className="text-xl font-bold text-gray-900">{t('title')}</h1>
+    <header className="bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+        <div className="flex justify-between items-center h-14 sm:h-16">
+          <div className="flex items-center min-w-0 flex-shrink">
+            <PaintbrushVertical className="h-5 w-5 sm:h-6 sm:w-6 text-municipal-blue mr-2 sm:mr-3 flex-shrink-0" />
+            <h1 className="text-base sm:text-xl font-bold text-gray-900 truncate">{t('title')}</h1>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
             <LanguageSelector />
-            <div className="flex bg-municipal-border rounded-lg p-1">
+            <div className="flex bg-municipal-border/70 backdrop-blur-sm rounded-lg p-0.5 sm:p-1">
               <Button
                 variant={location === '/' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setLocation('/')}
-                className={location === '/' ? 'bg-municipal-blue text-white' : 'text-municipal-gray hover:text-municipal-blue'}
+                className={`text-xs sm:text-sm px-1.5 sm:px-3 py-1 sm:py-2 h-auto ${location === '/' ? 'bg-municipal-blue text-white' : 'text-municipal-gray hover:text-municipal-blue'}`}
               >
                 {t('report')}
               </Button>
@@ -41,7 +41,7 @@ function Header() {
                 variant={location === '/map' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setLocation('/map')}
-                className={location === '/map' ? 'bg-municipal-blue text-white' : 'text-municipal-gray hover:text-municipal-blue'}
+                className={`text-xs sm:text-sm px-1.5 sm:px-3 py-1 sm:py-2 h-auto ${location === '/map' ? 'bg-municipal-blue text-white' : 'text-municipal-gray hover:text-municipal-blue'}`}
               >
                 {t('map')}
               </Button>
@@ -49,7 +49,7 @@ function Header() {
                 variant={location === '/admin' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setLocation('/admin')}
-                className={location === '/admin' ? 'bg-municipal-blue text-white' : 'text-municipal-gray hover:text-municipal-blue'}
+                className={`text-xs sm:text-sm px-1.5 sm:px-3 py-1 sm:py-2 h-auto ${location === '/admin' ? 'bg-municipal-blue text-white' : 'text-municipal-gray hover:text-municipal-blue'}`}
               >
                 {t('admin')}
               </Button>
