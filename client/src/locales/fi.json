@@ -84,7 +84,7 @@
   "updating": "Päivitetään...",
   "cookieConsent": {
     "title": "Evästeet ja tietosuoja",
-    "description": "Käytämme evästeitä kielen tallentamiseen ja palvelun toimivuuden varmistamiseksi. Tiedot käsitellään GDPR-säädösten mukaisesti.",
+    "description": "Käytämme evästeitä kieliasetuksen muistamiseen ja istunnon hallintaan. Tiedot käsitellään GDPR-säädösten mukaisesti.",
     "accept": "Hyväksy evästeet",
     "decline": "Hylkää evästeet"
   },

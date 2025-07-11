@@ -84,7 +84,7 @@
   "updating": "Uppdaterar...",
   "cookieConsent": {
     "title": "Cookies och integritet",
-    "description": "Vi använder cookies för att spara dina språkpreferenser och säkerställa tjänstens funktionalitet. Data behandlas enligt GDPR-reglerna.",
+    "description": "Vi använder cookies för att komma ihåg dina språkpreferenser och hantera sessioner. Data behandlas enligt GDPR-reglerna.",
     "accept": "Acceptera cookies",
     "decline": "Avböj cookies"
   },
