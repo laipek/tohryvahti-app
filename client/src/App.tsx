@@ -73,7 +73,7 @@ function App() {
           {/* Image copyright notice */}
           <div className="image-copyright">
             Vehoniemenharju. Kuva: Lassi Välimaa<br />
-            Source: Visit Kangasala
+            visitkangasala.fi
           </div>
         </div>
         <Toaster />
