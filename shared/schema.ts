@@ -12,6 +12,7 @@ export const graffitiReports = pgTable("graffiti_reports", {
   name: text("name"),
   email: text("email"),
   status: text("status").notNull().default("new"), // new, progress, cleaned
+  confirmed: text("confirmed").notNull().default("pending"), // pending, approved, rejected
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
 

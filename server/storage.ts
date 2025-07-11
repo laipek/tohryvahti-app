@@ -5,8 +5,11 @@ export interface IStorage {
   getReport(id: number): Promise<GraffitiReport | undefined>;
   createReport(report: InsertGraffitiReport): Promise<GraffitiReport>;
   updateReportStatus(id: number, status: string): Promise<GraffitiReport | undefined>;
+  updateReportConfirmation(id: number, confirmed: string): Promise<GraffitiReport | undefined>;
   getReportsByStatus(status: string): Promise<GraffitiReport[]>;
   getReportsByDistrict(district: string): Promise<GraffitiReport[]>;
+  getConfirmedReports(): Promise<GraffitiReport[]>;
+  getPendingReports(): Promise<GraffitiReport[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -40,6 +43,7 @@ export class MemStorage implements IStorage {
       name: insertReport.name || null,
       email: insertReport.email || null,
       status: insertReport.status || "new",
+      confirmed: insertReport.confirmed || "pending",
       timestamp: new Date()
     };
     
@@ -65,6 +69,27 @@ export class MemStorage implements IStorage {
   async getReportsByDistrict(district: string): Promise<GraffitiReport[]> {
     return Array.from(this.reports.values())
       .filter(report => report.district === district)
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }
+
+  async updateReportConfirmation(id: number, confirmed: string): Promise<GraffitiReport | undefined> {
+    const report = this.reports.get(id);
+    if (!report) return undefined;
+    
+    const updatedReport = { ...report, confirmed };
+    this.reports.set(id, updatedReport);
+    return updatedReport;
+  }
+
+  async getConfirmedReports(): Promise<GraffitiReport[]> {
+    return Array.from(this.reports.values())
+      .filter(report => report.confirmed === "approved")
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }
+
+  async getPendingReports(): Promise<GraffitiReport[]> {
+    return Array.from(this.reports.values())
+      .filter(report => report.confirmed === "pending")
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
   }
 }

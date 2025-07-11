@@ -21,7 +21,7 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Get all graffiti reports
+  // Get all graffiti reports (admin only)
   app.get("/api/reports", async (req, res) => {
     try {
       const reports = await storage.getAllReports();
@@ -29,6 +29,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching reports:", error);
       res.status(500).json({ message: "Failed to fetch reports" });
+    }
+  });
+
+  // Get confirmed reports (public)
+  app.get("/api/reports/confirmed", async (req, res) => {
+    try {
+      const reports = await storage.getConfirmedReports();
+      res.json(reports);
+    } catch (error) {
+      console.error("Error fetching confirmed reports:", error);
+      res.status(500).json({ message: "Failed to fetch confirmed reports" });
+    }
+  });
+
+  // Get pending reports (admin only)
+  app.get("/api/reports/pending", async (req, res) => {
+    try {
+      const reports = await storage.getPendingReports();
+      res.json(reports);
+    } catch (error) {
+      console.error("Error fetching pending reports:", error);
+      res.status(500).json({ message: "Failed to fetch pending reports" });
     }
   });
 
@@ -102,6 +124,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating report status:", error);
       res.status(500).json({ message: "Failed to update report status" });
+    }
+  });
+
+  // Update report confirmation status (admin only)
+  app.patch("/api/reports/:id/confirmation", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid report ID" });
+      }
+
+      const { confirmed } = req.body;
+      if (!["pending", "approved", "rejected"].includes(confirmed)) {
+        return res.status(400).json({ message: "Invalid confirmation status" });
+      }
+
+      const updatedReport = await storage.updateReportConfirmation(id, confirmed);
+      if (!updatedReport) {
+        return res.status(404).json({ message: "Report not found" });
+      }
+
+      res.json(updatedReport);
+    } catch (error) {
+      console.error("Error updating report confirmation:", error);
+      res.status(500).json({ message: "Failed to update report confirmation" });
     }
   });
 

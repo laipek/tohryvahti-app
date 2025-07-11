@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'wouter';
 import PublicForm from "@/pages/PublicForm";
 import AdminPanel from "@/pages/AdminPanel";
+import PublicMap from "@/pages/PublicMap";
 import NotFound from "@/pages/not-found";
 import './lib/i18n';
 
@@ -37,6 +38,14 @@ function Header() {
                 {t('report')}
               </Button>
               <Button
+                variant={location === '/map' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setLocation('/map')}
+                className={location === '/map' ? 'bg-municipal-blue text-white' : 'text-municipal-gray hover:text-municipal-blue'}
+              >
+                {t('map')}
+              </Button>
+              <Button
                 variant={location === '/admin' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setLocation('/admin')}
@@ -56,6 +65,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={PublicForm} />
+      <Route path="/map" component={PublicMap} />
       <Route path="/admin" component={AdminPanel} />
       <Route component={NotFound} />
     </Switch>
