@@ -19,11 +19,16 @@ export default function PublicForm() {
   if (showThankYou) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
-        <Card className="w-full max-w-md mx-auto bg-white/60 backdrop-blur-md border-municipal-border/30 shadow-lg">
-          <CardContent className="p-6 text-center">
-            <CheckCircle className="h-16 w-16 text-municipal-green mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-gray-900 mb-2">{t('thankYou')}</h3>
-            <p className="text-municipal-gray">{t('thankYouMessage')}</p>
+        <Card className="w-full max-w-lg mx-auto bg-white/60 backdrop-blur-md border-municipal-border/30 shadow-lg">
+          <CardContent className="p-8 text-center">
+            <CheckCircle className="h-20 w-20 text-municipal-green mx-auto mb-6" />
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('thankYou')}</h3>
+            <p className="text-gray-700 text-lg leading-relaxed mb-4">{t('thankYouMessage')}</p>
+            <div className="mt-6 p-4 bg-municipal-light rounded-lg">
+              <p className="text-sm text-municipal-gray">
+                💡 <span>{t('mapTrackingNotice', 'Voit seurata hyväksyttyjä ilmoituksia karttanäkymästä')}</span>
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
