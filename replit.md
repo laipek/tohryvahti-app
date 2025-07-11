@@ -9,6 +9,8 @@ This is a full-stack web application for reporting and managing graffiti inciden
 Preferred communication style: Simple, everyday language.
 Default application language: Finnish (fi) - users should see Finnish text by default, with option to switch to Swedish or English.
 Districts updated to Finnish municipalities: Asema, Haapaniemi, Huutijärvi, Ilkko, Kangasalan keskusta, Kuohenmaa, Lamminrahka, Lentola, Lihasula, Raikku, Ranta-Koivisto, Raudanmaa, Riku, Ruutana, Saarenmaa, Saarikylät, Suinula, Tiihala, Vatiala, Vehkajärvi, Vääksy.
+Background image: Use authentic Finnish landscape from Kangasala area (Vehoniemenharju) with proper attribution.
+Copyright notice: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi" displayed in bottom right corner.
 
 ## System Architecture
 
@@ -126,6 +128,18 @@ Districts updated to Finnish municipalities: Asema, Haapaniemi, Huutijärvi, Ilk
 - Firebase configuration for storage and real-time features
 - Language detection and persistence
 - Mobile-responsive design considerations
+- Authentic Finnish landscape background with proper copyright attribution
+
+## Recent Changes (January 2025)
+
+✓ Implemented complete dual-app architecture (public form + admin dashboard)
+✓ Added Finnish language as default with Swedish/English support
+✓ Integrated 21 specific Finnish districts from Kangasala area
+✓ Added beautiful Finnish landscape background (Vehoniemenharju)
+✓ Applied semi-transparent styling to maintain readability over background
+✓ Added proper image copyright attribution: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi"
+✓ Mobile-responsive design with camera integration and geolocation
+✓ Firebase integration setup (requires API keys for full functionality)
 
 ### Scalability Considerations
 - Serverless database (Neon) scales automatically
