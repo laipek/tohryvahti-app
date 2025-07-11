@@ -156,39 +156,16 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     
     setIsSubmitting(true);
     
-    try {
-      // Upload photos to Firebase Storage
-      const photoUrls = await uploadPhotos(formData.photos);
-      
-      // Save report to Firestore
-      await addDoc(collection(db, 'graffiti-reports'), {
-        photos: photoUrls,
-        latitude: formData.latitude,
-        longitude: formData.longitude,
-        district: formData.district,
-        description: formData.description,
-        name: formData.name || null,
-        email: formData.email || null,
-        status: 'new',
-        timestamp: new Date()
-      });
-      
+    // Simulate processing delay
+    setTimeout(() => {
       toast({
-        title: t('thankYou'),
-        description: t('thankYouMessage'),
+        title: "Kehitysversio",
+        description: "Ilmoitusten lähetys on vielä kehityksen alla. Kiitos kärsivällisyydestäsi!",
+        variant: "default"
       });
       
-      onSubmitSuccess();
-    } catch (error) {
-      console.error('Error submitting report:', error);
-      toast({
-        title: "Submission Error",
-        description: "Failed to submit report. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
       setIsSubmitting(false);
-    }
+    }, 1500);
   };
 
   const getLocationButtonContent = () => {
