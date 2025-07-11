@@ -17,7 +17,7 @@ export default function PublicForm() {
 
   if (showThankYou) {
     return (
-      <div className="min-h-screen bg-municipal-light flex items-center justify-center px-4">
+      <div className="min-h-screen flex items-center justify-center px-4">
         <Card className="w-full max-w-md mx-auto bg-white/95 backdrop-blur-sm border-municipal-border shadow-lg">
           <CardContent className="p-6 text-center">
             <CheckCircle className="h-16 w-16 text-municipal-green mx-auto mb-4" />
@@ -30,7 +30,7 @@ export default function PublicForm() {
   }
 
   return (
-    <div className="min-h-screen bg-municipal-light py-6 px-4">
+    <div className="min-h-screen py-6 px-4">
       <ReportForm onSubmitSuccess={handleSubmitSuccess} />
     </div>
   );

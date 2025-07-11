@@ -66,7 +66,14 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div className="min-h-screen bg-municipal-light">
+        <div className="min-h-screen relative">
+          {/* Clean environment decorative particles */}
+          <div className="clean-particle"></div>
+          <div className="clean-particle"></div>
+          <div className="clean-particle"></div>
+          <div className="clean-particle"></div>
+          <div className="clean-particle"></div>
+          
           <Header />
           <Router />
         </div>
