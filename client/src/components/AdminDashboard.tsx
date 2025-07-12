@@ -447,10 +447,10 @@ export function AdminDashboard() {
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          {t('photo')}
-                        </th>
-                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
                           {t('date')}
+                        </th>
+                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          {t('photo')}
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           {t('district')}
@@ -476,6 +476,12 @@ export function AdminDashboard() {
                           className="hover:bg-gray-50 cursor-pointer"
                           onClick={() => openReportModal(report)}
                         >
+                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm text-gray-900">
+                            <div className="flex flex-col">
+                              <span className="font-medium">{formatDate(report.timestamp).split(' ')[0]}</span>
+                              <span className="text-gray-500 text-xs">{formatDate(report.timestamp).split(' ')[1]}</span>
+                            </div>
+                          </td>
                           <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
                             {report.photos && report.photos.length > 0 && (
                               <img 
@@ -484,9 +490,6 @@ export function AdminDashboard() {
                                 className="w-12 h-12 lg:w-16 lg:h-16 rounded-lg object-cover"
                               />
                             )}
-                          </td>
-                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm text-gray-900 hidden sm:table-cell">
-                            {formatDate(report.timestamp)}
                           </td>
                           <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm text-gray-900">
                             <div className="max-w-20 lg:max-w-none truncate">
