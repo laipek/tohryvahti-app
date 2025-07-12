@@ -1,25 +1,31 @@
-import { graffitiReports, type GraffitiReport, type InsertGraffitiReport } from "@shared/schema";
+import { graffitiReports, type GraffitiReport, type InsertGraffitiReport, type ReportHistoryEntry, type InsertReportHistoryEntry } from "@shared/schema";
 
 export interface IStorage {
   getAllReports(): Promise<GraffitiReport[]>;
   getReport(id: number): Promise<GraffitiReport | undefined>;
   createReport(report: InsertGraffitiReport): Promise<GraffitiReport>;
-  updateReportStatus(id: number, status: string): Promise<GraffitiReport | undefined>;
-  updateReportValidation(id: number, validated: string): Promise<GraffitiReport | undefined>;
-  updateReportProperty(id: number, propertyOwner: string, propertyDescription?: string): Promise<GraffitiReport | undefined>;
+  updateReportStatus(id: number, status: string, adminUser?: string): Promise<GraffitiReport | undefined>;
+  updateReportValidation(id: number, validated: string, adminUser?: string): Promise<GraffitiReport | undefined>;
+  updateReportProperty(id: number, propertyOwner: string, propertyDescription?: string, adminUser?: string): Promise<GraffitiReport | undefined>;
   getReportsByStatus(status: string): Promise<GraffitiReport[]>;
   getReportsByDistrict(district: string): Promise<GraffitiReport[]>;
   getValidatedReports(): Promise<GraffitiReport[]>;
   getPendingReports(): Promise<GraffitiReport[]>;
+  getReportHistory(reportId: number): Promise<ReportHistoryEntry[]>;
+  addHistoryEntry(entry: InsertReportHistoryEntry): Promise<ReportHistoryEntry>;
 }
 
 export class MemStorage implements IStorage {
   private reports: Map<number, GraffitiReport>;
+  private history: Map<number, ReportHistoryEntry>;
   private currentId: number;
+  private currentHistoryId: number;
 
   constructor() {
     this.reports = new Map();
+    this.history = new Map();
     this.currentId = 1;
+    this.currentHistoryId = 1;
     this.initializeMockData();
   }
 
@@ -259,7 +265,41 @@ export class MemStorage implements IStorage {
         ...report
       };
       this.reports.set(fullReport.id, fullReport);
+      
+      // Add creation history for each report
+      this.addMockHistoryEntry(fullReport.id, 'created', null, 'Report created', null, `Report submitted from ${fullReport.district}`, fullReport.timestamp);
+      
+      // Add some realistic history for non-new reports
+      if (fullReport.status !== 'new') {
+        const statusChangeTime = new Date(fullReport.timestamp.getTime() + (1000 * 60 * 60 * 2)); // 2 hours later
+        this.addMockHistoryEntry(fullReport.id, 'status_changed', 'new', fullReport.status, 'admin', `Status changed from new to ${fullReport.status}`, statusChangeTime);
+      }
+      
+      if (fullReport.validated === 'approved') {
+        const validationTime = new Date(fullReport.timestamp.getTime() + (1000 * 60 * 30)); // 30 minutes later
+        this.addMockHistoryEntry(fullReport.id, 'validated', 'pending', 'approved', 'admin', 'Report reviewed and approved for public display', validationTime);
+      }
+      
+      if (fullReport.propertyOwner) {
+        const propertyTime = new Date(fullReport.timestamp.getTime() + (1000 * 60 * 60)); // 1 hour later
+        this.addMockHistoryEntry(fullReport.id, 'property_updated', 'none', fullReport.propertyOwner, 'admin', `Property owner assigned: ${fullReport.propertyDescription || 'No description'}`, propertyTime);
+      }
     });
+  }
+
+  private addMockHistoryEntry(reportId: number, action: string, oldValue: string | null, newValue: string, adminUser: string | null, notes: string, timestamp: Date) {
+    const id = this.currentHistoryId++;
+    const historyEntry: ReportHistoryEntry = {
+      id,
+      reportId,
+      action,
+      oldValue,
+      newValue,
+      adminUser,
+      notes,
+      timestamp
+    };
+    this.history.set(id, historyEntry);
   }
 
   async getAllReports(): Promise<GraffitiReport[]> {
@@ -291,15 +331,59 @@ export class MemStorage implements IStorage {
     };
     
     this.reports.set(id, report);
+    
+    // Add creation history entry
+    await this.addHistoryEntry({
+      reportId: id,
+      action: 'created',
+      oldValue: null,
+      newValue: 'Report created',
+      adminUser: null,
+      notes: `Report submitted from ${insertReport.district}`
+    });
+    
     return report;
   }
 
-  async updateReportStatus(id: number, status: string): Promise<GraffitiReport | undefined> {
+  async updateReportStatus(id: number, status: string, adminUser?: string): Promise<GraffitiReport | undefined> {
     const report = this.reports.get(id);
     if (!report) return undefined;
     
+    const oldStatus = report.status;
     const updatedReport = { ...report, status };
     this.reports.set(id, updatedReport);
+    
+    // Add history entry
+    await this.addHistoryEntry({
+      reportId: id,
+      action: 'status_changed',
+      oldValue: oldStatus,
+      newValue: status,
+      adminUser: adminUser || 'admin',
+      notes: `Status changed from ${oldStatus} to ${status}`
+    });
+    
+    return updatedReport;
+  }
+
+  async updateReportProperty(id: number, propertyOwner: string, propertyDescription?: string, adminUser?: string): Promise<GraffitiReport | undefined> {
+    const report = this.reports.get(id);
+    if (!report) return undefined;
+    
+    const oldOwner = report.propertyOwner || 'none';
+    const updatedReport = { ...report, propertyOwner, propertyDescription };
+    this.reports.set(id, updatedReport);
+    
+    // Add history entry
+    await this.addHistoryEntry({
+      reportId: id,
+      action: 'property_updated',
+      oldValue: oldOwner,
+      newValue: propertyOwner,
+      adminUser: adminUser || 'admin',
+      notes: `Property owner updated: ${propertyDescription || 'No description'}`
+    });
+    
     return updatedReport;
   }
 
@@ -315,26 +399,48 @@ export class MemStorage implements IStorage {
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
   }
 
-  async updateReportValidation(id: number, validated: string): Promise<GraffitiReport | undefined> {
+  async updateReportValidation(id: number, validated: string, adminUser?: string): Promise<GraffitiReport | undefined> {
     const report = this.reports.get(id);
     if (!report) return undefined;
     
+    const oldValidation = report.validated;
     const updatedReport = { ...report, validated };
     this.reports.set(id, updatedReport);
+    
+    // Add history entry
+    await this.addHistoryEntry({
+      reportId: id,
+      action: 'validated',
+      oldValue: oldValidation,
+      newValue: validated,
+      adminUser: adminUser || 'admin',
+      notes: `Validation status changed from ${oldValidation} to ${validated}`
+    });
+    
     return updatedReport;
   }
 
-  async updateReportProperty(id: number, propertyOwner: string, propertyDescription?: string): Promise<GraffitiReport | undefined> {
-    const report = this.reports.get(id);
-    if (!report) return undefined;
-    
-    const updatedReport = { 
-      ...report, 
-      propertyOwner,
-      propertyDescription: propertyDescription !== undefined ? propertyDescription : report.propertyDescription
+  async getReportHistory(reportId: number): Promise<ReportHistoryEntry[]> {
+    return Array.from(this.history.values())
+      .filter(entry => entry.reportId === reportId)
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }
+
+  async addHistoryEntry(entry: InsertReportHistoryEntry): Promise<ReportHistoryEntry> {
+    const id = this.currentHistoryId++;
+    const historyEntry: ReportHistoryEntry = {
+      id,
+      reportId: entry.reportId,
+      action: entry.action,
+      oldValue: entry.oldValue,
+      newValue: entry.newValue,
+      adminUser: entry.adminUser,
+      notes: entry.notes,
+      timestamp: new Date()
     };
-    this.reports.set(id, updatedReport);
-    return updatedReport;
+    
+    this.history.set(id, historyEntry);
+    return historyEntry;
   }
 
   async getValidatedReports(): Promise<GraffitiReport[]> {

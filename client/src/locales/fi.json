@@ -177,5 +177,14 @@
     "vatiala": "Vatiala",
     "vehkajarvi": "Vehkajärvi",
     "vaaksy": "Vääksy"
+  },
+  "changeHistory": "Muutoshistoria",
+  "historyDescription": "Tässä näet kaikki tapaukselle tehdyt muutokset ja toimenpiteet.",
+  "noHistoryFound": "Ei muutoshistoriaa saatavilla",
+  "historyActions": {
+    "created": "Ilmoitus luotu",
+    "status_changed": "Tila muutettu",
+    "validated": "Vahvistustila muutettu",
+    "property_updated": "Kiinteistötiedot päivitetty"
   }
 }

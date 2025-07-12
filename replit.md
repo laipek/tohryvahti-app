@@ -171,6 +171,12 @@ Copyright notice: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi" di
 ✓ Added clickable image popup functionality for full-size image viewing in admin panel
 ✓ Fixed image upload handling with proper FormData and base64 conversion
 ✓ All mock reports include realistic timestamps and new reports automatically get current timestamp
+✓ Implemented comprehensive change history tracking system with new database schema and storage methods
+✓ Created history API endpoint (/api/reports/:id/history) for fetching change logs
+✓ Added tabbed interface in admin report modal with dedicated History tab
+✓ History displays all actions (creation, status changes, validation, property updates) with timestamps and admin user info
+✓ Mock reports include realistic history entries showing progression from creation to current state
+✓ Finnish translations added for history interface and action types
 
 ### Scalability Considerations
 - Serverless database (Neon) scales automatically

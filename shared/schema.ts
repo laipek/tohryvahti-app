@@ -18,10 +18,28 @@ export const graffitiReports = pgTable("graffiti_reports", {
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
 
+export const reportHistory = pgTable("report_history", {
+  id: serial("id").primaryKey(),
+  reportId: integer("report_id").notNull().references(() => graffitiReports.id),
+  action: text("action").notNull(), // "created", "status_changed", "validated", "property_updated"
+  oldValue: text("old_value"),
+  newValue: text("new_value").notNull(),
+  adminUser: text("admin_user"), // username of admin who made the change
+  notes: text("notes"), // optional notes about the change
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+});
+
 export const insertGraffitiReportSchema = createInsertSchema(graffitiReports).omit({
+  id: true,
+  timestamp: true,
+});
+
+export const insertReportHistorySchema = createInsertSchema(reportHistory).omit({
   id: true,
   timestamp: true,
 });
 
 export type InsertGraffitiReport = z.infer<typeof insertGraffitiReportSchema>;
 export type GraffitiReport = typeof graffitiReports.$inferSelect;
+export type ReportHistoryEntry = typeof reportHistory.$inferSelect;
+export type InsertReportHistoryEntry = z.infer<typeof insertReportHistorySchema>;

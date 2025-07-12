@@ -130,7 +130,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid status" });
       }
 
-      const updatedReport = await storage.updateReportStatus(id, status);
+      const updatedReport = await storage.updateReportStatus(id, status, 'admin');
       if (!updatedReport) {
         return res.status(404).json({ message: "Report not found" });
       }
@@ -155,7 +155,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid validation status" });
       }
 
-      const updatedReport = await storage.updateReportValidation(id, validated);
+      const updatedReport = await storage.updateReportValidation(id, validated, 'admin');
       if (!updatedReport) {
         return res.status(404).json({ message: "Report not found" });
       }
@@ -180,7 +180,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid property owner. Must be: city, ely-keskus, or private" });
       }
 
-      const updatedReport = await storage.updateReportProperty(id, propertyOwner, propertyDescription);
+      const updatedReport = await storage.updateReportProperty(id, propertyOwner, propertyDescription, 'admin');
       if (!updatedReport) {
         return res.status(404).json({ message: "Report not found" });
       }
@@ -217,6 +217,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching reports by district:", error);
       res.status(500).json({ message: "Failed to fetch reports" });
+    }
+  });
+
+  // Get report history
+  app.get("/api/reports/:id/history", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid report ID" });
+      }
+
+      const history = await storage.getReportHistory(id);
+      res.json(history);
+    } catch (error) {
+      console.error("Error fetching report history:", error);
+      res.status(500).json({ message: "Failed to fetch report history" });
     }
   });
 

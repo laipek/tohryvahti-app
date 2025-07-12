@@ -12,8 +12,10 @@ import { Separator } from '@/components/ui/separator';
 import { MapView } from './MapView';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
-import { X, ZoomIn } from 'lucide-react';
-import type { GraffitiReport } from '@shared/schema';
+import { X, ZoomIn, History, Clock } from 'lucide-react';
+import type { GraffitiReport, ReportHistoryEntry } from '@shared/schema';
+import { useQuery } from '@tanstack/react-query';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface ReportModalProps {
   report: GraffitiReport;
@@ -31,6 +33,17 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
   const [isUpdatingProperty, setIsUpdatingProperty] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  // Fetch report history
+  const { data: history = [], isLoading: historyLoading } = useQuery({
+    queryKey: ['/api/reports', report.id, 'history'],
+    queryFn: async () => {
+      const response = await fetch(`/api/reports/${report.id}/history`);
+      if (!response.ok) throw new Error('Failed to fetch history');
+      return response.json() as Promise<ReportHistoryEntry[]>;
+    },
+    enabled: isOpen
+  });
 
   const formatDate = (timestamp: any) => {
     const date = new Date(timestamp.seconds ? timestamp.seconds * 1000 : timestamp);
@@ -136,7 +149,17 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
           </DialogTitle>
         </DialogHeader>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Tabs defaultValue="details" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="details">{t('reportDetails')}</TabsTrigger>
+            <TabsTrigger value="history" className="flex items-center gap-2">
+              <History className="h-4 w-4" />
+              {t('changeHistory')}
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="details" className="mt-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Column - Photos and Map */}
           <div className="space-y-4">
             {report.photos && report.photos.length > 0 && (
@@ -355,6 +378,64 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
             </Card>
           </div>
         </div>
+      </TabsContent>
+      
+      <TabsContent value="history" className="mt-4">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="h-5 w-5" />
+              {t('changeHistory')}
+            </CardTitle>
+            <p className="text-sm text-gray-600">{t('historyDescription')}</p>
+          </CardHeader>
+          <CardContent>
+            {historyLoading ? (
+              <div className="space-y-3">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="animate-pulse">
+                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                  </div>
+                ))}
+              </div>
+            ) : history.length === 0 ? (
+              <p className="text-gray-500 text-center py-4">{t('noHistoryFound')}</p>
+            ) : (
+              <div className="space-y-4">
+                {history.map((entry) => (
+                  <div key={entry.id} className="border-l-4 border-municipal-blue pl-4 py-2">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-medium text-municipal-primary">
+                            {t(`historyActions.${entry.action}`)}
+                          </span>
+                          {entry.oldValue && entry.newValue && (
+                            <span className="text-sm text-gray-600">
+                              {entry.oldValue} → {entry.newValue}
+                            </span>
+                          )}
+                        </div>
+                        {entry.notes && (
+                          <p className="text-sm text-gray-700 mb-1">{entry.notes}</p>
+                        )}
+                        <div className="flex items-center gap-4 text-xs text-gray-500">
+                          <span>{formatDate(entry.timestamp)}</span>
+                          {entry.adminUser && (
+                            <span>by {entry.adminUser}</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </TabsContent>
+    </Tabs>
       </DialogContent>
 
       {/* Image Popup Dialog */}
