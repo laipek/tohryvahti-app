@@ -73,6 +73,8 @@
   "private": "Private",
   "selectPropertyOwner": "Select property owner",
   "propertyOwnerHelp": "Determine responsible party for cleaning procedures",
+  "clickToView": "Click to view larger image",
+  "morePhotos": "more photos",
   "contactInfo": "Contact Information (Optional)",
   "reporterName": "Reporter name (optional)",
   "reporterEmail": "Reporter email (optional)",

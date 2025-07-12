@@ -73,6 +73,8 @@
   "private": "Yksityinen",
   "selectPropertyOwner": "Valitse kiinteistön omistaja",
   "propertyOwnerHelp": "Määritä vastuullinen taho puhdistustoimenpiteitä varten",
+  "clickToView": "Napsauta nähdäksesi suurempi kuva",
+  "morePhotos": "muuta kuvaa",
   "filters": "Suodattimet",
   "searchReports": "Hae ilmoituksia...",
   "approvalStatus": "Hyväksyntätila",

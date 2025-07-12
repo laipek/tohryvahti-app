@@ -12,6 +12,7 @@ import { Separator } from '@/components/ui/separator';
 import { MapView } from './MapView';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
+import { X, ZoomIn } from 'lucide-react';
 import type { GraffitiReport } from '@shared/schema';
 
 interface ReportModalProps {
@@ -28,6 +29,8 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
   const [propertyOwner, setPropertyOwner] = useState(report.propertyOwner || '');
   const [propertyDescription, setPropertyDescription] = useState(report.propertyDescription || '');
   const [isUpdatingProperty, setIsUpdatingProperty] = useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const formatDate = (timestamp: any) => {
     const date = new Date(timestamp.seconds ? timestamp.seconds * 1000 : timestamp);
@@ -139,11 +142,25 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
             {report.photos && report.photos.length > 0 && (
               <div>
                 <Label className="text-sm font-medium text-municipal-gray">{t('photo')}</Label>
-                <img
-                  src={report.photos[0]}
-                  alt="Graffiti report"
-                  className="w-full h-48 object-cover rounded-lg border border-municipal-border"
-                />
+                <div className="relative group">
+                  <img
+                    src={report.photos[0]}
+                    alt="Graffiti report"
+                    className="w-full h-48 object-cover rounded-lg border border-municipal-border cursor-pointer hover:opacity-90 transition-opacity"
+                    onClick={() => {
+                      setSelectedImage(report.photos[0]);
+                      setIsImagePopupOpen(true);
+                    }}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-20 rounded-lg">
+                    <ZoomIn className="h-8 w-8 text-white" />
+                  </div>
+                </div>
+                {report.photos.length > 1 && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    {t('clickToView')} (+{report.photos.length - 1} {t('morePhotos')})
+                  </p>
+                )}
               </div>
             )}
             
@@ -339,6 +356,30 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
           </div>
         </div>
       </DialogContent>
+
+      {/* Image Popup Dialog */}
+      <Dialog open={isImagePopupOpen} onOpenChange={setIsImagePopupOpen}>
+        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black">
+          <div className="relative h-full">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsImagePopupOpen(false)}
+              className="absolute top-4 right-4 z-10 bg-black bg-opacity-50 text-white hover:bg-opacity-75"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+            {selectedImage && (
+              <img
+                src={selectedImage}
+                alt="Full size graffiti report"
+                className="w-full h-full object-contain"
+                style={{ maxHeight: '95vh' }}
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </Dialog>
   );
 }

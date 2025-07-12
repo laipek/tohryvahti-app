@@ -73,6 +73,8 @@
   "private": "Privat",
   "selectPropertyOwner": "Välj fastighetsägare",
   "propertyOwnerHelp": "Bestäm ansvarig part för rengöringsprocedurer",
+  "clickToView": "Klicka för att se större bild",
+  "morePhotos": "fler foton",
   "contactInfo": "Kontaktinformation (Valfritt)",
   "reporterName": "Rapportörens namn (valfritt)",
   "reporterEmail": "Rapportörens e-post (valfritt)",
