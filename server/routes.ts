@@ -93,7 +93,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...req.body,
         latitude: parseFloat(req.body.latitude),
         longitude: parseFloat(req.body.longitude),
-        photos: req.files ? (req.files as Express.Multer.File[]).map(file => file.buffer.toString('base64')) : []
+        photos: req.files ? (req.files as Express.Multer.File[]).map(file => {
+          const mimeType = file.mimetype;
+          const base64Data = file.buffer.toString('base64');
+          return `data:${mimeType};base64,${base64Data}`;
+        }) : []
       };
 
       const validatedData = insertGraffitiReportSchema.parse(reportData);

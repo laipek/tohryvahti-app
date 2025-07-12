@@ -157,25 +157,32 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     setIsSubmitting(true);
     
     try {
-      // For now, use the backend API instead of Firebase
-      const reportData = {
-        photos: formData.photos.map(file => URL.createObjectURL(file)), // Convert files to URLs for demo
-        latitude: formData.latitude,
-        longitude: formData.longitude,
-        district: formData.district,
-        description: formData.description,
-        name: formData.name || null,
-        email: formData.email || null,
-        status: 'new',
-        validated: 'pending'
-      };
+      // Create FormData for file upload
+      const formDataForUpload = new FormData();
+      
+      // Add photos as files
+      formData.photos.forEach((photo, index) => {
+        formDataForUpload.append('photos', photo);
+      });
+      
+      // Add other form fields
+      formDataForUpload.append('latitude', formData.latitude!.toString());
+      formDataForUpload.append('longitude', formData.longitude!.toString());
+      formDataForUpload.append('district', formData.district);
+      formDataForUpload.append('description', formData.description);
+      formDataForUpload.append('status', 'new');
+      formDataForUpload.append('validated', 'pending');
+      
+      if (formData.name) {
+        formDataForUpload.append('name', formData.name);
+      }
+      if (formData.email) {
+        formDataForUpload.append('email', formData.email);
+      }
 
       const response = await fetch('/api/reports', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(reportData),
+        body: formDataForUpload, // Don't set Content-Type header, let browser set it with boundary
       });
 
       if (!response.ok) {
@@ -186,6 +193,18 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         title: t('thankYou'),
         description: t('thankYouMessage'),
       });
+      
+      // Reset form after successful submission
+      setFormData({
+        photos: [],
+        latitude: null,
+        longitude: null,
+        district: '',
+        description: '',
+        name: '',
+        email: ''
+      });
+      setLocationStatus('idle');
       
       onSubmitSuccess();
     } catch (error) {
