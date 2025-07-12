@@ -167,6 +167,10 @@ Copyright notice: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi" di
 ✓ Background now moves at different pace than content for improved visual depth
 ✓ Optimized background scaling to 150% for complete coverage without excessive oversizing
 ✓ Fixed background coverage issues on submit page with enhanced transparency settings
+✓ Enhanced admin table with proper date/time display as first column
+✓ Added clickable image popup functionality for full-size image viewing in admin panel
+✓ Fixed image upload handling with proper FormData and base64 conversion
+✓ All mock reports include realistic timestamps and new reports automatically get current timestamp
 
 ### Scalability Considerations
 - Serverless database (Neon) scales automatically

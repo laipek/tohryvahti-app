@@ -159,7 +159,8 @@ export function AdminDashboard() {
       month: '2-digit',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      timeZone: 'Europe/Helsinki'
     });
   };
 
@@ -479,7 +480,7 @@ export function AdminDashboard() {
                           <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm text-gray-900">
                             <div className="flex flex-col">
                               <span className="font-medium">{formatDate(report.timestamp).split(' ')[0]}</span>
-                              <span className="text-gray-500 text-xs">{formatDate(report.timestamp).split(' ')[1]}</span>
+                              <span className="text-gray-500 text-xs">{formatDate(report.timestamp).split(' ')[1] || ''}</span>
                             </div>
                           </td>
                           <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
