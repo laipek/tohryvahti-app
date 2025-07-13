@@ -62,11 +62,7 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
 
     setIsUpdatingProperty(true);
     try {
-      const response = await apiRequest({
-        method: 'PATCH',
-        url: `/api/reports/${report.id}/property`,
-        body: { propertyOwner, propertyDescription },
-      });
+      const response = await apiRequest('PATCH', `/api/reports/${report.id}/property`, { propertyOwner, propertyDescription });
 
       if (response.ok) {
         const updatedReport = await response.json();
@@ -92,11 +88,7 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
 
   const handleValidationUpdate = async (validated: string) => {
     try {
-      const response = await apiRequest({
-        method: 'PATCH',
-        url: `/api/reports/${report.id}/validate`,
-        body: { validated },
-      });
+      const response = await apiRequest('PATCH', `/api/reports/${report.id}/validate`, { validated });
 
       if (response.ok) {
         const updatedReport = await response.json();

@@ -37,10 +37,7 @@ export function AdminDashboard() {
   // Verification mutations
   const approveReportMutation = useMutation({
     mutationFn: async (reportId: number) => {
-      return apiRequest(`/api/reports/${reportId}/validate`, {
-        method: 'PATCH',
-        body: { validated: 'approved' }
-      });
+      return apiRequest('PATCH', `/api/reports/${reportId}/validate`, { validated: 'approved' });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/reports'] });
@@ -53,10 +50,7 @@ export function AdminDashboard() {
 
   const rejectReportMutation = useMutation({
     mutationFn: async (reportId: number) => {
-      return apiRequest(`/api/reports/${reportId}/validate`, {
-        method: 'PATCH',
-        body: { validated: 'rejected' }
-      });
+      return apiRequest('PATCH', `/api/reports/${reportId}/validate`, { validated: 'rejected' });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/reports'] });
@@ -69,10 +63,7 @@ export function AdminDashboard() {
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ reportId, status }: { reportId: number; status: string }) => {
-      return apiRequest(`/api/reports/${reportId}/status`, {
-        method: 'PATCH',
-        body: { status }
-      });
+      return apiRequest('PATCH', `/api/reports/${reportId}/status`, { status });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/reports'] });
