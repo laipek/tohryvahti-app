@@ -85,7 +85,7 @@ export default function CookiePolicy() {
                   {t('cookiePolicy.contact')}
                 </h2>
                 <p>
-                  {t('cookiePolicy.contactInfo')} <a href="mailto:tuki@tohryvahti.fi" className="text-municipal-blue hover:underline">tuki@tohryvahti.fi</a>
+                  {t('cookiePolicy.contactInfo')} tuki(at)tohryvahti.fi
                 </p>
               </section>
 

@@ -37,7 +37,7 @@ export default function PrivacyPolicy() {
                 </h2>
                 <p>{t('privacyPolicy.controllerInfo')}</p>
                 <p className="mt-2">
-                  <strong>{t('privacyPolicy.contact')}:</strong> <a href="mailto:tuki@tohryvahti.fi" className="text-municipal-blue hover:underline">tuki@tohryvahti.fi</a>
+                  <strong>{t('privacyPolicy.contact')}:</strong> tuki(at)tohryvahti.fi
                 </p>
               </section>
 
