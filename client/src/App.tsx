@@ -12,6 +12,8 @@ import { CookieConsent } from "@/components/CookieConsent";
 import PublicForm from "@/pages/PublicForm";
 import AdminPanel from "@/pages/AdminPanel";
 import PublicMap from "@/pages/PublicMap";
+import CookiePolicy from "@/pages/CookiePolicy";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import NotFound from "@/pages/not-found";
 import './lib/i18n';
 
@@ -63,6 +65,8 @@ function Router() {
       <Route path="/" component={PublicForm} />
       <Route path="/map" component={PublicMap} />
       <Route path="/admin" component={AdminPanel} />
+      <Route path="/cookie-policy" component={CookiePolicy} />
+      <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route component={NotFound} />
     </Switch>
   );

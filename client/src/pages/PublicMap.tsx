@@ -222,8 +222,13 @@ export default function PublicMap() {
             <p className="mb-2">
               <strong>{t('disclaimer.feedback')}</strong>
             </p>
-            <p>
+            <p className="mb-2">
               {t('disclaimer.copyright')}
+            </p>
+            <p className="text-center">
+              <a href="/cookie-policy" className="text-white/90 hover:text-white underline">{t('cookiePolicy.link')}</a>
+              {' | '}
+              <a href="/privacy-policy" className="text-white/90 hover:text-white underline">{t('privacyPolicy.link')}</a>
             </p>
           </div>
           
