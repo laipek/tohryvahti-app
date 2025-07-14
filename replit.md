@@ -189,6 +189,9 @@ Copyright notice: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi" di
 ✓ Updated disclaimer text across all languages with feedback email tuki(at)tohryvahti.fi
 ✓ Created internationalized disclaimer system with proper translation keys
 ✓ Added multilingual support for beta version notice, data processing terms, and contact information
+✓ Added analytics toggle button to public map page with daily report statistics
+✓ Implemented public analytics view with interactive line chart showing last 30 days
+✓ Updated language to use "vahvistetut ilmoitukset" instead of "graffiti" mentions
 
 ## Completed Admin Panel Features
 

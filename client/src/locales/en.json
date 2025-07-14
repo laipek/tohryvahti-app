@@ -54,7 +54,7 @@
   "invalidCredentials": "Invalid credentials",
   "error": "Error",
   "publicMap": "Public Map",
-  "publicMapDescription": "All confirmed graffiti reports on the map",
+  "publicMapDescription": "All verified reports on the map",
   "loadingReports": "Loading reports...",
   "noConfirmedReports": "No confirmed reports",
   "selectReportOnMap": "Select report on map",
@@ -128,6 +128,7 @@
     "vehkajarvi": "Vehkajärvi",
     "vaaksy": "Vääksy"
   },
+  "map": "Map",
   "disclaimer": {
     "betaVersion": "BETA VERSION: Töhryvahti is an open beta-stage free public service aimed at enabling a more pleasant and graffiti-free environment for all city residents. The service may contain errors or be interrupted without prior notice.",
     "dataProcessing": "By using this service, you agree that the information you report and the images you submit will be processed by the service provider to improve the city's attractiveness and promote graffiti removal. All reports are reviewed and inappropriate reports are removed without prior notice. The service does not guarantee immediate initiation of actions.",
