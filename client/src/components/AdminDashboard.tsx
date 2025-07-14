@@ -250,7 +250,7 @@ export function AdminDashboard() {
           <Card 
             className="bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow"
             onClick={() => {
-              setValidationFilter('all');
+              setValidationFilter('approved');
               setStatusFilter('all');
               setViewMode('table');
             }}
@@ -258,10 +258,34 @@ export function AdminDashboard() {
             <CardContent className="p-4 lg:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs lg:text-sm font-medium text-gray-600">{t('totalReports')}</p>
-                  <p className="text-xl lg:text-2xl font-bold text-blue-600">{stats.total}</p>
+                  <p className="text-xs lg:text-sm font-medium text-gray-600">{t('verifiedOnMap')}</p>
+                  <p className="text-xl lg:text-2xl font-bold text-green-600">{stats.approved}</p>
                 </div>
-                <CircleAlert className="h-6 w-6 lg:h-8 lg:w-8 text-blue-600" />
+                <Check className="h-6 w-6 lg:h-8 lg:w-8 text-green-600" />
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-white shadow-sm">
+            <CardContent className="p-4 lg:p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs lg:text-sm font-medium text-gray-600">{t('inProgress')}</p>
+                  <p className="text-sm lg:text-base font-medium text-gray-500">{t('featureComingSoon')}</p>
+                </div>
+                <Clock className="h-6 w-6 lg:h-8 lg:w-8 text-gray-400" />
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-white shadow-sm">
+            <CardContent className="p-4 lg:p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs lg:text-sm font-medium text-gray-600">{t('cleaned')}</p>
+                  <p className="text-sm lg:text-base font-medium text-gray-500">{t('featureComingSoon')}</p>
+                </div>
+                <Clock className="h-6 w-6 lg:h-8 lg:w-8 text-gray-400" />
               </div>
             </CardContent>
           </Card>
@@ -281,44 +305,6 @@ export function AdminDashboard() {
                   <p className="text-xl lg:text-2xl font-bold text-yellow-600">{stats.pending}</p>
                 </div>
                 <AlertTriangle className="h-6 w-6 lg:h-8 lg:w-8 text-yellow-600" />
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card 
-            className="bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow"
-            onClick={() => {
-              setValidationFilter('approved');
-              setStatusFilter('all');
-              setViewMode('table');
-            }}
-          >
-            <CardContent className="p-4 lg:p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs lg:text-sm font-medium text-gray-600">{t('approved')}</p>
-                  <p className="text-xl lg:text-2xl font-bold text-green-600">{stats.approved}</p>
-                </div>
-                <Check className="h-6 w-6 lg:h-8 lg:w-8 text-green-600" />
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card 
-            className="bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow"
-            onClick={() => {
-              setValidationFilter('rejected');
-              setStatusFilter('all');
-              setViewMode('table');
-            }}
-          >
-            <CardContent className="p-4 lg:p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs lg:text-sm font-medium text-gray-600">{t('rejected')}</p>
-                  <p className="text-xl lg:text-2xl font-bold text-red-600">{stats.rejected}</p>
-                </div>
-                <X className="h-6 w-6 lg:h-8 lg:w-8 text-red-600" />
               </div>
             </CardContent>
           </Card>

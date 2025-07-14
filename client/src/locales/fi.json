@@ -186,5 +186,7 @@
     "status_changed": "Tila muutettu",
     "validated": "Vahvistustila muutettu",
     "property_updated": "Kiinteistötiedot päivitetty"
-  }
+  },
+  "verifiedOnMap": "Vahvistettu kartalla",
+  "featureComingSoon": "Ominaisuus tulossa pian"
 }

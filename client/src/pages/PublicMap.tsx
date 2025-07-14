@@ -106,20 +106,16 @@ export default function PublicMap() {
             <CardContent>
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-sm text-municipal-gray">{t('totalReports')}</span>
+                  <span className="text-sm text-municipal-gray">{t('verifiedOnMap')}</span>
                   <span className="text-sm font-medium text-gray-900">{reports.length}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-municipal-gray">{t('cleaned')}</span>
-                  <span className="text-sm font-medium text-gray-900">
-                    {reports.filter((r: GraffitiReport) => r.status === 'cleaned').length}
-                  </span>
+                  <span className="text-sm font-medium text-gray-500">{t('featureComingSoon')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-municipal-gray">{t('inProgress')}</span>
-                  <span className="text-sm font-medium text-gray-900">
-                    {reports.filter((r: GraffitiReport) => r.status === 'progress').length}
-                  </span>
+                  <span className="text-sm font-medium text-gray-500">{t('featureComingSoon')}</span>
                 </div>
               </div>
             </CardContent>
