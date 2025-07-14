@@ -53,13 +53,16 @@ export default function PublicForm() {
         {/* Disclaimer and beta notice */}
         <div className="px-4 py-3 bg-black/20 backdrop-blur-sm rounded-lg text-xs text-white/70 leading-relaxed">
           <p className="mb-2">
-            <strong>BETA-versio:</strong> Töhryvahti on avoin beta-vaiheessa oleva maksuton yleishyödyllinen palvelu, jonka tarkoituksena on mahdollistaa viihtyisämpi ja töhrytön ympäristö kaikille kaupunkilaisille. Palvelu voi sisältää virheitä tai keskeytyä ilman ennakkoilmoitusta.
+            <strong>{t('disclaimer.betaVersion')}</strong>
           </p>
           <p className="mb-2">
-            Käyttämällä tätä palvelua hyväksyt, että ilmoittamasi tiedot ja lähettämäsi kuvat käsitellään palvelun tarjoajan toimesta kaupungin viihtyisyyden parantamiseksi ja töhryjen poistamisen edistämiseksi. Kaikki ilmoitukset tarkistetaan ja asiattomat ilmoitukset poistetaan ilman ennakkoilmoitusta. Palvelu ei takaa välitöntä toimenpiteiden aloittamista.
+            {t('disclaimer.dataProcessing')}
+          </p>
+          <p className="mb-2">
+            <strong>{t('disclaimer.feedback')}</strong>
           </p>
           <p>
-            © 2025 Töhryvahti. Kaikki oikeudet pidätetään.
+            {t('disclaimer.copyright')}
           </p>
         </div>
         

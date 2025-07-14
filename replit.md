@@ -186,6 +186,9 @@ Copyright notice: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi" di
 ✓ Horizontal scrolling support for table on smaller screens with max-width overflow handling
 ✓ Enhanced table headers with clickable sort buttons and visual sort indicators
 ✓ Sort state management with ascending/descending toggle and visual feedback
+✓ Updated disclaimer text across all languages with feedback email tuki(at)tohryvahti.fi
+✓ Created internationalized disclaimer system with proper translation keys
+✓ Added multilingual support for beta version notice, data processing terms, and contact information
 
 ## Completed Admin Panel Features
 
