@@ -89,7 +89,7 @@
   "actions": "Toiminnot",
   "photo": "Kuva",
   "date": "Päivämäärä",
-  "pendingApproval": "Odottaa hyväksyntää",
+  "pendingApproval": "Odottaa vahvistusta",
   "success": "Onnistui",
   "reportApproved": "Ilmoitus hyväksytty",
   "reportRejected": "Ilmoitus hylätty",
