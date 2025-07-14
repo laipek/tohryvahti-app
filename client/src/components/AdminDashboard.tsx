@@ -602,15 +602,7 @@ export function AdminDashboard() {
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleSort('timestamp')}
-                            className="h-auto p-0 font-medium hover:bg-transparent text-gray-500 hover:text-gray-700"
-                          >
-                            {t('date')}
-                            {getSortIcon('timestamp')}
-                          </Button>
+                          {t('date')}
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           <Button
@@ -641,15 +633,7 @@ export function AdminDashboard() {
                           {t('description')}
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleSort('validated')}
-                            className="h-auto p-0 font-medium hover:bg-transparent text-gray-500 hover:text-gray-700"
-                          >
-                            {t('validationStatus')}
-                            {getSortIcon('validated')}
-                          </Button>
+                          {t('validationStatus')}
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
                           <Button
