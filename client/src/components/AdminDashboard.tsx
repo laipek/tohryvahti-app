@@ -24,7 +24,7 @@ export function AdminDashboard() {
   const [validationFilter, setValidationFilter] = useState<string>('all');
   const [districtFilter, setDistrictFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<'timestamp' | 'status' | 'district' | 'validated'>('timestamp');
+  const [sortBy, setSortBy] = useState<'timestamp' | 'status' | 'district' | 'validated' | 'id'>('timestamp');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [selectedReport, setSelectedReport] = useState<GraffitiReport | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -117,6 +117,9 @@ export function AdminDashboard() {
         case 'validated':
           comparison = a.validated.localeCompare(b.validated);
           break;
+        case 'id':
+          comparison = a.id - b.id;
+          break;
       }
       return sortOrder === 'asc' ? comparison : -comparison;
     });
@@ -131,6 +134,15 @@ export function AdminDashboard() {
       setSortBy(field);
       setSortOrder('desc');
     }
+  };
+
+  const getSortIcon = (field: typeof sortBy) => {
+    if (sortBy !== field) {
+      return <ArrowUpDown className="h-3 w-3 ml-1 text-gray-400" />;
+    }
+    return sortOrder === 'asc' ? 
+      <ArrowUpDown className="h-3 w-3 ml-1 text-blue-600 rotate-180" /> : 
+      <ArrowUpDown className="h-3 w-3 ml-1 text-blue-600" />;
   };
 
   const getStatusBadge = (status: string) => {
@@ -585,30 +597,70 @@ export function AdminDashboard() {
                   <p className="text-gray-500">{t('noReportsFound')}</p>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto max-w-full">
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          {t('date')}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleSort('timestamp')}
+                            className="h-auto p-0 font-medium hover:bg-transparent text-gray-500 hover:text-gray-700"
+                          >
+                            {t('date')}
+                            {getSortIcon('timestamp')}
+                          </Button>
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          {t('reportId')}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleSort('id')}
+                            className="h-auto p-0 font-medium hover:bg-transparent text-gray-500 hover:text-gray-700"
+                          >
+                            {t('reportId')}
+                            {getSortIcon('id')}
+                          </Button>
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           {t('photo')}
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          {t('district')}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleSort('district')}
+                            className="h-auto p-0 font-medium hover:bg-transparent text-gray-500 hover:text-gray-700"
+                          >
+                            {t('district')}
+                            {getSortIcon('district')}
+                          </Button>
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">
                           {t('description')}
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          {t('validationStatus')}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleSort('validated')}
+                            className="h-auto p-0 font-medium hover:bg-transparent text-gray-500 hover:text-gray-700"
+                          >
+                            {t('validationStatus')}
+                            {getSortIcon('validated')}
+                          </Button>
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
-                          {t('status')}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleSort('status')}
+                            className="h-auto p-0 font-medium hover:bg-transparent text-gray-500 hover:text-gray-700"
+                          >
+                            {t('status')}
+                            {getSortIcon('status')}
+                          </Button>
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           {t('actions')}

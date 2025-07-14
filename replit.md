@@ -177,30 +177,43 @@ Copyright notice: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi" di
 ✓ History displays all actions (creation, status changes, validation, property updates) with timestamps and admin user info
 ✓ Mock reports include realistic history entries showing progression from creation to current state
 ✓ Finnish translations added for history interface and action types
+✓ Enhanced admin panel with desktop/mobile view toggle and comprehensive toolbar
+✓ Export functionality implemented - CSV download with all report data and Finnish translations
+✓ Analytics dashboard with interactive line chart showing daily reporting trends over 30 days
+✓ Report ID column added to table for unique tracking and identification
+✓ Delete functionality with confirmation dialog - removes reports and associated history
+✓ Sortable table columns implemented for Date, Report ID, District, Validation Status, and Status
+✓ Horizontal scrolling support for table on smaller screens with max-width overflow handling
+✓ Enhanced table headers with clickable sort buttons and visual sort indicators
+✓ Sort state management with ascending/descending toggle and visual feedback
 
-## Planned Admin Panel Enhancements
+## Completed Admin Panel Features
 
 ### UI/UX Improvements
-- Desktop-optimized admin interface with separate mobile view toggle
-- Each report has unique ID for tracking and processing
-- Enhanced sorting capabilities by date/time
+✓ Desktop-optimized admin interface with mobile view toggle in enhanced toolbar
+✓ Each report displays unique ID (#1, #2, etc.) for tracking and processing
+✓ Clickable sortable columns for Date, Report ID, District, Validation Status, and Status
+✓ Visual sort indicators showing active column and direction (ascending/descending)
+✓ Horizontal scrolling support for table overflow on smaller screens
+✓ Enhanced table responsiveness with proper column management
 
 ### Data Management Features  
-- Export functionality for report lists (CSV format)
-- Import capability for bulk report management
-- Manual report addition and deletion capabilities
-- Backup/restore functionality to prevent data loss
-- Persistent report links for archival purposes
+✓ Export functionality downloads CSV with Finnish-localized data
+✓ Delete functionality with confirmation dialog removes reports and history
+✓ Import/add report buttons prepared for future development (currently disabled)
+✓ Comprehensive data export includes all report fields and translations
 
 ### Analytics & Visualization
-- User statistics dashboard showing daily reporting trends
-- Visual charts for reporting patterns and activity metrics
-- Historical data analysis capabilities
+✓ Interactive analytics dashboard with daily reporting trends
+✓ Line chart visualization showing reports over last 30 days using Recharts
+✓ Toggle-able analytics view integrated into admin toolbar
+✓ Real-time data visualization with responsive charts
 
-### Data Integrity & Compatibility
-- Backwards compatibility for existing reports
-- Robust backup systems with CSV export fallback
-- Link-based report persistence system
+### Data Integrity & Features
+✓ Change history tracking with complete audit trail
+✓ Backwards compatibility maintained for existing reports
+✓ Report deletion includes cleanup of associated history entries
+✓ Robust data handling with proper error management
 
 ### Scalability Considerations
 - Serverless database (Neon) scales automatically
