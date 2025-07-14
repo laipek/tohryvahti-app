@@ -13,6 +13,7 @@ export interface IStorage {
   getPendingReports(): Promise<GraffitiReport[]>;
   getReportHistory(reportId: number): Promise<ReportHistoryEntry[]>;
   addHistoryEntry(entry: InsertReportHistoryEntry): Promise<ReportHistoryEntry>;
+  deleteReport(id: number): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -453,6 +454,17 @@ export class MemStorage implements IStorage {
     return Array.from(this.reports.values())
       .filter(report => report.validated === "pending")
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }
+
+  async deleteReport(id: number): Promise<boolean> {
+    const exists = this.reports.has(id);
+    if (exists) {
+      this.reports.delete(id);
+      // Also remove all history entries for this report
+      const historyEntries = Array.from(this.history.values()).filter(h => h.reportId === id);
+      historyEntries.forEach(entry => this.history.delete(entry.id));
+    }
+    return exists;
   }
 }
 

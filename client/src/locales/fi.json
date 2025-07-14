@@ -188,5 +188,22 @@
     "property_updated": "Kiinteistötiedot päivitetty"
   },
   "verifiedOnMap": "Vahvistettu kartalla",
-  "featureComingSoon": "Ominaisuus tulossa pian"
+  "featureComingSoon": "Ominaisuus tulossa pian",
+  "exportReports": "Vie raportit",
+  "importReports": "Tuo raportit",
+  "addReport": "Lisää raportti",
+  "deleteReport": "Poista raportti",
+  "analytics": "Tilastot",
+  "mobileView": "Mobiilinäkymä",
+  "desktopView": "Työpöytänäkymä",
+  "exportSuccess": "Vienti onnistui",
+  "exportSuccessMessage": "Raportit viety CSV-tiedostoon",
+  "confirmDelete": "Haluatko varmasti poistaa tämän raportin?",
+  "reportDeleted": "Raportti poistettu",
+  "reportDeletedMessage": "Raportti on poistettu onnistuneesti",
+  "deleteError": "Virhe raportin poistamisessa",
+  "dailyReports": "Päivittäiset raportit",
+  "last30Days": "Viimeiset 30 päivää",
+  "reportId": "Raportti ID",
+  "delete": "Poista"
 }

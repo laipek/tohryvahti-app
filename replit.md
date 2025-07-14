@@ -178,6 +178,30 @@ Copyright notice: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi" di
 ✓ Mock reports include realistic history entries showing progression from creation to current state
 ✓ Finnish translations added for history interface and action types
 
+## Planned Admin Panel Enhancements
+
+### UI/UX Improvements
+- Desktop-optimized admin interface with separate mobile view toggle
+- Each report has unique ID for tracking and processing
+- Enhanced sorting capabilities by date/time
+
+### Data Management Features  
+- Export functionality for report lists (CSV format)
+- Import capability for bulk report management
+- Manual report addition and deletion capabilities
+- Backup/restore functionality to prevent data loss
+- Persistent report links for archival purposes
+
+### Analytics & Visualization
+- User statistics dashboard showing daily reporting trends
+- Visual charts for reporting patterns and activity metrics
+- Historical data analysis capabilities
+
+### Data Integrity & Compatibility
+- Backwards compatibility for existing reports
+- Robust backup systems with CSV export fallback
+- Link-based report persistence system
+
 ### Scalability Considerations
 - Serverless database (Neon) scales automatically
 - In-memory storage can be replaced with Redis for horizontal scaling

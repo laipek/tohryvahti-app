@@ -10,7 +10,8 @@ import { MapView } from './MapView';
 import { ReportModal } from './ReportModal';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
-import { Map, Table, Eye, Search, Filter, ArrowUpDown, AlertTriangle, Check, X, CircleAlert, Clock, Calendar } from 'lucide-react';
+import { Map, Table, Eye, Search, Filter, ArrowUpDown, AlertTriangle, Check, X, CircleAlert, Clock, Calendar, Download, Upload, Plus, Trash2, BarChart3, Monitor, Smartphone } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import type { GraffitiReport } from '@shared/schema';
 
 export function AdminDashboard() {
@@ -27,6 +28,8 @@ export function AdminDashboard() {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [selectedReport, setSelectedReport] = useState<GraffitiReport | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   // Fetch all reports for admin
   const { data: reports = [], isLoading } = useQuery({
@@ -210,6 +213,163 @@ export function AdminDashboard() {
     });
   };
 
+  const exportReports = () => {
+    const csvHeaders = ['ID', 'Timestamp', 'District', 'Status', 'Validated', 'Description', 'Name', 'Email', 'Property Owner', 'Latitude', 'Longitude'];
+    const csvData = filteredReports.map(report => [
+      report.id,
+      formatDate(report.timestamp),
+      t(`districts.${report.district}`),
+      t(report.status),
+      t(report.validated),
+      `"${report.description.replace(/"/g, '""')}"`,
+      report.name || '',
+      report.email || '',
+      report.propertyOwner || '',
+      report.latitude,
+      report.longitude
+    ]);
+    
+    const csvContent = [csvHeaders, ...csvData]
+      .map(row => row.join(','))
+      .join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `tohryvahti-reports-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    
+    toast({
+      title: t('exportSuccess'),
+      description: t('exportSuccessMessage'),
+    });
+  };
+
+  const deleteReport = async (reportId: number) => {
+    if (!confirm(t('confirmDelete'))) return;
+    
+    try {
+      await apiRequest('DELETE', `/api/reports/${reportId}`);
+      queryClient.invalidateQueries({ queryKey: ['/api/reports'] });
+      toast({
+        title: t('reportDeleted'),
+        description: t('reportDeletedMessage'),
+      });
+    } catch (error) {
+      toast({
+        title: t('error'),
+        description: t('deleteError'),
+        variant: 'destructive',
+      });
+    }
+  };
+
+  // Analytics data
+  const analyticsData = reports.reduce((acc, report) => {
+    const date = new Date(report.timestamp).toLocaleDateString('fi-FI');
+    acc[date] = (acc[date] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const last30Days = Array.from({ length: 30 }, (_, i) => {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    return date.toLocaleDateString('fi-FI');
+  }).reverse();
+
+  const chartData = last30Days.map(date => ({
+    date,
+    reports: analyticsData[date] || 0
+  }));
+
+  // Enhanced toolbar component
+  const AdminToolbar = () => (
+    <div className="flex flex-wrap gap-4 mb-6 p-4 bg-background/80 backdrop-blur-sm rounded-lg border">
+      <div className="flex items-center gap-2">
+        <Button
+          variant={isMobileView ? "outline" : "default"}
+          size="sm"
+          onClick={() => setIsMobileView(false)}
+        >
+          <Monitor className="h-4 w-4 mr-2" />
+          {t('desktopView')}
+        </Button>
+        <Button
+          variant={isMobileView ? "default" : "outline"}
+          size="sm"
+          onClick={() => setIsMobileView(true)}
+        >
+          <Smartphone className="h-4 w-4 mr-2" />
+          {t('mobileView')}
+        </Button>
+      </div>
+      
+      <div className="flex items-center gap-2">
+        <Button onClick={exportReports} size="sm" variant="outline">
+          <Download className="h-4 w-4 mr-2" />
+          {t('exportReports')}
+        </Button>
+        <Button size="sm" variant="outline" disabled>
+          <Upload className="h-4 w-4 mr-2" />
+          {t('importReports')}
+        </Button>
+        <Button size="sm" variant="outline" disabled>
+          <Plus className="h-4 w-4 mr-2" />
+          {t('addReport')}
+        </Button>
+      </div>
+      
+      <div className="flex items-center gap-2">
+        <Button
+          variant={showAnalytics ? "default" : "outline"}
+          size="sm"
+          onClick={() => setShowAnalytics(!showAnalytics)}
+        >
+          <BarChart3 className="h-4 w-4 mr-2" />
+          {t('analytics')}
+        </Button>
+      </div>
+    </div>
+  );
+
+  // Analytics component
+  const AnalyticsView = () => (
+    <Card className="mb-6">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <BarChart3 className="h-5 w-5" />
+          {t('dailyReports')} - {t('last30Days')}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis 
+                dataKey="date" 
+                tick={{ fontSize: 12 }}
+                angle={-45}
+                textAnchor="end"
+                height={60}
+              />
+              <YAxis />
+              <Tooltip />
+              <Line 
+                type="monotone" 
+                dataKey="reports" 
+                stroke="#2563eb" 
+                strokeWidth={2}
+                dot={{ fill: '#2563eb', strokeWidth: 2, r: 4 }}
+                activeDot={{ r: 6 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Admin Header */}
@@ -245,6 +405,11 @@ export function AdminDashboard() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Enhanced Admin Toolbar */}
+        <AdminToolbar />
+        
+        {/* Analytics View */}
+        {showAnalytics && <AnalyticsView />}
         {/* Statistics Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6">
           <Card 
@@ -428,6 +593,9 @@ export function AdminDashboard() {
                           {t('date')}
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          {t('reportId')}
+                        </th>
+                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           {t('photo')}
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -459,6 +627,9 @@ export function AdminDashboard() {
                               <span className="font-medium">{formatDate(report.timestamp).split(' ')[0]}</span>
                               <span className="text-gray-500 text-xs">{formatDate(report.timestamp).split(' ')[1] || ''}</span>
                             </div>
+                          </td>
+                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm text-gray-900">
+                            <span className="font-mono font-bold text-blue-600">#{report.id}</span>
                           </td>
                           <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
                             {report.photos && report.photos.length > 0 && (
@@ -531,18 +702,33 @@ export function AdminDashboard() {
                               </SelectContent>
                             </Select>
                           </td>
-                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                openReportModal(report);
-                              }}
-                              className="text-blue-600 hover:text-blue-700 h-8 w-8 p-0"
-                            >
-                              <Eye className="h-4 w-4" />
-                            </Button>
+                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm">
+                            <div className="flex items-center space-x-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  openReportModal(report);
+                                }}
+                                className="flex items-center px-2 py-1 text-xs"
+                              >
+                                <Eye className="h-3 w-3 mr-1" />
+                                <span className="hidden sm:inline">{t('view')}</span>
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deleteReport(report.id);
+                                }}
+                                className="flex items-center px-2 py-1 text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
+                              >
+                                <Trash2 className="h-3 w-3 mr-1" />
+                                <span className="hidden sm:inline">{t('delete')}</span>
+                              </Button>
+                            </div>
                           </td>
                         </tr>
                       ))}
