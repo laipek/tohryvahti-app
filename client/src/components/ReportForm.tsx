@@ -117,7 +117,10 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
   };
 
   const getCurrentLocation = () => {
+    console.log('getCurrentLocation called');
+    
     if (!navigator.geolocation) {
+      console.log('Geolocation not supported');
       toast({
         title: "Error",
         description: "Geolocation is not supported by this browser",
@@ -126,10 +129,12 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       return;
     }
 
+    console.log('Starting geolocation request');
     setLocationStatus('loading');
     
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        console.log('Location obtained:', position.coords.latitude, position.coords.longitude);
         setFormData(prev => ({
           ...prev,
           latitude: position.coords.latitude,
@@ -140,6 +145,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       },
       (error) => {
         console.error('Error getting location:', error);
+        console.log('Error code:', error.code, 'Error message:', error.message);
         setLocationStatus('error');
         
         let title = t('locationError');
