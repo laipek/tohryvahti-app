@@ -179,11 +179,7 @@ export default function PublicMap() {
         {/* Statistics */}
         <div className="mt-6 flex justify-center">
           <Card className="bg-white/60 backdrop-blur-md border-municipal-border/30 shadow-lg w-full max-w-md">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold text-gray-900 text-center">
-                {t('statistics')}
-              </CardTitle>
-            </CardHeader>
+
             <CardContent>
               <div className="space-y-2">
                 <div className="flex justify-between">
