@@ -15,6 +15,8 @@ export const graffitiReports = pgTable("graffiti_reports", {
   validated: text("validated").notNull().default("pending"), // pending, approved, rejected
   propertyOwner: text("property_owner"), // "city", "ely-keskus", "private"
   propertyDescription: text("property_description"), // Additional details about the property
+  csvData: text("csv_data"), // Store CSV content or URL
+  folderPath: text("folder_path"), // Store the organized folder path
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
 

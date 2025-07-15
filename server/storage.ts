@@ -17,6 +17,7 @@ export interface IStorage {
   addHistoryEntry(entry: InsertReportHistoryEntry): Promise<ReportHistoryEntry>;
   deleteReport(id: number): Promise<boolean>;
   updateReportPhotos(id: number, photoUrls: string[]): Promise<GraffitiReport | undefined>;
+  updateReportMetadata(id: number, folderPath: string, csvData: string): Promise<GraffitiReport | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -60,6 +61,8 @@ export class MemStorage implements IStorage {
       validated: insertReport.validated || "pending",
       propertyOwner: insertReport.propertyOwner || null,
       propertyDescription: insertReport.propertyDescription || null,
+      csvData: null,
+      folderPath: null,
       timestamp: new Date()
     };
     
@@ -206,6 +209,17 @@ export class MemStorage implements IStorage {
     }
     
     const updatedReport = { ...report, photos: photoUrls };
+    this.reports.set(id, updatedReport);
+    return updatedReport;
+  }
+
+  async updateReportMetadata(id: number, folderPath: string, csvData: string): Promise<GraffitiReport | undefined> {
+    const report = this.reports.get(id);
+    if (!report) {
+      return undefined;
+    }
+    
+    const updatedReport = { ...report, folderPath, csvData };
     this.reports.set(id, updatedReport);
     return updatedReport;
   }
@@ -407,6 +421,24 @@ export class DatabaseStorage implements IStorage {
       return updatedReport;
     } catch (error) {
       console.error('Error updating report photos:', error);
+      return undefined;
+    }
+  }
+
+  async updateReportMetadata(id: number, folderPath: string, csvData: string): Promise<GraffitiReport | undefined> {
+    try {
+      const [updatedReport] = await db
+        .update(graffitiReports)
+        .set({ 
+          folderPath: folderPath,
+          csvData: csvData 
+        })
+        .where(eq(graffitiReports.id, id))
+        .returning();
+      
+      return updatedReport;
+    } catch (error) {
+      console.error('Error updating report metadata:', error);
       return undefined;
     }
   }

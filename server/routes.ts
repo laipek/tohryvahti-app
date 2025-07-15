@@ -202,15 +202,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         `Submission Timestamp,${now.toISOString()}`
       ].join('\n');
       
-      // Upload CSV file to Firebase Storage
+      // Store CSV content in database and try Firebase Storage
       try {
         const csvFileName = `${reportFolder}/report-${reportId}.csv`;
         const csvBuffer = Buffer.from(csvContent, 'utf8');
         const csvStorageRef = ref(firebaseStorage, csvFileName);
         await uploadBytes(csvStorageRef, csvBuffer);
         console.log(`Successfully uploaded CSV file: ${csvFileName}`);
+        
+        // Store CSV URL and folder path in database for future access
+        await storage.updateReportMetadata(reportId, reportFolder, `https://firebasestorage.googleapis.com/v0/b/graffititracker-17552.firebasestorage.app/o/${encodeURIComponent(csvFileName)}?alt=media`);
       } catch (csvError) {
-        console.log('Failed to upload CSV file to Firebase Storage:', csvError);
+        console.log('Failed to upload CSV file to Firebase Storage, storing locally:', csvError);
+        
+        // Fallback: Store CSV content and folder path in database
+        await storage.updateReportMetadata(reportId, reportFolder, csvContent);
       }
 
       console.log('Processing report:', {
