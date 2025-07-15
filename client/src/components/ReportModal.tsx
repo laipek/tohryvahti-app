@@ -12,8 +12,9 @@ import { Separator } from '@/components/ui/separator';
 import { MapView } from './MapView';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
-import { X, ZoomIn, History, Clock } from 'lucide-react';
+import { X, ZoomIn, History, Clock, Trash2, AlertTriangle } from 'lucide-react';
 import type { GraffitiReport, ReportHistoryEntry } from '@shared/schema';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { useQuery } from '@tanstack/react-query';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -23,9 +24,10 @@ interface ReportModalProps {
   onClose: () => void;
   onStatusUpdate: (status: string) => void;
   onPropertyUpdate?: (report: GraffitiReport) => void;
+  onDelete?: () => void;
 }
 
-export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropertyUpdate }: ReportModalProps) {
+export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropertyUpdate, onDelete }: ReportModalProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const [propertyOwner, setPropertyOwner] = useState(report.propertyOwner || '');
@@ -33,6 +35,7 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
   const [isUpdatingProperty, setIsUpdatingProperty] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Fetch report history
   const { data: history = [], isLoading: historyLoading } = useQuery({
@@ -428,6 +431,83 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
         </Card>
       </TabsContent>
     </Tabs>
+    
+    {/* Delete Report Section - at the bottom */}
+    <div className="mt-6 p-4 border-t border-gray-200">
+      <div className="flex justify-between items-center">
+        <div>
+          <h4 className="text-sm font-medium text-gray-700">{t('dangerZone')}</h4>
+          <p className="text-xs text-gray-500">{t('deleteReportWarning')}</p>
+        </div>
+        
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button 
+              variant="outline" 
+              size="sm"
+              className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+            >
+              <Trash2 className="h-3 w-3 mr-1" />
+              {t('deleteReport')}
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className="flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5 text-red-600" />
+                {t('confirmDelete')}
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                <div className="space-y-2">
+                  <p>{t('deleteConfirmMessage')}</p>
+                  <div className="bg-gray-50 p-3 rounded text-sm">
+                    <p><strong>{t('reportId')}:</strong> #{report.id}</p>
+                    <p><strong>{t('district')}:</strong> {t(`districts.${report.district}`)}</p>
+                    <p><strong>{t('date')}:</strong> {new Date(report.timestamp).toLocaleDateString('fi-FI')}</p>
+                  </div>
+                  <p className="text-red-600 font-medium">{t('deleteIsPermanent')}</p>
+                </div>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
+              <AlertDialogAction 
+                className="bg-red-600 hover:bg-red-700 text-white"
+                onClick={async () => {
+                  setIsDeleting(true);
+                  try {
+                    const response = await apiRequest('DELETE', `/api/reports/${report.id}`);
+                    if (response.ok) {
+                      toast({
+                        title: t('reportDeleted'),
+                        description: t('reportDeletedMessage'),
+                      });
+                      onClose();
+                      if (onDelete) {
+                        onDelete();
+                      }
+                    } else {
+                      throw new Error('Failed to delete report');
+                    }
+                  } catch (error) {
+                    toast({
+                      title: t('error'),
+                      description: t('failedToDelete'),
+                      variant: 'destructive',
+                    });
+                  } finally {
+                    setIsDeleting(false);
+                  }
+                }}
+                disabled={isDeleting}
+              >
+                {isDeleting ? t('deleting') : t('confirmDeleteReport')}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+    </div>
       </DialogContent>
 
       {/* Image Popup Dialog */}

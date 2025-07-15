@@ -718,32 +718,18 @@ export function AdminDashboard() {
                             </Select>
                           </td>
                           <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap text-xs xl:text-sm">
-                            <div className="flex items-center space-x-1 xl:space-x-2">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  openReportModal(report);
-                                }}
-                                className="flex items-center px-1 xl:px-2 py-1 text-xs"
-                              >
-                                <Eye className="h-3 w-3 xl:mr-1" />
-                                <span className="hidden xl:inline">{t('view')}</span>
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  deleteReport(report.id);
-                                }}
-                                className="flex items-center px-1 xl:px-2 py-1 text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
-                              >
-                                <Trash2 className="h-3 w-3 xl:mr-1" />
-                                <span className="hidden xl:inline">{t('delete')}</span>
-                              </Button>
-                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openReportModal(report);
+                              }}
+                              className="flex items-center px-1 xl:px-2 py-1 text-xs"
+                            >
+                              <Eye className="h-3 w-3 xl:mr-1" />
+                              <span className="hidden xl:inline">{t('view')}</span>
+                            </Button>
                           </td>
                         </tr>
                       ))}
@@ -785,6 +771,10 @@ export function AdminDashboard() {
           onClose={closeReportModal}
           onStatusUpdate={(status) => updateStatusMutation.mutate({ reportId: selectedReport.id, status })}
           onPropertyUpdate={handleReportUpdate}
+          onDelete={() => {
+            // Refetch reports after deletion
+            window.location.reload();
+          }}
         />
       )}
     </div>
