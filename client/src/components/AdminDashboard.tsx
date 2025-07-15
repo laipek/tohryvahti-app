@@ -560,11 +560,11 @@ export function AdminDashboard() {
                   <p className="text-gray-500">{t('noReportsFound')}</p>
                 </div>
               ) : (
-                <div className="overflow-x-auto max-w-full">
-                  <table className="min-w-full divide-y divide-gray-200">
+                <div className="overflow-x-auto">
+                  <table className="w-full table-auto divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-2 sm:px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32 xl:w-40">
                           <Button
                             variant="ghost"
                             size="sm"
@@ -575,7 +575,7 @@ export function AdminDashboard() {
                             {getSortIcon('timestamp')}
                           </Button>
                         </th>
-                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-2 sm:px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20 xl:w-24">
                           <Button
                             variant="ghost"
                             size="sm"
@@ -586,10 +586,10 @@ export function AdminDashboard() {
                             {getSortIcon('id')}
                           </Button>
                         </th>
-                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-2 sm:px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20 xl:w-24">
                           {t('photo')}
                         </th>
-                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-2 sm:px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32 xl:w-40">
                           <Button
                             variant="ghost"
                             size="sm"
@@ -600,10 +600,10 @@ export function AdminDashboard() {
                             {getSortIcon('district')}
                           </Button>
                         </th>
-                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">
+                        <th className="px-2 sm:px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell min-w-48 xl:min-w-64">
                           {t('description')}
                         </th>
-                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-2 sm:px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32 xl:w-40">
                           <Button
                             variant="ghost"
                             size="sm"
@@ -614,7 +614,7 @@ export function AdminDashboard() {
                             {getSortIcon('validated')}
                           </Button>
                         </th>
-                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
+                        <th className="px-2 sm:px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell w-32 xl:w-40">
                           <Button
                             variant="ghost"
                             size="sm"
@@ -625,7 +625,7 @@ export function AdminDashboard() {
                             {getSortIcon('status')}
                           </Button>
                         </th>
-                        <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-2 sm:px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32 xl:w-40">
                           {t('actions')}
                         </th>
                       </tr>
@@ -637,36 +637,36 @@ export function AdminDashboard() {
                           className="hover:bg-gray-50 cursor-pointer"
                           onClick={() => openReportModal(report)}
                         >
-                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm text-gray-900">
+                          <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap text-xs xl:text-sm text-gray-900">
                             <div className="flex flex-col">
                               <span className="font-medium">{new Date(report.timestamp).toLocaleDateString('fi-FI')}</span>
                               <span className="text-gray-500 text-xs">klo {new Date(report.timestamp).toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' })}</span>
                             </div>
                           </td>
-                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm text-gray-900">
+                          <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap text-xs xl:text-sm text-gray-900">
                             <span className="font-mono font-bold text-blue-600">#{report.id}</span>
                           </td>
-                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
+                          <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap">
                             {report.photos && report.photos.length > 0 && (
                               <img 
                                 src={report.photos[0]} 
                                 alt="Report" 
-                                className="w-12 h-12 lg:w-16 lg:h-16 rounded-lg object-cover"
+                                className="w-12 h-12 xl:w-16 xl:h-16 rounded-lg object-cover"
                               />
                             )}
                           </td>
-                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm text-gray-900">
-                            <div className="max-w-20 lg:max-w-none truncate">
+                          <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap text-xs xl:text-sm text-gray-900">
+                            <div className="truncate">
                               {t(`districts.${report.district}`)}
                             </div>
                           </td>
-                          <td className="px-3 lg:px-6 py-4 text-xs lg:text-sm text-gray-900 max-w-xs hidden md:table-cell">
-                            <div className="truncate" title={report.description}>
+                          <td className="px-2 sm:px-3 xl:px-6 py-4 text-xs xl:text-sm text-gray-900 hidden md:table-cell">
+                            <div className="line-clamp-2 xl:line-clamp-3" title={report.description}>
                               {report.description}
                             </div>
                           </td>
-                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
-                            <div className="flex flex-col lg:flex-row items-start lg:items-center space-y-1 lg:space-y-0 lg:space-x-2">
+                          <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap">
+                            <div className="flex flex-col xl:flex-row items-start xl:items-center space-y-1 xl:space-y-0 xl:space-x-2">
                               {getValidationBadge(report.validated)}
                               {report.validated === 'pending' && (
                                 <div className="flex space-x-1">
@@ -698,14 +698,14 @@ export function AdminDashboard() {
                               )}
                             </div>
                           </td>
-                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap hidden lg:table-cell">
+                          <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap hidden lg:table-cell">
                             <Select 
                               value={report.status} 
                               onValueChange={(value) => updateStatusMutation.mutate({ reportId: report.id, status: value })}
                               disabled={updateStatusMutation.isPending}
                             >
                               <SelectTrigger 
-                                className="w-24 lg:w-32 h-8 text-xs"
+                                className="w-full max-w-32 xl:max-w-40 h-8 text-xs"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <SelectValue />
@@ -717,8 +717,8 @@ export function AdminDashboard() {
                               </SelectContent>
                             </Select>
                           </td>
-                          <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm">
-                            <div className="flex items-center space-x-2">
+                          <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap text-xs xl:text-sm">
+                            <div className="flex items-center space-x-1 xl:space-x-2">
                               <Button
                                 size="sm"
                                 variant="outline"
@@ -726,10 +726,10 @@ export function AdminDashboard() {
                                   e.stopPropagation();
                                   openReportModal(report);
                                 }}
-                                className="flex items-center px-2 py-1 text-xs"
+                                className="flex items-center px-1 xl:px-2 py-1 text-xs"
                               >
-                                <Eye className="h-3 w-3 mr-1" />
-                                <span className="hidden sm:inline">{t('view')}</span>
+                                <Eye className="h-3 w-3 xl:mr-1" />
+                                <span className="hidden xl:inline">{t('view')}</span>
                               </Button>
                               <Button
                                 size="sm"
@@ -738,10 +738,10 @@ export function AdminDashboard() {
                                   e.stopPropagation();
                                   deleteReport(report.id);
                                 }}
-                                className="flex items-center px-2 py-1 text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
+                                className="flex items-center px-1 xl:px-2 py-1 text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
                               >
-                                <Trash2 className="h-3 w-3 mr-1" />
-                                <span className="hidden sm:inline">{t('delete')}</span>
+                                <Trash2 className="h-3 w-3 xl:mr-1" />
+                                <span className="hidden xl:inline">{t('delete')}</span>
                               </Button>
                             </div>
                           </td>
