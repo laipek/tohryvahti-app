@@ -49,7 +49,7 @@ export default function PublicForm() {
         </div>
         
         {/* Disclaimer and beta notice */}
-        <div className="px-4 py-3 bg-black/20 backdrop-blur-sm rounded-lg text-xs text-white/70 leading-relaxed">
+        <div className="px-4 py-3 bg-black/20 backdrop-blur-sm rounded-lg text-xs text-white/70 leading-relaxed text-center">
           <p className="mb-2">
             <strong>{t('disclaimer.betaVersion')}</strong>
           </p>
@@ -62,7 +62,7 @@ export default function PublicForm() {
           <p className="mb-2">
             {t('disclaimer.copyright')}
           </p>
-          <p className="text-center">
+          <p>
             <a href="/cookie-policy" className="text-white/90 hover:text-white underline">{t('cookiePolicy.link')}</a>
             {' | '}
             <a href="/privacy-policy" className="text-white/90 hover:text-white underline">{t('privacyPolicy.link')}</a>
