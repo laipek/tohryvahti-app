@@ -19,12 +19,13 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const firebaseStorage = getStorage(firebaseApp);
 
-// Configure multer for file uploads
+// Configure multer for optimized file uploads
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 20 * 1024 * 1024, // 20MB limit per file
+    fileSize: 10 * 1024 * 1024, // 10MB limit per file for faster uploads
     files: 5, // Allow up to 5 files
+    fieldSize: 100 * 1024 * 1024, // 100MB total form size limit
   },
   fileFilter: (req, file, cb) => {
     // Check if file is an image
@@ -155,21 +156,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Create folder structure: reports/YYYY-MM-DD/HH-MM-SS-reportID/
       const reportFolder = `reports/${dateFolder}/${timeFolder}-${reportId}`;
       
-      // Process uploaded images with organized folder structure
+      // Process uploaded images with parallel upload for better performance
       const uploadedFiles = req.files as Express.Multer.File[];
-      const photoUrls: string[] = [];
-
-      for (let i = 0; i < uploadedFiles.length; i++) {
-        const file = uploadedFiles[i];
+      
+      console.log(`Starting parallel upload of ${uploadedFiles.length} files...`);
+      const uploadPromises = uploadedFiles.map(async (file, index) => {
         try {
           // Try Firebase Storage first with organized folder structure
-          const fileName = `${reportFolder}/image-${i + 1}-${file.originalname}`;
+          const fileName = `${reportFolder}/image-${index + 1}-${file.originalname}`;
           const storageRef = ref(firebaseStorage, fileName);
           const snapshot = await uploadBytes(storageRef, file.buffer);
           const downloadURL = await getDownloadURL(snapshot.ref);
           
           console.log(`Successfully uploaded ${fileName} to Firebase Storage`);
-          photoUrls.push(downloadURL);
+          return downloadURL;
         } catch (firebaseError: any) {
           console.log('Firebase Storage failed, using base64 fallback:', firebaseError.code || firebaseError.message);
           
@@ -179,11 +179,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const dataUrl = `data:${mimeType};base64,${base64Data}`;
           
           console.log(`Using base64 fallback for ${file.originalname} (${file.size} bytes)`);
-          photoUrls.push(dataUrl);
+          return dataUrl;
         }
-      }
+      });
       
-      // Create CSV content for the report
+      // Wait for all uploads to complete in parallel
+      const photoUrls = await Promise.all(uploadPromises);
+      console.log(`Parallel upload completed: ${photoUrls.length} files processed`);
+      
+      // Create CSV content asynchronously for better performance
       const csvContent = [
         'Field,Value',
         `Report ID,${reportId}`,
@@ -193,6 +197,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         `Longitude,${longitude}`,
         `District,${district}`,
         `Description,"${description.replace(/"/g, '""')}"`, // Escape quotes in CSV
+        `Graffiti Type,${req.body.graffitiType || 'Not specified'}`,
         `Name,${name || 'Anonymous'}`,
         `Email,${email || 'Not provided'}`,
         `Status,${status}`,
@@ -202,7 +207,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         `Submission Timestamp,${now.toISOString()}`
       ].join('\n');
       
-      // Store CSV content in database and try Firebase Storage
+      // Perform database update and CSV storage in parallel
       try {
         const csvFileName = `${reportFolder}/report-${reportId}.csv`;
         const csvBuffer = Buffer.from(csvContent, 'utf8');

@@ -111,6 +111,8 @@
   "locationUnavailableDesc": "Kontrollera GPS/nätverksanslutning och försök igen.",
   "locationTimeout": "Platssökning översteg tidsgräns",
   "locationTimeoutDesc": "Platssökning översteg tidsgräns. Försök igen eller använd manuell val.",
+  "uploadingReport": "Skickar rapport",
+  "processingImages": "Bearbetar bilder och sparar data...",
   "validation": {
     "selectGraffitiType": "Välj klottertyp"
   },

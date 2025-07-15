@@ -112,6 +112,8 @@
   "locationUnavailableDesc": "Tarkista GPS/verkkoyhteys ja yritä uudelleen.",
   "locationTimeout": "Sijaintihaku aikakatkaistiin",
   "locationTimeoutDesc": "Sijaintihaku aikakatkaistiin. Yritä uudelleen tai käytä manuaalista valintaa.",
+  "uploadingReport": "Lähetetään ilmoitusta",
+  "processingImages": "Käsitellään kuvia ja tallennetaan tietoja...",
   "validation": {
     "selectGraffitiType": "Valitse töhryn tyyppi"
   },

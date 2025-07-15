@@ -270,27 +270,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     }
   };
 
-  const uploadPhotos = async (photos: File[]): Promise<string[]> => {
-    console.log('Firebase Storage: Uploading photos to bucket gs://graffititracker-17552.firebasestorage.app');
-    
-    const uploadPromises = photos.map(async (photo, index) => {
-      const fileName = `graffiti-reports/${Date.now()}-${index}-${photo.name}`;
-      console.log(`Firebase Storage: Uploading ${fileName} (${photo.size} bytes)`);
-      
-      try {
-        const storageRef = ref(storage, fileName);
-        const snapshot = await uploadBytes(storageRef, photo);
-        const downloadURL = await getDownloadURL(snapshot.ref);
-        console.log(`Firebase Storage: Successfully uploaded ${fileName} -> ${downloadURL}`);
-        return downloadURL;
-      } catch (error) {
-        console.error(`Firebase Storage: Failed to upload ${fileName}:`, error);
-        throw error;
-      }
-    });
-    
-    return Promise.all(uploadPromises);
-  };
+  // Removed client-side photo upload - server handles this now for better performance
 
   const validateForm = (): boolean => {
     if (formData.photos.length === 0) {
@@ -342,12 +322,12 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     setIsSubmitting(true);
     
     try {
-      console.log('Starting report submission process...');
+      console.log('Starting optimized report submission...');
       
-      // Create FormData for file upload to server
+      // Create FormData for streamlined upload
       const formDataForUpload = new FormData();
       
-      // Add photos as files (server will handle Firebase upload)
+      // Add photos as files (server handles Firebase upload in parallel)
       formData.photos.forEach((photo, index) => {
         formDataForUpload.append('photos', photo);
       });
@@ -359,6 +339,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       formDataForUpload.append('description', formData.description);
       formDataForUpload.append('status', 'new');
       formDataForUpload.append('validated', 'pending');
+      formDataForUpload.append('graffitiType', formData.graffitiType);
       
       if (formData.name) {
         formDataForUpload.append('name', formData.name);
@@ -367,10 +348,18 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         formDataForUpload.append('email', formData.email);
       }
 
-      console.log('Submitting report with files to server...');
+      console.log('Submitting report with optimized processing...');
+      
+      // Show progress feedback
+      toast({
+        title: t('uploadingReport', "Uploading Report"),
+        description: t('processingImages', "Processing images and saving data..."),
+        duration: 3000
+      });
+      
       const response = await fetch('/api/reports', {
         method: 'POST',
-        body: formDataForUpload, // Don't set Content-Type header, let browser set it with boundary
+        body: formDataForUpload,
       });
 
       if (!response.ok) {

@@ -111,6 +111,8 @@
   "locationUnavailableDesc": "Please check your GPS/network connection and try again.",
   "locationTimeout": "Location Timeout",
   "locationTimeoutDesc": "Location request timed out. Please try again or use manual selection.",
+  "uploadingReport": "Uploading Report",
+  "processingImages": "Processing images and saving data...",
   "validation": {
     "selectGraffitiType": "Select graffiti type"
   },
