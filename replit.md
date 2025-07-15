@@ -10,7 +10,7 @@ Preferred communication style: Simple, everyday language.
 Default application language: Finnish (fi) - users should see Finnish text by default, with option to switch to Swedish or English.
 Districts updated to Finnish municipalities: Asema, Haapaniemi, Huutijärvi, Ilkko, Kangasalan keskusta, Kuohenmaa, Lamminrahka, Lentola, Lihasula, Raikku, Ranta-Koivisto, Raudanmaa, Riku, Ruutana, Saarenmaa, Saarikylät, Suinula, Tiihala, Vatiala, Vehkajärvi, Vääksy.
 Background image: Use authentic Finnish landscape from Kangasala area (Vehoniemenharju) with proper attribution.
-Copyright notice: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi" displayed in bottom right corner.
+Copyright notice: "Vehoniemenharju. Kuva: visitkangasala.fi" displayed in bottom right corner.
 
 ## System Architecture
 

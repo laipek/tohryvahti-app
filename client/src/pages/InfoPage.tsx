@@ -126,7 +126,7 @@ export default function InfoPage() {
       
       {/* Copyright notice */}
       <div className="absolute bottom-4 right-4 text-xs text-gray-600 bg-white/70 px-2 py-1 rounded backdrop-blur-sm">
-        Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi
+        Vehoniemenharju. Kuva: visitkangasala.fi
       </div>
       </div>
     </div>

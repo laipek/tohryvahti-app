@@ -98,7 +98,7 @@ export default function CookiePolicy() {
       
       {/* Copyright notice */}
       <div className="absolute bottom-4 right-4 text-xs text-gray-600 bg-white/70 px-2 py-1 rounded backdrop-blur-sm">
-        Kuva: Lassi Välimaa / visitkangasala.fi – Vehoniemenharju
+        Vehoniemenharju. Kuva: visitkangasala.fi
       </div>
       </div>
     </div>

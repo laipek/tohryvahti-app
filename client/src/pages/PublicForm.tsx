@@ -74,7 +74,7 @@ export default function PublicForm() {
         {/* Image copyright */}
         <div className="text-center">
           <div className="text-xs text-white/60 bg-black/30 backdrop-blur-sm rounded px-3 py-2 inline-block">
-            Kuva: Vehoniemenharju. visitkangasala.fi
+            Vehoniemenharju. Kuva: visitkangasala.fi
           </div>
         </div>
       </div>
