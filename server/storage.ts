@@ -192,14 +192,56 @@ export class MemStorage implements IStorage {
   }
 
   async deleteReport(id: number): Promise<boolean> {
-    const exists = this.reports.has(id);
-    if (exists) {
-      this.reports.delete(id);
-      // Also remove all history entries for this report
-      const historyEntries = Array.from(this.history.values()).filter(h => h.reportId === id);
-      historyEntries.forEach(entry => this.history.delete(entry.id));
+    const report = this.reports.get(id);
+    if (!report) {
+      return false;
     }
-    return exists;
+
+    // Clean up Firebase Storage folder if it exists
+    if (report.folderPath) {
+      await this.cleanupFirebaseFolder(report.folderPath);
+    }
+
+    this.reports.delete(id);
+    // Also remove all history entries for this report
+    const historyEntries = Array.from(this.history.values()).filter(h => h.reportId === id);
+    historyEntries.forEach(entry => this.history.delete(entry.id));
+    
+    return true;
+  }
+
+  // Clean up entire Firebase Storage folder for a report
+  async cleanupFirebaseFolder(folderPath: string): Promise<void> {
+    try {
+      const { getStorage, ref, listAll, deleteObject } = await import('firebase/storage');
+      const { initializeApp } = await import('firebase/app');
+      
+      const firebaseConfig = {
+        apiKey: process.env.VITE_FIREBASE_API_KEY,
+        authDomain: `${process.env.VITE_FIREBASE_PROJECT_ID}.firebaseapp.com`,
+        projectId: process.env.VITE_FIREBASE_PROJECT_ID,
+        storageBucket: "graffititracker-17552.firebasestorage.app",
+        appId: process.env.VITE_FIREBASE_APP_ID,
+      };
+      
+      const firebaseApp = initializeApp(firebaseConfig);
+      const firebaseStorage = getStorage(firebaseApp);
+      
+      // List all items in the folder
+      const folderRef = ref(firebaseStorage, folderPath);
+      const listResult = await listAll(folderRef);
+      
+      // Delete all files in the folder
+      const deletePromises = listResult.items.map(itemRef => deleteObject(itemRef));
+      await Promise.all(deletePromises);
+      
+      console.log(`Successfully cleaned up Firebase Storage folder: ${folderPath}`);
+      console.log(`Deleted ${listResult.items.length} files from folder`);
+      
+    } catch (error) {
+      console.error('Error cleaning up Firebase Storage folder:', error);
+      // Don't throw error - deletion from database should still proceed
+    }
   }
 
   async updateReportPhotos(id: number, photoUrls: string[]): Promise<GraffitiReport | undefined> {
@@ -412,6 +454,17 @@ export class DatabaseStorage implements IStorage {
 
   async deleteReport(id: number): Promise<boolean> {
     try {
+      // Get the report first to access folder path for cleanup
+      const report = await this.getReport(id);
+      if (!report) {
+        return false;
+      }
+
+      // Clean up Firebase Storage folder if it exists
+      if (report.folderPath) {
+        await this.cleanupFirebaseFolder(report.folderPath);
+      }
+
       // Delete history entries first
       await db.delete(reportHistory).where(eq(reportHistory.reportId, id));
       
@@ -422,6 +475,40 @@ export class DatabaseStorage implements IStorage {
     } catch (error) {
       console.error('Error deleting report:', error);
       return false;
+    }
+  }
+
+  // Clean up entire Firebase Storage folder for a report
+  async cleanupFirebaseFolder(folderPath: string): Promise<void> {
+    try {
+      const { getStorage, ref, listAll, deleteObject } = await import('firebase/storage');
+      const { initializeApp } = await import('firebase/app');
+      
+      const firebaseConfig = {
+        apiKey: process.env.VITE_FIREBASE_API_KEY,
+        authDomain: `${process.env.VITE_FIREBASE_PROJECT_ID}.firebaseapp.com`,
+        projectId: process.env.VITE_FIREBASE_PROJECT_ID,
+        storageBucket: "graffititracker-17552.firebasestorage.app",
+        appId: process.env.VITE_FIREBASE_APP_ID,
+      };
+      
+      const firebaseApp = initializeApp(firebaseConfig);
+      const firebaseStorage = getStorage(firebaseApp);
+      
+      // List all items in the folder
+      const folderRef = ref(firebaseStorage, folderPath);
+      const listResult = await listAll(folderRef);
+      
+      // Delete all files in the folder
+      const deletePromises = listResult.items.map(itemRef => deleteObject(itemRef));
+      await Promise.all(deletePromises);
+      
+      console.log(`Successfully cleaned up Firebase Storage folder: ${folderPath}`);
+      console.log(`Deleted ${listResult.items.length} files from folder`);
+      
+    } catch (error) {
+      console.error('Error cleaning up Firebase Storage folder:', error);
+      // Don't throw error - deletion from database should still proceed
     }
   }
 

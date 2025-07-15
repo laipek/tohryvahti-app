@@ -208,6 +208,9 @@ Copyright notice: Localized copyright text in Finnish ("Kuva: DC Productions, Pe
 ✓ **CSV Generation**: Complete report data exported as CSV file in each report folder
 ✓ **Database Tracking**: Added csvData and folderPath fields to track organized storage
 ✓ **Multi-tier Upload**: Firebase Storage primary with database fallback when permission issues occur
+✓ **CSV Regeneration**: Admin modifications automatically update CSV files in Firebase Storage
+✓ **Complete Storage Cleanup**: Report deletion removes entire Firebase Storage folder and all files
+✓ **Comprehensive Deletion**: Database entries, history, images, and CSV files all cleaned up together
 
 ## Completed Admin Panel Features
 
