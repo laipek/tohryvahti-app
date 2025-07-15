@@ -288,6 +288,11 @@ export class DatabaseStorage implements IStorage {
       notes: `Status changed from ${oldStatus} to ${status}`
     });
     
+    // Regenerate CSV file with updated data
+    if (updatedReport) {
+      await this.regenerateReportCsv(updatedReport);
+    }
+    
     return updatedReport;
   }
 
@@ -311,6 +316,11 @@ export class DatabaseStorage implements IStorage {
       adminUser: adminUser || 'admin',
       notes: `Validation changed from ${oldValidation} to ${validated}`
     });
+    
+    // Regenerate CSV file with updated data
+    if (updatedReport) {
+      await this.regenerateReportCsv(updatedReport);
+    }
     
     return updatedReport;
   }
@@ -338,6 +348,11 @@ export class DatabaseStorage implements IStorage {
       adminUser: adminUser || 'admin',
       notes: `Property owner updated: ${propertyDescription || 'No description'}`
     });
+    
+    // Regenerate CSV file with updated data
+    if (updatedReport) {
+      await this.regenerateReportCsv(updatedReport);
+    }
     
     return updatedReport;
   }
@@ -440,6 +455,75 @@ export class DatabaseStorage implements IStorage {
     } catch (error) {
       console.error('Error updating report metadata:', error);
       return undefined;
+    }
+  }
+
+  // Regenerate CSV file when report data changes
+  async regenerateReportCsv(report: GraffitiReport): Promise<void> {
+    if (!report.folderPath) {
+      console.log(`Report ${report.id} has no folder path, skipping CSV regeneration`);
+      return;
+    }
+
+    try {
+      // Create updated CSV content
+      const csvContent = [
+        `Report ID,${report.id}`,
+        `Date,${new Date(report.timestamp).toLocaleDateString('fi-FI')}`,
+        `Time,${new Date(report.timestamp).toLocaleTimeString('fi-FI')}`,
+        `Latitude,${report.latitude}`,
+        `Longitude,${report.longitude}`,
+        `District,${report.district}`,
+        `Description,"${report.description.replace(/"/g, '""')}"`,
+        `Submitter Name,${report.name || 'Not provided'}`,
+        `Email,${report.email || 'Not provided'}`,
+        `Status,${report.status}`,
+        `Validation Status,${report.validated}`,
+        `Property Owner,${report.propertyOwner || 'Not specified'}`,
+        `Property Description,"${(report.propertyDescription || 'Not specified').replace(/"/g, '""')}"`,
+        `Photo URLs,"${report.photos.join('; ')}"`,
+        `Submission Timestamp,${new Date(report.timestamp).toISOString()}`,
+        `Last Updated,${new Date().toISOString()}`
+      ].join('\n');
+
+      // Upload updated CSV to Firebase Storage
+      const { getStorage, ref, uploadBytes } = await import('firebase/storage');
+      const { initializeApp } = await import('firebase/app');
+      
+      const firebaseConfig = {
+        apiKey: process.env.VITE_FIREBASE_API_KEY,
+        authDomain: `${process.env.VITE_FIREBASE_PROJECT_ID}.firebaseapp.com`,
+        projectId: process.env.VITE_FIREBASE_PROJECT_ID,
+        storageBucket: "graffititracker-17552.firebasestorage.app",
+        appId: process.env.VITE_FIREBASE_APP_ID,
+      };
+      
+      const firebaseApp = initializeApp(firebaseConfig);
+      const firebaseStorage = getStorage(firebaseApp);
+      
+      const csvFileName = `${report.folderPath}/report-${report.id}.csv`;
+      const csvBuffer = Buffer.from(csvContent, 'utf8');
+      const csvStorageRef = ref(firebaseStorage, csvFileName);
+      
+      await uploadBytes(csvStorageRef, csvBuffer);
+      console.log(`Successfully regenerated CSV file: ${csvFileName}`);
+      
+      // Update database with new CSV content
+      await this.updateReportMetadata(report.id, report.folderPath, csvContent);
+      
+    } catch (error) {
+      console.error('Error regenerating CSV file:', error);
+      
+      // Fallback: Just update the CSV content in database
+      const csvContent = [
+        `Report ID,${report.id}`,
+        `Status,${report.status}`,
+        `Validation Status,${report.validated}`,
+        `Property Owner,${report.propertyOwner || 'Not specified'}`,
+        `Last Updated,${new Date().toISOString()}`
+      ].join('\n');
+      
+      await this.updateReportMetadata(report.id, report.folderPath, csvContent);
     }
   }
 }
