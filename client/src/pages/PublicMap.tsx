@@ -186,11 +186,11 @@ export default function PublicMap() {
                   <span className="text-lg font-semibold text-gray-900">{reports.length}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-municipal-gray">{t('cleaned')}</span>
+                  <span className="text-sm text-municipal-gray">{t('inProgress')}</span>
                   <span className="text-sm font-medium text-gray-500">{t('featureComingSoon')}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-municipal-gray">{t('inProgress')}</span>
+                  <span className="text-sm text-municipal-gray">{t('cleaned')}</span>
                   <span className="text-sm font-medium text-gray-500">{t('featureComingSoon')}</span>
                 </div>
               </div>
