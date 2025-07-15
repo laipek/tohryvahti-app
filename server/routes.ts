@@ -9,7 +9,7 @@ import { z } from "zod";
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB limit per file - reasonable for mobile photos
+    fileSize: 20 * 1024 * 1024, // 20MB limit per file
     files: 1, // Only allow 1 file
   },
   fileFilter: (req, file, cb) => {
@@ -131,7 +131,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof multer.MulterError) {
         if (error.code === 'LIMIT_FILE_SIZE') {
           return res.status(400).json({ 
-            message: "File too large. Maximum file size is 5MB." 
+            message: "File too large. Maximum file size is 20MB." 
           });
         }
         if (error.code === 'LIMIT_FILE_COUNT') {

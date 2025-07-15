@@ -124,7 +124,7 @@
     "invalidFileType": "Invalid file type",
     "supportedFormats": "Supported formats: JPEG, PNG, WebP",
     "fileTooLarge": "File too large",
-    "maxFileSize": "Maximum size: 5MB"
+    "maxFileSize": "Maximum size: 20MB"
   },
   "districts": {
     "asema": "Asema",
@@ -159,7 +159,7 @@
   },
   "backToHome": "Back to home",
   "supportedFormats": "Supported formats",
-  "maxFileSize": "Maximum size",
+  "maxFileSize": "Maximum size: 20MB",
   "photoSelected": "Photo selected",
   "clickMapToAdjust": "Click map to adjust location",
   "cancel": "Cancel",

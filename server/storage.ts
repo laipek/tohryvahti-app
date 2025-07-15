@@ -50,7 +50,6 @@ export class MemStorage implements IStorage {
       latitude: insertReport.latitude,
       longitude: insertReport.longitude,
       district: insertReport.district,
-      graffitiType: insertReport.graffitiType || null,
       description: insertReport.description,
       name: insertReport.name || null,
       email: insertReport.email || null,
@@ -102,7 +101,7 @@ export class MemStorage implements IStorage {
     if (!report) return undefined;
     
     const oldOwner = report.propertyOwner || 'none';
-    const updatedReport = { ...report, propertyOwner, propertyDescription };
+    const updatedReport = { ...report, propertyOwner, propertyDescription: propertyDescription || null };
     this.reports.set(id, updatedReport);
     
     // Add history entry
@@ -163,10 +162,10 @@ export class MemStorage implements IStorage {
       id,
       reportId: entry.reportId,
       action: entry.action,
-      oldValue: entry.oldValue,
+      oldValue: entry.oldValue || null,
       newValue: entry.newValue,
-      adminUser: entry.adminUser,
-      notes: entry.notes,
+      adminUser: entry.adminUser || null,
+      notes: entry.notes || null,
       timestamp: new Date()
     };
     

@@ -124,7 +124,7 @@
     "invalidFileType": "Ogiltig filtyp",
     "supportedFormats": "Stödda format: JPEG, PNG, WebP",
     "fileTooLarge": "Filen är för stor",
-    "maxFileSize": "Maximal storlek: 5MB"
+    "maxFileSize": "Maximal storlek: 20MB"
   },
   "districts": {
     "asema": "Asema",
@@ -159,7 +159,7 @@
   },
   "backToHome": "Tillbaka till startsidan",
   "supportedFormats": "Stödda format",
-  "maxFileSize": "Maximal storlek",
+  "maxFileSize": "Maximal storlek: 20MB",
   "photoSelected": "Foto valt",
   "clickMapToAdjust": "Klicka på kartan för att justera platsen",
   "cancel": "Avbryt",

@@ -19,7 +19,6 @@ interface ReportFormData {
   latitude: number | null;
   longitude: number | null;
   district: string;
-  graffitiType: string;
   description: string;
   name: string;
   email: string;
@@ -39,7 +38,6 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     latitude: null,
     longitude: null,
     district: '',
-    graffitiType: '',
     description: '',
     name: '',
     email: ''
@@ -58,14 +56,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     'saarikylat', 'suinula', 'tiihala', 'vatiala', 'vehkajarvi', 'vaaksy'
   ];
 
-  const graffitiTypes = [
-    'textOrImage',
-    'sprayTag', 
-    'sprayImage',
-    'sticker',
-    'deliberateScratches',
-    'otherVandalism'
-  ];
+
 
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
@@ -104,8 +95,8 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       return;
     }
     
-    // Validate file size (10MB limit)
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    // Validate file size (20MB limit)
+    const maxSize = 20 * 1024 * 1024; // 20MB
     if (selectedFile.size > maxSize) {
       toast({
         title: t('validation.fileTooLarge'),
@@ -199,14 +190,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       return false;
     }
     
-    if (!formData.graffitiType) {
-      toast({
-        title: "Validation Error",
-        description: t('validation.selectGraffitiType'),
-        variant: "destructive"
-      });
-      return false;
-    }
+
     
     if (!formData.description.trim()) {
       toast({
@@ -240,7 +224,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       formDataForUpload.append('latitude', formData.latitude!.toString());
       formDataForUpload.append('longitude', formData.longitude!.toString());
       formDataForUpload.append('district', formData.district);
-      formDataForUpload.append('graffitiType', formData.graffitiType);
+
       formDataForUpload.append('description', formData.description);
       formDataForUpload.append('status', 'new');
       formDataForUpload.append('validated', 'pending');
@@ -272,7 +256,6 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         latitude: null,
         longitude: null,
         district: '',
-        graffitiType: '',
         description: '',
         name: '',
         email: ''
@@ -485,25 +468,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
             </Select>
           </div>
 
-          {/* Graffiti Type */}
-          <div>
-            <Label className="flex items-center text-sm font-medium text-gray-700 mb-2">
-              <FileText className="mr-2 h-4 w-4" />
-              {t('graffitiType')}
-            </Label>
-            <Select value={formData.graffitiType} onValueChange={(value) => setFormData(prev => ({ ...prev, graffitiType: value }))}>
-              <SelectTrigger className="border-municipal-border">
-                <SelectValue placeholder={t('selectGraffitiType')} />
-              </SelectTrigger>
-              <SelectContent>
-                {graffitiTypes.map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {t(type)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+
 
           {/* Description */}
           <div>

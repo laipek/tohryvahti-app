@@ -136,7 +136,7 @@
   "deleteIsPermanent": "Poistaminen on pysyvää ja kaikkia tietoja ei voi palauttaa.",
   "cancel": "Peruuta",
   "supportedFormats": "Tuetut muodot",
-  "maxFileSize": "Maksimikoko",
+  "maxFileSize": "Maksimikoko: 20MB",
   "photoSelected": "Kuva valittu",
   "clickMapToAdjust": "Napsauta karttaa sijainnin säätämiseksi",
   "confirmDeleteReport": "Poista ilmoitus",
