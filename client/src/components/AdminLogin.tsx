@@ -34,7 +34,7 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
     setIsLoading(true);
     
     // Simple username/password check - in production this would be more secure
-    if (username === 'admin' && password === 'admin123') {
+    if (username === 'oravaadmin' && password === 'oravatarha2025!') {
       onLogin(username, password);
       toast({
         title: t('loginSuccess'),
