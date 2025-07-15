@@ -36,9 +36,6 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
   const [isUpdatingProperty, setIsUpdatingProperty] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  
-  // Debug the image popup state
-  console.log('ReportModal render - isImagePopupOpen:', isImagePopupOpen, 'selectedImage:', selectedImage);
   const [isDeleting, setIsDeleting] = useState(false);
   
   // Editable fields state
@@ -225,20 +222,16 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
                     className="w-full h-48 object-cover rounded-lg border border-municipal-border cursor-pointer hover:opacity-90 transition-opacity"
                     onClick={(e) => {
                       e.stopPropagation();
-                      console.log('Image clicked!', report.photos[0]);
                       setSelectedImage(report.photos[0]);
                       setIsImagePopupOpen(true);
-                      console.log('Image popup state set:', true);
                     }}
                   />
                   <div 
                     className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-20 rounded-lg cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
-                      console.log('Overlay clicked!', report.photos[0]);
                       setSelectedImage(report.photos[0]);
                       setIsImagePopupOpen(true);
-                      console.log('Image popup state set from overlay:', true);
                     }}
                   >
                     <ZoomIn className="h-8 w-8 text-white pointer-events-none" />

@@ -211,6 +211,8 @@ Copyright notice: Localized copyright text in Finnish ("Kuva: DC Productions, Pe
 ✓ **CSV Regeneration**: Admin modifications automatically update CSV files in Firebase Storage
 ✓ **Complete Storage Cleanup**: Report deletion removes entire Firebase Storage folder and all files
 ✓ **Comprehensive Deletion**: Database entries, history, images, and CSV files all cleaned up together
+✓ **Image Popup Functionality**: Fixed full-size image viewing with separate ImagePopup component to avoid nested Dialog issues
+✓ **Enhanced Image Interaction**: Clickable images in admin panel open full-size popup with proper overlay effects
 
 ## Completed Admin Panel Features
 
