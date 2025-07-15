@@ -144,5 +144,57 @@
   "privacyPolicy": {
     "title": "Integritetspolicy",
     "link": "Integritetspolicy"
+  },
+  "info": "Info",
+  "infoPage": {
+    "title": "Om Töhryvahti",
+    "subtitle": "Lättanvänt verktyg för att rapportera skadegörelse och graffiti",
+    "whatIsTitle": "Vad är Töhryvahti?",
+    "whatIsContent": "Töhryvahti är ett lättanvänt verktyg riktat till medborgare och myndigheter för att rapportera skadegörelse och graffiti direkt på en karta. Målet är att möjliggöra en renare och trevligare livsmiljö och underlätta planering av städning och övervakning – oavsett vem som förvaltar det vandaliserade objektet.",
+    "whatCanDoTitle": "Vad kan du göra med Töhryvahti?",
+    "reportEasily": "Rapportera skadegörelse enkelt",
+    "reportEasilyDesc": "ta ett foto, lokalisera positionen på kartan och lägg till ytterligare information om så önskas.",
+    "followOnMap": "Följ skadegörelse på kartan",
+    "followOnMapDesc": "se rapporterade platser på kartan efter stadsdel.",
+    "trackStatistics": "Spåra incidenter",
+    "trackStatisticsDesc": "verktyget kan användas för att övervaka mängden och utvecklingen av skadegörelse över tid och område – vilket hjälper till att rikta städning och resurser mer effektivt.",
+    "dataUsageTitle": "Hur används insamlade data?",
+    "dataUsageIntro": "Data lagras anonymt och kan användas till exempel för:",
+    "budgetPlanning": "kommunal budgetplanering och prioritering av städningsbehov",
+    "statisticalTracking": "statistisk övervakning och identifiering av återkommande problemområden",
+    "serviceProviders": "stöd för tjänsteleverantörers anbud och kontrakt",
+    "residentInfluence": "ökning av invånarnas möjligheter att påverka",
+    "officialServiceTitle": "Är detta en officiell tjänst?",
+    "officialServiceContent": "Töhryvahti är ett stadsoberoende medborgarlett projekt som för närvarande är under utveckling. Målet är att etablera samarbete med städer, myndigheter, fastighetsägare och städtjänster så att insamlade data kan användas så effektivt som möjligt.",
+    "contactTitle": "Kontaktinformation",
+    "contactContent": "För mer information, frågor och kommentarer: tuki(at)tohryvahti.fi"
+  },
+  "privacyPolicy": {
+    "title": "Integritetspolicy",
+    "lastUpdated": "Senast uppdaterad",
+    "dataController": "Datakontroller",
+    "dataControllerContent": "Töhryvahti-tjänsten (under utveckling)",
+    "dataProcessing": "Databehandling",
+    "dataProcessingContent": "Vi samlar in och behandlar data för att hantera rapporter om skadegörelse. Data lagras anonymt och behandlas i enlighet med GDPR-förordningar.",
+    "dataTypes": "Insamlade data",
+    "dataTypesContent": "Foton av skadegörelse, platsdata, valfri kontaktinformation, webbläsardata genom cookies.",
+    "legalBasis": "Rättslig grund för behandling",
+    "legalBasisContent": "Samtycke och berättigat intresse för att förbättra stadsmiljön.",
+    "dataRetention": "Datalagring",
+    "dataRetentionContent": "Data behålls så länge som det är nödvändigt för tjänstens syfte.",
+    "userRights": "Användarrättigheter",
+    "userRightsContent": "Du har rätt att komma åt, korrigera och radera dina data. Kontakt: tuki(at)tohryvahti.fi"
+  },
+  "cookiePolicy": {
+    "title": "Cookiepolicy",
+    "lastUpdated": "Senast uppdaterad",
+    "whatAreCookies": "Vad är cookies?",
+    "whatAreCookiesContent": "Cookies är små textfiler som en webbplats lagrar på din enhet för att förbättra användarupplevelsen.",
+    "howWeUse": "Hur använder vi cookies?",
+    "howWeUseContent": "Vi använder cookies för att komma ihåg språkinställningar och behålla inloggningsinformation.",
+    "cookieTypes": "Typer av cookies",
+    "cookieTypesContent": "Nödvändiga cookies: Nödvändiga för tjänstens funktionalitet. Funktionella cookies: Språkinställningar och användarupplevelse.",
+    "manageCookies": "Hantera cookies",
+    "manageCookiesContent": "Du kan hantera cookie-inställningar genom din webbläsare eller vägra cookies helt."
   }
 }

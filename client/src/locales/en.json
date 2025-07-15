@@ -144,5 +144,29 @@
   "privacyPolicy": {
     "title": "Privacy Policy", 
     "link": "Privacy Policy"
+  },
+  "info": "Info",
+  "infoPage": {
+    "title": "About Töhryvahti",
+    "subtitle": "Easy-to-use tool for reporting vandalism and graffiti",
+    "whatIsTitle": "What is Töhryvahti?",
+    "whatIsContent": "Töhryvahti is an easy-to-use tool designed for citizens and authorities to report vandalism and graffiti directly on a map. The goal is to enable a cleaner and more pleasant living environment and facilitate planning for cleaning and monitoring – regardless of who manages the vandalized property.",
+    "whatCanDoTitle": "What can you do with Töhryvahti?",
+    "reportEasily": "Report vandalism easily",
+    "reportEasilyDesc": "take a photo, locate the position on the map, and add additional information if desired.",
+    "followOnMap": "Follow vandalism on the map",
+    "followOnMapDesc": "see reported locations on the map by district.",
+    "trackStatistics": "Track incidents",
+    "trackStatisticsDesc": "the tool can be used to monitor the amount and development of vandalism over time and by area – helping to target cleaning and resources more efficiently.",
+    "dataUsageTitle": "How is collected data used?",
+    "dataUsageIntro": "Data is stored anonymously and can be utilized for example in:",
+    "budgetPlanning": "municipal budget planning and prioritizing cleaning needs",
+    "statisticalTracking": "statistical monitoring and identifying recurring problem areas",
+    "serviceProviders": "supporting service providers' bidding and contracts",
+    "residentInfluence": "increasing residents' opportunities to influence",
+    "officialServiceTitle": "Is this an official service?",
+    "officialServiceContent": "Töhryvahti is a city-independent citizen-led project currently in development. The goal is to establish cooperation with cities, authorities, property owners, and cleaning services so that collected data can be utilized as effectively as possible.",
+    "contactTitle": "Contact Information",
+    "contactContent": "For more information, questions, and comments: tuki(at)tohryvahti.fi"
   }
 }

@@ -8,7 +8,9 @@ export default function CookiePolicy() {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen py-6 px-4">
+    <div className="min-h-screen py-6 px-4 bg-[url('/vehoniemenharju.jpg')] bg-cover bg-center bg-no-repeat bg-fixed relative">
+      <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px]"></div>
+      <div className="relative z-10">
       <div className="max-w-4xl mx-auto">
         <div className="mb-6">
           <Link href="/">
@@ -92,6 +94,12 @@ export default function CookiePolicy() {
             </div>
           </CardContent>
         </Card>
+      </div>
+      
+      {/* Copyright notice */}
+      <div className="absolute bottom-4 right-4 text-xs text-gray-600 bg-white/70 px-2 py-1 rounded backdrop-blur-sm">
+        Kuva: Lassi Välimaa / visitkangasala.fi – Vehoniemenharju
+      </div>
       </div>
     </div>
   );
