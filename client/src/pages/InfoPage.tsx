@@ -130,9 +130,9 @@ export default function InfoPage() {
             </div>
           </div>
           
-          {/* Copyright notice */}
+          {/* Image copyright */}
           <div className="text-center mt-8">
-            <div className="text-xs text-gray-600 bg-white/70 px-3 py-2 rounded backdrop-blur-sm inline-block">
+            <div className="text-xs text-white/60 bg-black/30 backdrop-blur-sm rounded px-3 py-2 inline-block">
               Vehoniemenharju. Kuva: visitkangasala.fi
             </div>
           </div>
