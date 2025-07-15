@@ -15,6 +15,7 @@
   "location": "Plats",
   "getCurrentLocation": "Hämta nuvarande plats",
   "locationObtained": "Plats hämtad",
+  "obtainAutomatically": "Hämta automatiskt",
   "locationError": "Fel med plats",
   "gettingLocation": "Hämtar plats...",
   "district": "Stadsdel",

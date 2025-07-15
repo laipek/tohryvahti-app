@@ -15,6 +15,7 @@
   "location": "Location",
   "getCurrentLocation": "Get current location",
   "locationObtained": "Location obtained",
+  "obtainAutomatically": "Obtain automatically",
   "locationError": "Location error",
   "gettingLocation": "Getting location...",
   "district": "District",

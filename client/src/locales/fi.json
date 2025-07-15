@@ -16,6 +16,7 @@
   "location": "Sijainti",
   "getCurrentLocation": "Hae nykyinen sijainti",
   "locationObtained": "Sijainti haettu",
+  "obtainAutomatically": "Hae automaattisesti",
   "locationError": "Virhe sijainnissa",
   "gettingLocation": "Haetaan sijaintia...",
   "district": "Kaupunginosa",

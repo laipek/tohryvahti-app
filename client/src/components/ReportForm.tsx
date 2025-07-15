@@ -47,6 +47,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
   const [locationStatus, setLocationStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
   const [showPrivacyDialog, setShowPrivacyDialog] = useState(false);
+  const [isLocationManuallyAdjusted, setIsLocationManuallyAdjusted] = useState(false);
 
   const districts = [
     'asema', 'haapaniemi', 'huutijarvi', 'ilkko', 'kangasalan_keskusta',
@@ -133,6 +134,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
           longitude: position.coords.longitude
         }));
         setLocationStatus('success');
+        setIsLocationManuallyAdjusted(false); // Reset manual adjustment flag
       },
       (error) => {
         console.error('Error getting location:', error);
@@ -254,6 +256,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         email: ''
       });
       setLocationStatus('idle');
+      setIsLocationManuallyAdjusted(false);
       
       onSubmitSuccess();
     } catch (error) {
@@ -281,7 +284,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         return (
           <>
             <Check className="mr-2 h-4 w-4" />
-            {t('locationObtained')}
+            {isLocationManuallyAdjusted ? t('obtainAutomatically') : t('locationObtained')}
           </>
         );
       case 'error':
@@ -423,6 +426,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                       latitude: lat,
                       longitude: lng
                     }));
+                    setIsLocationManuallyAdjusted(true); // Mark as manually adjusted
                   }}
                 />
                 <p className="text-sm text-municipal-gray mt-2">
