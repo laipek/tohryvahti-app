@@ -371,6 +371,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update graffiti report details
+  app.patch("/api/reports/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updateData = req.body;
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid report ID" });
+      }
+      
+      const updatedReport = await storage.updateReport(id, updateData, "admin");
+      
+      if (!updatedReport) {
+        return res.status(404).json({ message: "Report not found" });
+      }
+      
+      res.json(updatedReport);
+    } catch (error) {
+      console.error("Error updating report:", error);
+      res.status(500).json({ message: "Failed to update report" });
+    }
+  });
+
   // Get reports by status
   app.get("/api/reports/status/:status", async (req, res) => {
     try {

@@ -9,6 +9,7 @@ export interface IStorage {
   updateReportStatus(id: number, status: string, adminUser?: string): Promise<GraffitiReport | undefined>;
   updateReportValidation(id: number, validated: string, adminUser?: string): Promise<GraffitiReport | undefined>;
   updateReportProperty(id: number, propertyOwner: string, propertyDescription?: string, adminUser?: string): Promise<GraffitiReport | undefined>;
+  updateReport(id: number, updateData: Partial<GraffitiReport>, adminUser?: string): Promise<GraffitiReport | undefined>;
   getReportsByStatus(status: string): Promise<GraffitiReport[]>;
   getReportsByDistrict(district: string): Promise<GraffitiReport[]>;
   getValidatedReports(): Promise<GraffitiReport[]>;
@@ -55,6 +56,7 @@ export class MemStorage implements IStorage {
       longitude: insertReport.longitude,
       district: insertReport.district,
       description: insertReport.description,
+      graffitiType: insertReport.graffitiType || null,
       name: insertReport.name || null,
       email: insertReport.email || null,
       status: insertReport.status || "new",
@@ -152,6 +154,53 @@ export class MemStorage implements IStorage {
       adminUser: adminUser || 'admin',
       notes: `Validation status changed from ${oldValidation} to ${validated}`
     });
+    
+    return updatedReport;
+  }
+
+  async updateReport(id: number, updateData: Partial<GraffitiReport>, adminUser?: string): Promise<GraffitiReport | undefined> {
+    const report = this.reports.get(id);
+    if (!report) return undefined;
+    
+    const oldReport = { ...report };
+    const updatedReport = { ...report, ...updateData, id: report.id, timestamp: report.timestamp };
+    this.reports.set(id, updatedReport);
+    
+    // Track what fields changed for history
+    const changes: string[] = [];
+    if (updateData.description !== undefined && updateData.description !== oldReport.description) {
+      changes.push(`description: "${oldReport.description}" → "${updateData.description}"`);
+    }
+    if (updateData.district !== undefined && updateData.district !== oldReport.district) {
+      changes.push(`district: "${oldReport.district}" → "${updateData.district}"`);
+    }
+    if (updateData.graffitiType !== undefined && updateData.graffitiType !== oldReport.graffitiType) {
+      changes.push(`graffiti type: "${oldReport.graffitiType}" → "${updateData.graffitiType}"`);
+    }
+    if (updateData.name !== undefined && updateData.name !== oldReport.name) {
+      changes.push(`name: "${oldReport.name || 'None'}" → "${updateData.name || 'None'}"`);
+    }
+    if (updateData.email !== undefined && updateData.email !== oldReport.email) {
+      changes.push(`email: "${oldReport.email || 'None'}" → "${updateData.email || 'None'}"`);
+    }
+    if (updateData.latitude !== undefined && updateData.latitude !== oldReport.latitude) {
+      changes.push(`latitude: ${oldReport.latitude} → ${updateData.latitude}`);
+    }
+    if (updateData.longitude !== undefined && updateData.longitude !== oldReport.longitude) {
+      changes.push(`longitude: ${oldReport.longitude} → ${updateData.longitude}`);
+    }
+    
+    // Add history entry if there were changes
+    if (changes.length > 0) {
+      await this.addHistoryEntry({
+        reportId: id,
+        action: 'updated',
+        oldValue: null,
+        newValue: 'updated',
+        adminUser: adminUser || 'admin',
+        notes: `Report updated: ${changes.join(', ')}`
+      });
+    }
     
     return updatedReport;
   }
@@ -396,6 +445,61 @@ export class DatabaseStorage implements IStorage {
       await this.regenerateReportCsv(updatedReport);
     }
     
+    return updatedReport;
+  }
+
+  async updateReport(id: number, updateData: Partial<GraffitiReport>, adminUser?: string): Promise<GraffitiReport | undefined> {
+    const existingReport = await this.getReport(id);
+    if (!existingReport) return undefined;
+
+    // Track what fields changed for history
+    const changes: string[] = [];
+    if (updateData.description !== undefined && updateData.description !== existingReport.description) {
+      changes.push(`description: "${existingReport.description}" → "${updateData.description}"`);
+    }
+    if (updateData.district !== undefined && updateData.district !== existingReport.district) {
+      changes.push(`district: "${existingReport.district}" → "${updateData.district}"`);
+    }
+    if (updateData.graffitiType !== undefined && updateData.graffitiType !== existingReport.graffitiType) {
+      changes.push(`graffiti type: "${existingReport.graffitiType}" → "${updateData.graffitiType}"`);
+    }
+    if (updateData.name !== undefined && updateData.name !== existingReport.name) {
+      changes.push(`name: "${existingReport.name || 'None'}" → "${updateData.name || 'None'}"`);
+    }
+    if (updateData.email !== undefined && updateData.email !== existingReport.email) {
+      changes.push(`email: "${existingReport.email || 'None'}" → "${updateData.email || 'None'}"`);
+    }
+    if (updateData.latitude !== undefined && updateData.latitude !== existingReport.latitude) {
+      changes.push(`latitude: ${existingReport.latitude} → ${updateData.latitude}`);
+    }
+    if (updateData.longitude !== undefined && updateData.longitude !== existingReport.longitude) {
+      changes.push(`longitude: ${existingReport.longitude} → ${updateData.longitude}`);
+    }
+
+    // Only update if there are changes
+    if (changes.length === 0) {
+      return existingReport;
+    }
+
+    const [updatedReport] = await db
+      .update(graffitiReports)
+      .set(updateData)
+      .where(eq(graffitiReports.id, id))
+      .returning();
+
+    // Add history entry
+    await this.addHistoryEntry({
+      reportId: id,
+      action: 'updated',
+      oldValue: null,
+      newValue: 'updated',
+      adminUser: adminUser || 'admin',
+      notes: `Report updated: ${changes.join(', ')}`
+    });
+
+    // Regenerate CSV if report was updated
+    await this.regenerateReportCsv(updatedReport);
+
     return updatedReport;
   }
 

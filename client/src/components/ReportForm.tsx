@@ -446,6 +446,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                   latitude={formData.latitude}
                   longitude={formData.longitude}
                   className="h-32 sm:h-48 rounded-lg"
+                  showMainMarker={true}
                   onClick={(lat, lng) => {
                     setFormData(prev => ({
                       ...prev,

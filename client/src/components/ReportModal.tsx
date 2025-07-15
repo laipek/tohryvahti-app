@@ -12,7 +12,7 @@ import { Separator } from '@/components/ui/separator';
 import { MapView } from './MapView';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
-import { X, ZoomIn, History, Clock, Trash2, AlertTriangle } from 'lucide-react';
+import { X, ZoomIn, History, Clock, Trash2, AlertTriangle, Edit, Save, XCircle } from 'lucide-react';
 import type { GraffitiReport, ReportHistoryEntry } from '@shared/schema';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { useQuery } from '@tanstack/react-query';
@@ -36,6 +36,19 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  
+  // Editable fields state
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedData, setEditedData] = useState({
+    description: report.description,
+    district: report.district,
+    graffitiType: report.graffitiType,
+    name: report.name || '',
+    email: report.email || '',
+    latitude: report.latitude,
+    longitude: report.longitude
+  });
+  const [isUpdatingReport, setIsUpdatingReport] = useState(false);
 
   // Fetch report history
   const { data: history = [], isLoading: historyLoading } = useQuery({
@@ -131,6 +144,46 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
     }
   };
 
+  const handleReportUpdate = async () => {
+    setIsUpdatingReport(true);
+    try {
+      const response = await apiRequest('PATCH', `/api/reports/${report.id}`, editedData);
+
+      if (response.ok) {
+        const updatedReport = await response.json();
+        toast({
+          title: t('reportUpdated'),
+          description: t('reportDetailsUpdated'),
+        });
+        if (onPropertyUpdate) {
+          onPropertyUpdate(updatedReport);
+        }
+        setIsEditing(false);
+      }
+    } catch (error) {
+      console.error('Error updating report:', error);
+      toast({
+        title: t('error'),
+        description: 'Failed to update report details',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsUpdatingReport(false);
+    }
+  };
+
+  const resetEditedData = () => {
+    setEditedData({
+      description: report.description,
+      district: report.district,
+      graffitiType: report.graffitiType,
+      name: report.name || '',
+      email: report.email || '',
+      latitude: report.latitude,
+      longitude: report.longitude
+    });
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -207,7 +260,44 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
             {/* Basic Information */}
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg">{t('reportDetails')}</CardTitle>
+                <div className="flex justify-between items-center">
+                  <CardTitle className="text-lg">{t('reportDetails')}</CardTitle>
+                  {!isEditing ? (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setIsEditing(true)}
+                      className="flex items-center gap-2"
+                    >
+                      <Edit className="h-4 w-4" />
+                      {t('edit')}
+                    </Button>
+                  ) : (
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setIsEditing(false);
+                          resetEditedData();
+                        }}
+                        className="flex items-center gap-2"
+                      >
+                        <XCircle className="h-4 w-4" />
+                        {t('cancel')}
+                      </Button>
+                      <Button
+                        size="sm"
+                        onClick={handleReportUpdate}
+                        disabled={isUpdatingReport}
+                        className="flex items-center gap-2 bg-municipal-blue hover:bg-blue-600"
+                      >
+                        <Save className="h-4 w-4" />
+                        {isUpdatingReport ? t('saving') : t('save')}
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div>
@@ -217,12 +307,106 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
                 
                 <div>
                   <Label className="text-sm font-medium text-municipal-gray">{t('district')}</Label>
-                  <p className="text-gray-900">{t(`districts.${report.district}`)}</p>
+                  {isEditing ? (
+                    <Select value={editedData.district} onValueChange={(value) => setEditedData(prev => ({...prev, district: value}))}>
+                      <SelectTrigger className="border-municipal-border">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="asema">{t('districts.asema')}</SelectItem>
+                        <SelectItem value="haapaniemi">{t('districts.haapaniemi')}</SelectItem>
+                        <SelectItem value="huutijarvi">{t('districts.huutijarvi')}</SelectItem>
+                        <SelectItem value="ilkko">{t('districts.ilkko')}</SelectItem>
+                        <SelectItem value="kangasalan-keskusta">{t('districts.kangasalan-keskusta')}</SelectItem>
+                        <SelectItem value="kuohenmaa">{t('districts.kuohenmaa')}</SelectItem>
+                        <SelectItem value="lamminrahka">{t('districts.lamminrahka')}</SelectItem>
+                        <SelectItem value="lentola">{t('districts.lentola')}</SelectItem>
+                        <SelectItem value="lihasula">{t('districts.lihasula')}</SelectItem>
+                        <SelectItem value="raikku">{t('districts.raikku')}</SelectItem>
+                        <SelectItem value="ranta-koivisto">{t('districts.ranta-koivisto')}</SelectItem>
+                        <SelectItem value="raudanmaa">{t('districts.raudanmaa')}</SelectItem>
+                        <SelectItem value="riku">{t('districts.riku')}</SelectItem>
+                        <SelectItem value="ruutana">{t('districts.ruutana')}</SelectItem>
+                        <SelectItem value="saarenmaa">{t('districts.saarenmaa')}</SelectItem>
+                        <SelectItem value="saarikylat">{t('districts.saarikylat')}</SelectItem>
+                        <SelectItem value="suinula">{t('districts.suinula')}</SelectItem>
+                        <SelectItem value="tiihala">{t('districts.tiihala')}</SelectItem>
+                        <SelectItem value="vatiala">{t('districts.vatiala')}</SelectItem>
+                        <SelectItem value="vehkajarvi">{t('districts.vehkajarvi')}</SelectItem>
+                        <SelectItem value="vaaksy">{t('districts.vaaksy')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <p className="text-gray-900">{t(`districts.${report.district}`)}</p>
+                  )}
                 </div>
+
+                {report.graffitiType && (
+                  <div>
+                    <Label className="text-sm font-medium text-municipal-gray">{t('graffitiType')}</Label>
+                    {isEditing ? (
+                      <Select value={editedData.graffitiType} onValueChange={(value) => setEditedData(prev => ({...prev, graffitiType: value}))}>
+                        <SelectTrigger className="border-municipal-border">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="tussiteksti-tai-kuva">{t('graffitiTypes.tussiteksti-tai-kuva')}</SelectItem>
+                          <SelectItem value="spray-tagi">{t('graffitiTypes.spray-tagi')}</SelectItem>
+                          <SelectItem value="spray-kuva">{t('graffitiTypes.spray-kuva')}</SelectItem>
+                          <SelectItem value="tarra">{t('graffitiTypes.tarra')}</SelectItem>
+                          <SelectItem value="tahallinen-naarmu">{t('graffitiTypes.tahallinen-naarmu')}</SelectItem>
+                          <SelectItem value="muu-ilkivalta">{t('graffitiTypes.muu-ilkivalta')}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <p className="text-gray-900">{t(`graffitiTypes.${report.graffitiType}`)}</p>
+                    )}
+                  </div>
+                )}
                 
                 <div>
                   <Label className="text-sm font-medium text-municipal-gray">{t('description')}</Label>
-                  <p className="text-gray-900">{report.description}</p>
+                  {isEditing ? (
+                    <Textarea
+                      value={editedData.description}
+                      onChange={(e) => setEditedData(prev => ({...prev, description: e.target.value}))}
+                      placeholder={t('descriptionPlaceholder')}
+                      className="border-municipal-border"
+                      rows={4}
+                    />
+                  ) : (
+                    <p className="text-gray-900">{report.description}</p>
+                  )}
+                </div>
+
+                <div>
+                  <Label className="text-sm font-medium text-municipal-gray">{t('location')}</Label>
+                  {isEditing ? (
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <Label className="text-xs text-gray-500">{t('latitude')}</Label>
+                        <Input
+                          type="number"
+                          step="0.000001"
+                          value={editedData.latitude}
+                          onChange={(e) => setEditedData(prev => ({...prev, latitude: parseFloat(e.target.value)}))}
+                          className="border-municipal-border"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs text-gray-500">{t('longitude')}</Label>
+                        <Input
+                          type="number"
+                          step="0.000001"
+                          value={editedData.longitude}
+                          onChange={(e) => setEditedData(prev => ({...prev, longitude: parseFloat(e.target.value)}))}
+                          className="border-municipal-border"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-gray-900">{report.latitude.toFixed(6)}, {report.longitude.toFixed(6)}</p>
+                  )}
                 </div>
                 
                 <div>
@@ -248,22 +432,36 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
                 <p className="text-sm text-municipal-gray">{t('contactStatusUpdates')}</p>
               </CardHeader>
               <CardContent className="space-y-3">
-                {report.name || report.email ? (
-                  <>
-                    {report.name && (
-                      <div>
-                        <Label className="text-sm font-medium text-municipal-gray">{t('reporterName')}</Label>
-                        <p className="text-gray-900">{report.name}</p>
-                      </div>
-                    )}
-                    {report.email && (
-                      <div>
-                        <Label className="text-sm font-medium text-municipal-gray">{t('reporterEmail')}</Label>
-                        <p className="text-gray-900">{report.email}</p>
-                      </div>
-                    )}
-                  </>
-                ) : (
+                <div>
+                  <Label className="text-sm font-medium text-municipal-gray">{t('reporterName')}</Label>
+                  {isEditing ? (
+                    <Input
+                      value={editedData.name}
+                      onChange={(e) => setEditedData(prev => ({...prev, name: e.target.value}))}
+                      placeholder={t('optionalName')}
+                      className="border-municipal-border"
+                    />
+                  ) : (
+                    <p className="text-gray-900">{report.name || t('notProvided')}</p>
+                  )}
+                </div>
+                
+                <div>
+                  <Label className="text-sm font-medium text-municipal-gray">{t('reporterEmail')}</Label>
+                  {isEditing ? (
+                    <Input
+                      type="email"
+                      value={editedData.email}
+                      onChange={(e) => setEditedData(prev => ({...prev, email: e.target.value}))}
+                      placeholder={t('optionalEmail')}
+                      className="border-municipal-border"
+                    />
+                  ) : (
+                    <p className="text-gray-900">{report.email || t('notProvided')}</p>
+                  )}
+                </div>
+                
+                {!report.name && !report.email && !isEditing && (
                   <div className="text-gray-500 text-sm">{t('anonymous')}</div>
                 )}
               </CardContent>

@@ -47,6 +47,7 @@ interface MapViewProps {
   className?: string;
   onClick?: (lat: number, lng: number) => void;
   onMarkerClick?: (markerId: number) => void;
+  showMainMarker?: boolean; // New prop to control main marker visibility
 }
 
 export function MapView({ 
@@ -56,7 +57,8 @@ export function MapView({
   markers = [], 
   className,
   onClick,
-  onMarkerClick
+  onMarkerClick,
+  showMainMarker = false
 }: MapViewProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
@@ -81,11 +83,13 @@ export function MapView({
         attribution: '© OpenStreetMap contributors'
       }).addTo(map);
 
-      // Add main marker
-      L.marker([latitude, longitude])
-        .addTo(map)
-        .bindPopup(t('reportLocationLabel'))
-        .openPopup();
+      // Add main marker only when requested (for form views)
+      if (showMainMarker) {
+        L.marker([latitude, longitude])
+          .addTo(map)
+          .bindPopup(t('reportLocationLabel'))
+          .openPopup();
+      }
 
       // Add additional markers with enhanced popups
       markers.forEach(marker => {
