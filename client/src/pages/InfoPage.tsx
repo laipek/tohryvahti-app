@@ -6,7 +6,18 @@ export default function InfoPage() {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 px-4 py-8 bg-[url('/vehoniemenharju.jpg')] bg-cover bg-center bg-no-repeat bg-fixed relative">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 px-4 py-8 relative overflow-hidden">
+      {/* Background Image with Parallax */}
+      <div 
+        className="fixed inset-0 w-full h-full bg-cover bg-center bg-no-repeat -z-10"
+        style={{
+          backgroundImage: 'url(/vehoniemenharju.jpg)',
+          transform: 'scale(1.5)',
+          filter: 'blur(0.5px)'
+        }}
+      ></div>
+      
+      {/* Overlay */}
       <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px]"></div>
       <div className="relative z-10">
       <div className="max-w-4xl mx-auto">
@@ -127,7 +138,7 @@ export default function InfoPage() {
       
       {/* Copyright notice */}
       <div className="absolute bottom-4 right-4 text-xs text-gray-600 bg-white/70 px-2 py-1 rounded backdrop-blur-sm">
-        Kuva: Lassi Välimaa / visitkangasala.fi – Vehoniemenharju
+        Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi
       </div>
       </div>
     </div>
