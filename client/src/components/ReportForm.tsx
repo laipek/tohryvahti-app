@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Camera, MapPin, Building, FileText, Mail, User, Send, Crosshair, Check, AlertTriangle, X } from 'lucide-react';
+import { Camera, MapPin, Building, FileText, Mail, User, Send, Crosshair, Check, AlertTriangle, X, RotateCcw } from 'lucide-react';
 import { MapView } from './MapView';
 import { useToast } from '@/hooks/use-toast';
 import { collection, addDoc } from 'firebase/firestore';
@@ -132,8 +132,21 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     console.log('Starting geolocation request');
     setLocationStatus('loading');
     
+    // Add a manual timeout as backup
+    const timeoutId = setTimeout(() => {
+      console.log('Manual timeout triggered after 15 seconds');
+      setLocationStatus('error');
+      toast({
+        title: t('locationTimeout'),
+        description: t('locationTimeoutDesc'),
+        variant: "destructive",
+        duration: 8000
+      });
+    }, 15000);
+    
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        clearTimeout(timeoutId); // Clear the manual timeout
         console.log('Location obtained:', position.coords.latitude, position.coords.longitude);
         setFormData(prev => ({
           ...prev,
@@ -144,6 +157,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         setIsLocationManuallyAdjusted(false); // Reset manual adjustment flag
       },
       (error) => {
+        clearTimeout(timeoutId); // Clear the manual timeout
         console.error('Error getting location:', error);
         console.log('Error code:', error.code, 'Error message:', error.message);
         setLocationStatus('error');
@@ -175,7 +189,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
           duration: 8000 // Longer duration for location error messages
         });
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      { enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 }
     );
   };
 
@@ -344,8 +358,8 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       case 'error':
         return (
           <>
-            <AlertTriangle className="mr-2 h-4 w-4" />
-            {t('locationError')}
+            <RotateCcw className="mr-2 h-4 w-4" />
+            {t('getCurrentLocation')}
           </>
         );
       default:
