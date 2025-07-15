@@ -185,6 +185,7 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
   };
 
   return (
+    <>
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
@@ -708,29 +709,31 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
     </div>
       </DialogContent>
 
-      {/* Image Popup Dialog */}
-      <Dialog open={isImagePopupOpen} onOpenChange={setIsImagePopupOpen}>
-        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black">
-          <div className="relative h-full">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsImagePopupOpen(false)}
-              className="absolute top-4 right-4 z-10 bg-black bg-opacity-50 text-white hover:bg-opacity-75"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-            {selectedImage && (
-              <img
-                src={selectedImage}
-                alt="Full size graffiti report"
-                className="w-full h-full object-contain"
-                style={{ maxHeight: '95vh' }}
-              />
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
     </Dialog>
+    
+    {/* Image Popup Dialog - Separate from main dialog to avoid nesting issues */}
+    <Dialog open={isImagePopupOpen} onOpenChange={setIsImagePopupOpen}>
+      <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black">
+        <div className="relative w-full h-[95vh]">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsImagePopupOpen(false)}
+            className="absolute top-4 right-4 z-50 bg-black bg-opacity-50 text-white hover:bg-opacity-75"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+          {selectedImage && (
+            <img
+              src={selectedImage}
+              alt="Full size graffiti report"
+              className="w-full h-full object-contain"
+              style={{ maxHeight: '95vh', maxWidth: '95vw' }}
+            />
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+    </>
   );
 }
