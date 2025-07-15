@@ -130,14 +130,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "No image file provided. Please upload at least one image." });
       }
 
-      // Process uploaded images - try Firebase first, fallback to base64
+      // Generate folder structure based on datetime and report ID
+      const now = new Date();
+      const dateFolder = now.toISOString().split('T')[0]; // YYYY-MM-DD
+      const timeFolder = now.toISOString().split('T')[1].split('.')[0].replace(/:/g, '-'); // HH-MM-SS
+      
+      // Create temporary report to get ID for folder naming
+      const tempReportData = {
+        photos: [], // Will be updated after upload
+        latitude,
+        longitude,
+        district,
+        description,
+        name,
+        email,
+        status,
+        validated
+      };
+      
+      const validatedTempData = insertGraffitiReportSchema.parse(tempReportData);
+      const tempReport = await storage.createReport(validatedTempData);
+      const reportId = tempReport.id;
+      
+      // Create folder structure: reports/YYYY-MM-DD/HH-MM-SS-reportID/
+      const reportFolder = `reports/${dateFolder}/${timeFolder}-${reportId}`;
+      
+      // Process uploaded images with organized folder structure
       const uploadedFiles = req.files as Express.Multer.File[];
       const photoUrls: string[] = [];
 
-      for (const file of uploadedFiles) {
+      for (let i = 0; i < uploadedFiles.length; i++) {
+        const file = uploadedFiles[i];
         try {
-          // Try Firebase Storage first
-          const fileName = `graffiti-reports/${Date.now()}-${file.originalname}`;
+          // Try Firebase Storage first with organized folder structure
+          const fileName = `${reportFolder}/image-${i + 1}-${file.originalname}`;
           const storageRef = ref(firebaseStorage, fileName);
           const snapshot = await uploadBytes(storageRef, file.buffer);
           const downloadURL = await getDownloadURL(snapshot.ref);
@@ -156,8 +182,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
           photoUrls.push(dataUrl);
         }
       }
+      
+      // Create CSV content for the report
+      const csvContent = [
+        'Field,Value',
+        `Report ID,${reportId}`,
+        `Date,${now.toISOString().split('T')[0]}`,
+        `Time,${now.toISOString().split('T')[1].split('.')[0]}`,
+        `Latitude,${latitude}`,
+        `Longitude,${longitude}`,
+        `District,${district}`,
+        `Description,"${description.replace(/"/g, '""')}"`, // Escape quotes in CSV
+        `Name,${name || 'Anonymous'}`,
+        `Email,${email || 'Not provided'}`,
+        `Status,${status}`,
+        `Validation Status,${validated}`,
+        `Number of Photos,${photoUrls.length}`,
+        `Photo URLs,"${photoUrls.join('; ')}"`,
+        `Submission Timestamp,${now.toISOString()}`
+      ].join('\n');
+      
+      // Upload CSV file to Firebase Storage
+      try {
+        const csvFileName = `${reportFolder}/report-${reportId}.csv`;
+        const csvBuffer = Buffer.from(csvContent, 'utf8');
+        const csvStorageRef = ref(firebaseStorage, csvFileName);
+        await uploadBytes(csvStorageRef, csvBuffer);
+        console.log(`Successfully uploaded CSV file: ${csvFileName}`);
+      } catch (csvError) {
+        console.log('Failed to upload CSV file to Firebase Storage:', csvError);
+      }
 
       console.log('Processing report:', {
+        reportId,
         latitude,
         longitude,
         district,
@@ -166,15 +223,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         name,
         email,
         status,
-        validated
+        validated,
+        folderPath: reportFolder
       });
 
       if (photoUrls.length === 0) {
         return res.status(500).json({ message: "Failed to process any images" });
       }
 
-      // Create report data
-      const reportData = {
+      // Update the temporary report with photo URLs
+      const updatedReportData = {
         photos: photoUrls,
         latitude,
         longitude,
@@ -186,11 +244,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         validated
       };
 
-      const validatedData = insertGraffitiReportSchema.parse(reportData);
-      const report = await storage.createReport(validatedData);
+      const validatedData = insertGraffitiReportSchema.parse(updatedReportData);
       
-      console.log('Report created successfully:', report.id);
-      res.status(201).json(report);
+      // Update the existing report instead of creating a new one
+      const updatedReport = await storage.updateReportPhotos(reportId, photoUrls);
+      
+      console.log('Report updated successfully with photos:', reportId);
+      res.status(201).json(updatedReport || tempReport);
     } catch (error) {
       console.error('Error creating report:', error);
       if (error instanceof z.ZodError) {

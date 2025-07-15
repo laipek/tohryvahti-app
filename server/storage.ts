@@ -16,6 +16,7 @@ export interface IStorage {
   getReportHistory(reportId: number): Promise<ReportHistoryEntry[]>;
   addHistoryEntry(entry: InsertReportHistoryEntry): Promise<ReportHistoryEntry>;
   deleteReport(id: number): Promise<boolean>;
+  updateReportPhotos(id: number, photoUrls: string[]): Promise<GraffitiReport | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -196,6 +197,17 @@ export class MemStorage implements IStorage {
       historyEntries.forEach(entry => this.history.delete(entry.id));
     }
     return exists;
+  }
+
+  async updateReportPhotos(id: number, photoUrls: string[]): Promise<GraffitiReport | undefined> {
+    const report = this.reports.get(id);
+    if (!report) {
+      return undefined;
+    }
+    
+    const updatedReport = { ...report, photos: photoUrls };
+    this.reports.set(id, updatedReport);
+    return updatedReport;
   }
 }
 
@@ -381,6 +393,21 @@ export class DatabaseStorage implements IStorage {
     } catch (error) {
       console.error('Error deleting report:', error);
       return false;
+    }
+  }
+
+  async updateReportPhotos(id: number, photoUrls: string[]): Promise<GraffitiReport | undefined> {
+    try {
+      const [updatedReport] = await db
+        .update(graffitiReports)
+        .set({ photos: photoUrls })
+        .where(eq(graffitiReports.id, id))
+        .returning();
+      
+      return updatedReport;
+    } catch (error) {
+      console.error('Error updating report photos:', error);
+      return undefined;
     }
   }
 }
