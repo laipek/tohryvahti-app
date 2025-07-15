@@ -116,7 +116,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     setImagePreviewUrls([url]);
   };
 
-  const getCurrentLocation = () => {
+  const getCurrentLocation = async () => {
     console.log('Location request started');
     console.log('User agent:', navigator.userAgent);
     console.log('Protocol:', window.location.protocol);
@@ -132,67 +132,90 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       return;
     }
 
+    // Check permissions first on mobile
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isReplit = navigator.userAgent.includes('Replit');
+    
+    console.log('Is Replit app:', isReplit);
+    console.log('Is mobile:', isMobile);
+
+    // Try to check permissions if available
+    if ('permissions' in navigator) {
+      try {
+        const permission = await navigator.permissions.query({name: 'geolocation'});
+        console.log('Permission state:', permission.state);
+        
+        if (permission.state === 'denied') {
+          console.log('Permission denied');
+          setLocationStatus('error');
+          toast({
+            title: t('locationError'),
+            description: "Location permission denied. Please enable location in browser settings.",
+            variant: "destructive",
+            duration: 8000
+          });
+          return;
+        }
+      } catch (e) {
+        console.log('Permission API not available:', e);
+      }
+    }
+
     setLocationStatus('loading');
     
-    // Use different settings for mobile vs desktop
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const options = {
-      enableHighAccuracy: !isMobile, // Disable high accuracy on mobile for faster response
-      timeout: isMobile ? 15000 : 10000, // Longer timeout on mobile
-      maximumAge: 300000 // 5 minutes cache
+      enableHighAccuracy: true, // Re-enable for accuracy
+      timeout: isMobile ? 15000 : 10000,
+      maximumAge: 60000
     };
     
     console.log('Geolocation options:', options);
-    console.log('Is mobile:', isMobile);
     
-    // Add manual timeout for situations where the API doesn't call back
-    const manualTimeout = setTimeout(() => {
-      console.log('Manual timeout triggered - no response from geolocation API');
+    // Create a promise wrapper to handle the callback API
+    const getPositionPromise = () => {
+      return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, options);
+      });
+    };
+    
+    try {
+      console.log('Calling getCurrentPosition...');
+      const position = await getPositionPromise();
+      console.log('Location success:', position.coords);
+      
+      setFormData(prev => ({
+        ...prev,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      }));
+      setLocationStatus('success');
+      
+    } catch (error) {
+      console.error('Location error:', error);
+      console.log('Error code:', error.code);
+      console.log('Error message:', error.message);
       setLocationStatus('error');
+      
+      let errorMessage = "Unable to get your location. Please use manual location selection.";
+      if (error.code === 1) {
+        errorMessage = "Location access denied. Please enable location permissions.";
+      } else if (error.code === 2) {
+        errorMessage = "Location unavailable. Please check your GPS/network connection.";
+      } else if (error.code === 3) {
+        errorMessage = "Location request timed out.";
+      }
+      
+      if (isReplit && isMobile) {
+        errorMessage += " The Replit mobile app may have location restrictions.";
+      }
+      
       toast({
         title: t('locationError'),
-        description: "Location request timed out. Please use manual location selection.",
+        description: errorMessage,
         variant: "destructive",
-        duration: 6000
+        duration: 8000
       });
-    }, options.timeout + 2000); // 2 seconds after API timeout
-    
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        clearTimeout(manualTimeout);
-        console.log('Location success:', position.coords);
-        setFormData(prev => ({
-          ...prev,
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        }));
-        setLocationStatus('success');
-      },
-      (error) => {
-        clearTimeout(manualTimeout);
-        console.error('Location error:', error);
-        console.log('Error code:', error.code);
-        console.log('Error message:', error.message);
-        setLocationStatus('error');
-        
-        let errorMessage = "Unable to get your location. Please try again or enter it manually.";
-        if (error.code === 1) {
-          errorMessage = "Location access denied. Please enable location permissions and try again.";
-        } else if (error.code === 2) {
-          errorMessage = "Location unavailable. Please check your GPS/network connection.";
-        } else if (error.code === 3) {
-          errorMessage = "Location request timed out. Please try again.";
-        }
-        
-        toast({
-          title: t('locationError'),
-          description: errorMessage,
-          variant: "destructive",
-          duration: 6000
-        });
-      },
-      options
-    );
+    }
   };
 
   const uploadPhotos = async (photos: File[]): Promise<string[]> => {
@@ -504,8 +527,8 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
               </div>
             )}
 
-            {/* Manual Location Entry Button - Show after GPS error or for mobile users */}
-            {(locationStatus === 'error' || (navigator.userAgent && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent))) && !formData.latitude && (
+            {/* Manual Location Entry Button - Only show after GPS error */}
+            {locationStatus === 'error' && !formData.latitude && (
               <div className="mt-3">
                 <Button
                   type="button"
