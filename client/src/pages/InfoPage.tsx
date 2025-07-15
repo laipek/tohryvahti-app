@@ -63,7 +63,7 @@ export default function InfoPage() {
           <Card className="bg-white/70 backdrop-blur-md border-municipal-border/40 shadow-lg">
             <CardContent className="p-6">
               <div className="flex items-start gap-4">
-                <div className="bg-municipal-primary rounded-full p-3 flex-shrink-0">
+                <div className="bg-municipal-blue rounded-full p-3 flex-shrink-0">
                   <Database className="h-6 w-6 text-white" />
                 </div>
                 <div>
@@ -107,7 +107,7 @@ export default function InfoPage() {
           <Card className="bg-white/70 backdrop-blur-md border-municipal-border/40 shadow-lg">
             <CardContent className="p-6">
               <div className="flex items-start gap-4">
-                <div className="bg-municipal-primary rounded-full p-3 flex-shrink-0">
+                <div className="bg-municipal-blue rounded-full p-3 flex-shrink-0">
                   <Mail className="h-6 w-6 text-white" />
                 </div>
                 <div>

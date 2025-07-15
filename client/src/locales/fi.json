@@ -151,7 +151,7 @@
     "officialServiceTitle": "Onko tämä virallinen palvelu?",
     "officialServiceContent": "Töhryvahti on kaupungista riippumaton kansalaislähtöinen projekti, joka on tällä hetkellä kehitysvaiheessa. Tavoitteena on käynnistää yhteistyö kaupunkien, viranomaisten, kiinteistönomistajien ja siivouspalvelujen kanssa, jotta kerättyä tietoa voidaan hyödyntää mahdollisimman tehokkaasti.",
     "contactTitle": "Yhteystiedot",
-    "contactContent": "Lisätietoja, kysymykset ja kommentit osoitteeseen tuki(at)tohryvahti.fi"
+    "contactContent": "Palaute ja yhteydenotot: tuki(at)tohryvahti.fi"
   },
   "privacyPolicy": {
     "title": "Tietosuojakäytäntö",
@@ -285,7 +285,7 @@
   "disclaimer": {
     "betaVersion": "BETA-versio: Töhryvahti on avoin beta-vaiheessa oleva maksuton yleishyödyllinen palvelu, jonka tarkoituksena on mahdollistaa viihtyisämpi ja töhrytön ympäristö kaikille kaupunkilaisille. Palvelu voi sisältää virheitä tai keskeytyä ilman ennakkoilmoitusta.",
     "dataProcessing": "Käyttämällä tätä palvelua hyväksyt, että ilmoittamasi tiedot ja lähettämäsi kuvat käsitellään palvelun tarjoajan toimesta kaupungin viihtyisyyden parantamiseksi ja töhryjen poistamisen edistämiseksi. Kaikki ilmoitukset tarkistetaan ja asiattomat ilmoitukset poistetaan ilman ennakkoilmoitusta. Palvelu ei takaa välitöntä toimenpiteiden aloittamista.",
-    "feedback": "Palaute ja yhteydenotot: tuki(at)tohryvahti.fi",
+    "feedback": "",
     "copyright": "© 2025 Töhryvahti. Kaikki oikeudet pidätetään.",
     "legalLinks": "Lue lisää: {cookiePolicy} | {privacyPolicy}"
   },

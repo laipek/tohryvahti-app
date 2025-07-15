@@ -138,7 +138,7 @@
   "disclaimer": {
     "betaVersion": "BETA-VERSION: Töhryvahti är en öppen beta-fas gratis allmännyttig tjänst som syftar till att möjliggöra en trevligare och graffitifri miljö för alla stadsbor. Tjänsten kan innehålla fel eller avbrytas utan förvarning.",
     "dataProcessing": "Genom att använda denna tjänst godkänner du att informationen du rapporterar och bilderna du skickar behandlas av tjänsteleverantören för att förbättra stadens attraktivitet och främja borttagning av graffiti. Alla rapporter granskas och olämpliga rapporter tas bort utan förvarning. Tjänsten garanterar inte omedelbar påbörjande av åtgärder.",
-    "feedback": "Feedback och kontakt: tuki(at)tohryvahti.fi",
+    "feedback": "",
     "copyright": "© 2025 Töhryvahti. Alla rättigheter förbehållna.",
     "legalLinks": "Läs mer: {cookiePolicy} | {privacyPolicy}"
   },
@@ -178,7 +178,7 @@
     "officialServiceTitle": "Är detta en officiell tjänst?",
     "officialServiceContent": "Töhryvahti är ett stadsoberoende medborgarlett projekt som för närvarande är under utveckling. Målet är att etablera samarbete med städer, myndigheter, fastighetsägare och städtjänster så att insamlade data kan användas så effektivt som möjligt.",
     "contactTitle": "Kontaktinformation",
-    "contactContent": "För mer information, frågor och kommentarer: tuki(at)tohryvahti.fi"
+    "contactContent": "Feedback och kontakt: tuki(at)tohryvahti.fi"
   },
   "privacyPolicy": {
     "title": "Integritetspolicy",
