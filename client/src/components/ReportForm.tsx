@@ -117,49 +117,30 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
   };
 
   const getCurrentLocation = () => {
-    console.log('getCurrentLocation called');
-    
     if (!navigator.geolocation) {
-      console.log('Geolocation not supported');
       toast({
         title: "Error",
         description: "Geolocation is not supported by this browser",
         variant: "destructive"
       });
+      setLocationStatus('error');
       return;
     }
 
-    console.log('Starting geolocation request');
     setLocationStatus('loading');
-    
-    // Add a manual timeout as backup
-    const timeoutId = setTimeout(() => {
-      console.log('Manual timeout triggered after 15 seconds');
-      setLocationStatus('error');
-      toast({
-        title: t('locationTimeout'),
-        description: t('locationTimeoutDesc'),
-        variant: "destructive",
-        duration: 8000
-      });
-    }, 15000);
     
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        clearTimeout(timeoutId); // Clear the manual timeout
-        console.log('Location obtained:', position.coords.latitude, position.coords.longitude);
         setFormData(prev => ({
           ...prev,
           latitude: position.coords.latitude,
           longitude: position.coords.longitude
         }));
         setLocationStatus('success');
-        setIsLocationManuallyAdjusted(false); // Reset manual adjustment flag
+        setIsLocationManuallyAdjusted(false);
       },
       (error) => {
-        clearTimeout(timeoutId); // Clear the manual timeout
         console.error('Error getting location:', error);
-        console.log('Error code:', error.code, 'Error message:', error.message);
         setLocationStatus('error');
         
         let title = t('locationError');
@@ -186,10 +167,10 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
           title,
           description,
           variant: "destructive",
-          duration: 8000 // Longer duration for location error messages
+          duration: 6000
         });
       },
-      { enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
     );
   };
 
@@ -525,7 +506,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
               </div>
             )}
 
-            {/* Manual Location Entry Button */}
+            {/* Manual Location Entry Button - Only show after GPS error */}
             {locationStatus === 'error' && !formData.latitude && (
               <div className="mt-3">
                 <Button
@@ -533,7 +514,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                   variant="outline"
                   className="w-full border-municipal-border text-municipal-primary hover:bg-municipal-blue/10"
                   onClick={() => {
-                    // Set a default location (center of Kangasala) for manual adjustment
+                    // Set default location (center of Kangasala) for manual selection
                     setFormData(prev => ({
                       ...prev,
                       latitude: 61.4639,
@@ -546,6 +527,9 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                   <MapPin className="mr-2 h-4 w-4" />
                   {t('setLocationManually')}
                 </Button>
+                <p className="text-xs text-municipal-gray mt-2 text-center">
+                  {t('clickMapToAdjust')}
+                </p>
               </div>
             )}
           </div>
