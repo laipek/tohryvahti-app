@@ -6,19 +6,7 @@ export default function InfoPage() {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 px-4 py-8 relative overflow-hidden">
-      {/* Background Image with Parallax */}
-      <div 
-        className="fixed inset-0 w-full h-full bg-cover bg-center bg-no-repeat -z-10"
-        style={{
-          backgroundImage: 'url(/vehoniemenharju.jpg)',
-          transform: 'scale(1.5)',
-          filter: 'blur(0.5px)'
-        }}
-      ></div>
-      
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px]"></div>
+    <div className="min-h-screen px-4 py-8 relative">
       <div className="relative z-10">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
