@@ -23,7 +23,7 @@ const firebaseStorage = getStorage(firebaseApp);
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit per file for faster uploads
+    fileSize: 15 * 1024 * 1024, // 15MB limit per file for smartphone photos
     files: 5, // Allow up to 5 files
     fieldSize: 100 * 1024 * 1024, // 100MB total form size limit
   },
