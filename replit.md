@@ -196,6 +196,9 @@ Copyright notice: "Vehoniemenharju. Kuva: visitkangasala.fi" displayed in bottom
 ✓ Added info page navigation button next to map button in header
 ✓ Moved admin delete functionality from table to report modal with confirmation dialog
 ✓ Enhanced delete safety with multi-step confirmation and report verification display
+✓ Standardized footer components across all pages (PublicForm, PublicMap, InfoPage) with identical language selector, disclaimer, and copyright styling
+✓ Applied consistent semi-transparent backgrounds and centered language selectors for uniform user experience
+✓ Enhanced subtitle visibility on InfoPage with semi-transparent background matching other content boxes
 
 ## Completed Admin Panel Features
 

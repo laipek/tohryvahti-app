@@ -123,17 +123,38 @@ export default function InfoPage() {
             </CardContent>
           </Card>
           
-          {/* Language selector */}
-          <div className="mt-12">
+          {/* Language selector and footer */}
+          <div className="mt-12 space-y-6">
             <div className="flex justify-center items-center px-4 py-4 bg-black/40 backdrop-blur-sm rounded-lg">
               <LanguageSelector />
             </div>
-          </div>
-          
-          {/* Image copyright */}
-          <div className="text-center mt-8">
-            <div className="text-xs text-white/60 bg-black/30 backdrop-blur-sm rounded px-3 py-2 inline-block">
-              Vehoniemenharju. Kuva: visitkangasala.fi
+            
+            {/* Disclaimer and beta notice */}
+            <div className="px-4 py-3 bg-black/20 backdrop-blur-sm rounded-lg text-xs text-white/70 leading-relaxed">
+              <p className="mb-2">
+                <strong>{t('disclaimer.betaVersion')}</strong>
+              </p>
+              <p className="mb-2">
+                {t('disclaimer.dataProcessing')}
+              </p>
+              <p className="mb-2">
+                <strong>{t('disclaimer.feedback')}</strong>
+              </p>
+              <p className="mb-2">
+                {t('disclaimer.copyright')}
+              </p>
+              <p className="text-center">
+                <a href="/cookie-policy" className="text-white/90 hover:text-white underline">{t('cookiePolicy.link')}</a>
+                {' | '}
+                <a href="/privacy-policy" className="text-white/90 hover:text-white underline">{t('privacyPolicy.link')}</a>
+              </p>
+            </div>
+            
+            {/* Image copyright */}
+            <div className="text-center">
+              <div className="text-xs text-white/60 bg-black/30 backdrop-blur-sm rounded px-3 py-2 inline-block">
+                Vehoniemenharju. Kuva: visitkangasala.fi
+              </div>
             </div>
           </div>
         </div>
