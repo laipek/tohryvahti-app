@@ -23,7 +23,7 @@ const firebaseStorage = getStorage(firebaseApp);
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 20 * 1024 * 1024, // 20MB limit per file for smartphone photos
+    fileSize: 25 * 1024 * 1024, // 25MB limit per file for smartphone photos
     files: 5, // Allow up to 5 files
     fieldSize: 200 * 1024 * 1024, // 200MB total form size limit
   },
@@ -275,9 +275,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof multer.MulterError) {
         if (error.code === 'LIMIT_FILE_SIZE') {
           return res.status(400).json({ 
-            message: "Tiedosto on liian suuri. Enimmäiskoko on 20MB per tiedosto.",
-            messageEn: "File too large. Maximum file size is 20MB per file.",
-            messageSv: "Filen är för stor. Maximal filstorlek är 20MB per fil."
+            message: "Tiedosto on liian suuri. Enimmäiskoko on 25MB per tiedosto.",
+            messageEn: "File too large. Maximum file size is 25MB per file.",
+            messageSv: "Filen är för stor. Maximal filstorlek är 25MB per fil."
           });
         }
         if (error.code === 'LIMIT_FILE_COUNT') {

@@ -369,13 +369,14 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         // Show appropriate error message based on current language
         let errorMessage = errorData.message || 'Failed to submit report';
         
-        // If server provides localized messages, use them
-        if (i18n.language === 'fi' && errorData.message) {
-          errorMessage = errorData.message;
-        } else if (i18n.language === 'sv' && errorData.messageSv) {
+        // Show localized error messages based on browser language or default to Finnish
+        const currentLang = localStorage.getItem('i18nextLng') || 'fi';
+        if (currentLang === 'sv' && errorData.messageSv) {
           errorMessage = errorData.messageSv;
-        } else if (i18n.language === 'en' && errorData.messageEn) {
+        } else if (currentLang === 'en' && errorData.messageEn) {
           errorMessage = errorData.messageEn;
+        } else if (errorData.message) {
+          errorMessage = errorData.message; // Default to Finnish
         }
         
         throw new Error(errorMessage);
