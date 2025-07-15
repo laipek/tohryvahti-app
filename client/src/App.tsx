@@ -12,6 +12,7 @@ import { CookieConsent } from "@/components/CookieConsent";
 import PublicForm from "@/pages/PublicForm";
 import AdminPanel from "@/pages/AdminPanel";
 import PublicMap from "@/pages/PublicMap";
+import InfoPage from "@/pages/InfoPage";
 import CookiePolicy from "@/pages/CookiePolicy";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import NotFound from "@/pages/not-found";
@@ -50,7 +51,14 @@ function Header() {
               >
                 {t('map')}
               </Button>
-
+              <Button
+                variant={location === '/info' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setLocation('/info')}
+                className={`text-xs sm:text-sm px-1.5 sm:px-3 py-1 sm:py-2 h-auto ${location === '/info' ? 'bg-municipal-blue text-white' : 'text-municipal-gray hover:text-municipal-blue'}`}
+              >
+                {t('info')}
+              </Button>
             </div>
           </div>
         </div>
@@ -64,6 +72,7 @@ function Router() {
     <Switch>
       <Route path="/" component={PublicForm} />
       <Route path="/map" component={PublicMap} />
+      <Route path="/info" component={InfoPage} />
       <Route path="/admin" component={AdminPanel} />
       <Route path="/cookie-policy" component={CookiePolicy} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />

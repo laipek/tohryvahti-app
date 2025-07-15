@@ -192,6 +192,10 @@ Copyright notice: "Vehoniemenharju. Kuva: Lassi Välimaa / visitkangasala.fi" di
 ✓ Added analytics toggle button to public map page with daily report statistics
 ✓ Implemented public analytics view with interactive line chart showing last 30 days
 ✓ Updated language to use "vahvistetut ilmoitukset" instead of "graffiti" mentions
+✓ Created comprehensive info page explaining Töhryvahti's purpose, features, and data usage
+✓ Added info page navigation button next to map button in header
+✓ Moved admin delete functionality from table to report modal with confirmation dialog
+✓ Enhanced delete safety with multi-step confirmation and report verification display
 
 ## Completed Admin Panel Features
 
