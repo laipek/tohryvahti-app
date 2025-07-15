@@ -117,19 +117,37 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
   };
 
   const getCurrentLocation = () => {
+    console.log('Location request started');
+    console.log('User agent:', navigator.userAgent);
+    console.log('Protocol:', window.location.protocol);
+    
     if (!navigator.geolocation) {
+      console.log('Geolocation not supported');
       toast({
         title: "Error",
         description: "Geolocation is not supported by this browser",
         variant: "destructive"
       });
+      setLocationStatus('error');
       return;
     }
 
     setLocationStatus('loading');
     
+    // Use different settings for mobile vs desktop
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const options = {
+      enableHighAccuracy: !isMobile, // Disable high accuracy on mobile for faster response
+      timeout: isMobile ? 15000 : 10000, // Longer timeout on mobile
+      maximumAge: 300000 // 5 minutes cache
+    };
+    
+    console.log('Geolocation options:', options);
+    console.log('Is mobile:', isMobile);
+    
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        console.log('Location success:', position.coords);
         setFormData(prev => ({
           ...prev,
           latitude: position.coords.latitude,
@@ -138,15 +156,28 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         setLocationStatus('success');
       },
       (error) => {
-        console.error('Error getting location:', error);
+        console.error('Location error:', error);
+        console.log('Error code:', error.code);
+        console.log('Error message:', error.message);
         setLocationStatus('error');
+        
+        let errorMessage = "Unable to get your location. Please try again or enter it manually.";
+        if (error.code === 1) {
+          errorMessage = "Location access denied. Please enable location permissions and try again.";
+        } else if (error.code === 2) {
+          errorMessage = "Location unavailable. Please check your GPS/network connection.";
+        } else if (error.code === 3) {
+          errorMessage = "Location request timed out. Please try again.";
+        }
+        
         toast({
           title: t('locationError'),
-          description: "Unable to get your location. Please try again or enter it manually.",
-          variant: "destructive"
+          description: errorMessage,
+          variant: "destructive",
+          duration: 6000
         });
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      options
     );
   };
 

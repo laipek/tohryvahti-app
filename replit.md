@@ -213,9 +213,10 @@ Copyright notice: Localized copyright text in Finnish ("Kuva: DC Productions, Pe
 ✓ **Comprehensive Deletion**: Database entries, history, images, and CSV files all cleaned up together
 ✓ **Image Popup Functionality**: Fixed full-size image viewing with separate ImagePopup component to avoid nested Dialog issues
 ✓ **Enhanced Image Interaction**: Clickable images in admin panel open full-size popup with proper overlay effects
-✓ **Improved Location Handling**: Enhanced GPS error handling with specific error messages and user guidance
+✓ **Improved Location Handling**: Enhanced GPS error handling with mobile-specific optimizations
+✓ **Mobile Location Support**: Added mobile browser detection with adjusted timeout and accuracy settings
 ✓ **Manual Location Option**: Added fallback manual location selection when GPS fails or is disabled
-✓ **User-Friendly Error Messages**: Comprehensive help text for location permission issues with step-by-step instructions
+✓ **Cross-Platform Compatibility**: Different geolocation settings for mobile vs desktop for better reliability
 
 ## Completed Admin Panel Features
 
