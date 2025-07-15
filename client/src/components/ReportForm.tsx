@@ -93,8 +93,8 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       return;
     }
     
-    // Validate file size (5MB limit)
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    // Validate file size (10MB limit)
+    const maxSize = 10 * 1024 * 1024; // 10MB
     if (selectedFile.size > maxSize) {
       toast({
         title: t('validation.fileTooLarge'),
