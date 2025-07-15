@@ -225,16 +225,12 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     try {
       console.log('Starting report submission process...');
       
-      // Upload photos to Firebase Storage first
-      const photoUrls = await uploadPhotos(formData.photos);
-      console.log('Photos uploaded to Firebase Storage:', photoUrls);
-      
-      // Create FormData for the report submission
+      // Create FormData for file upload to server
       const formDataForUpload = new FormData();
       
-      // Add photo URLs (not files) to the form data
-      photoUrls.forEach((url, index) => {
-        formDataForUpload.append('photos', url);
+      // Add photos as files (server will handle Firebase upload)
+      formData.photos.forEach((photo, index) => {
+        formDataForUpload.append('photos', photo);
       });
       
       // Add other form fields
@@ -252,10 +248,10 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         formDataForUpload.append('email', formData.email);
       }
 
-      console.log('Submitting report to database...');
+      console.log('Submitting report with files to server...');
       const response = await fetch('/api/reports', {
         method: 'POST',
-        body: formDataForUpload,
+        body: formDataForUpload, // Don't set Content-Type header, let browser set it with boundary
       });
 
       if (!response.ok) {

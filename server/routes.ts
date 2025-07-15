@@ -4,13 +4,27 @@ import { storage } from "./storage";
 import multer from "multer";
 import { insertGraffitiReportSchema } from "@shared/schema";
 import { z } from "zod";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { initializeApp } from "firebase/app";
+
+// Initialize Firebase for server-side storage
+const firebaseConfig = {
+  apiKey: process.env.VITE_FIREBASE_API_KEY,
+  authDomain: `${process.env.VITE_FIREBASE_PROJECT_ID}.firebaseapp.com`,
+  projectId: process.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: "graffititracker-17552.firebasestorage.app",
+  appId: process.env.VITE_FIREBASE_APP_ID,
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const firebaseStorage = getStorage(firebaseApp);
 
 // Configure multer for file uploads
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
     fileSize: 20 * 1024 * 1024, // 20MB limit per file
-    files: 1, // Only allow 1 file
+    files: 5, // Allow up to 5 files
   },
   fileFilter: (req, file, cb) => {
     // Check if file is an image
@@ -94,8 +108,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create new graffiti report
-  app.post("/api/reports", async (req, res) => {
+  app.post("/api/reports", upload.array('photos', 5), async (req, res) => {
     try {
+      console.log('Received form data:', req.body);
+      console.log('Received files:', req.files ? req.files.length : 0);
+      
       // Extract data from form
       const latitude = parseFloat(req.body.latitude);
       const longitude = parseFloat(req.body.longitude);
@@ -106,9 +123,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const status = req.body.status || 'new';
       const validated = req.body.validated || 'pending';
 
-      // Check if photo URLs were provided (uploaded by client)
-      const photoUrls = req.body.photos ? (Array.isArray(req.body.photos) ? req.body.photos : [req.body.photos]) : [];
-      
+      console.log('Parsed data:', { latitude, longitude, district, description, name, email, status, validated });
+
+      // Check if files were uploaded
+      if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ message: "No image file provided. Please upload at least one image." });
+      }
+
+      // Process uploaded images - try Firebase first, fallback to base64
+      const uploadedFiles = req.files as Express.Multer.File[];
+      const photoUrls: string[] = [];
+
+      for (const file of uploadedFiles) {
+        try {
+          // Try Firebase Storage first
+          const fileName = `graffiti-reports/${Date.now()}-${file.originalname}`;
+          const storageRef = ref(firebaseStorage, fileName);
+          const snapshot = await uploadBytes(storageRef, file.buffer);
+          const downloadURL = await getDownloadURL(snapshot.ref);
+          
+          console.log(`Successfully uploaded ${fileName} to Firebase Storage`);
+          photoUrls.push(downloadURL);
+        } catch (firebaseError: any) {
+          console.log('Firebase Storage failed, using base64 fallback:', firebaseError.code || firebaseError.message);
+          
+          // Fallback: Convert to base64 and store in database
+          const mimeType = file.mimetype;
+          const base64Data = file.buffer.toString('base64');
+          const dataUrl = `data:${mimeType};base64,${base64Data}`;
+          
+          console.log(`Using base64 fallback for ${file.originalname} (${file.size} bytes)`);
+          photoUrls.push(dataUrl);
+        }
+      }
+
       console.log('Processing report:', {
         latitude,
         longitude,
@@ -121,8 +169,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         validated
       });
 
-      if (!photoUrls || photoUrls.length === 0) {
-        return res.status(400).json({ message: "No image URLs provided. Please upload at least one image." });
+      if (photoUrls.length === 0) {
+        return res.status(500).json({ message: "Failed to process any images" });
       }
 
       // Create report data
@@ -149,6 +197,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ 
           message: "Validation error", 
           errors: error.errors 
+        });
+      }
+      
+      // Handle multer errors
+      if (error instanceof multer.MulterError) {
+        if (error.code === 'LIMIT_FILE_SIZE') {
+          return res.status(400).json({ 
+            message: "File too large. Maximum file size is 20MB." 
+          });
+        }
+        if (error.code === 'LIMIT_FILE_COUNT') {
+          return res.status(400).json({ 
+            message: "Too many files. Maximum 5 images allowed." 
+          });
+        }
+        return res.status(400).json({ 
+          message: `File upload error: ${error.message}` 
         });
       }
       
