@@ -145,8 +145,21 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     console.log('Geolocation options:', options);
     console.log('Is mobile:', isMobile);
     
+    // Add manual timeout for situations where the API doesn't call back
+    const manualTimeout = setTimeout(() => {
+      console.log('Manual timeout triggered - no response from geolocation API');
+      setLocationStatus('error');
+      toast({
+        title: t('locationError'),
+        description: "Location request timed out. Please use manual location selection.",
+        variant: "destructive",
+        duration: 6000
+      });
+    }, options.timeout + 2000); // 2 seconds after API timeout
+    
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        clearTimeout(manualTimeout);
         console.log('Location success:', position.coords);
         setFormData(prev => ({
           ...prev,
@@ -156,6 +169,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         setLocationStatus('success');
       },
       (error) => {
+        clearTimeout(manualTimeout);
         console.error('Location error:', error);
         console.log('Error code:', error.code);
         console.log('Error message:', error.message);
@@ -490,8 +504,8 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
               </div>
             )}
 
-            {/* Manual Location Entry Button - Only show after GPS error */}
-            {locationStatus === 'error' && !formData.latitude && (
+            {/* Manual Location Entry Button - Show after GPS error or for mobile users */}
+            {(locationStatus === 'error' || (navigator.userAgent && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent))) && !formData.latitude && (
               <div className="mt-3">
                 <Button
                   type="button"
