@@ -283,7 +283,11 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       case 'success':
         return (
           <>
-            <Check className="mr-2 h-4 w-4" />
+            {isLocationManuallyAdjusted ? (
+              <Crosshair className="mr-2 h-4 w-4" />
+            ) : (
+              <Check className="mr-2 h-4 w-4" />
+            )}
             {isLocationManuallyAdjusted ? t('obtainAutomatically') : t('locationObtained')}
           </>
         );
