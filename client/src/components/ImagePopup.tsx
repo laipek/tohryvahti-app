@@ -9,7 +9,12 @@ interface ImagePopupProps {
 }
 
 export function ImagePopup({ isOpen, onClose, imageUrl }: ImagePopupProps) {
-  if (!imageUrl) return null;
+  console.log('ImagePopup render - isOpen:', isOpen, 'imageUrl:', imageUrl);
+  
+  if (!imageUrl) {
+    console.log('ImagePopup: No imageUrl provided, returning null');
+    return null;
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
