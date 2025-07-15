@@ -117,55 +117,98 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     setImagePreviewUrls([url]);
   };
 
-  const getCurrentLocation = async () => {
-    console.log('Location request started');
-    console.log('User agent:', navigator.userAgent);
-    console.log('Protocol:', window.location.protocol);
-    
-    if (!navigator.geolocation) {
-      console.log('Geolocation not supported');
-      toast({
-        title: "Error",
-        description: "Geolocation is not supported by this browser",
-        variant: "destructive"
-      });
-      setLocationStatus('error');
-      return;
-    }
-
-    // Check permissions first on mobile
+  const checkLocationPermission = async () => {
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const isReplit = navigator.userAgent.includes('Replit');
     
-    console.log('Is Replit app:', isReplit);
-    console.log('Is mobile:', isMobile);
+    // Check if geolocation is supported
+    if (!navigator.geolocation) {
+      toast({
+        title: t('locationError'),
+        description: t('geolocationNotSupported', "Geolocation is not supported by this browser"),
+        variant: "destructive",
+        duration: 8000
+      });
+      return false;
+    }
 
-    // Try to check permissions if available
+    // Check HTTPS requirement
+    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+      toast({
+        title: t('locationError'),
+        description: t('httpsRequired', "Location access requires a secure connection (HTTPS)"),
+        variant: "destructive",
+        duration: 8000
+      });
+      return false;
+    }
+
+    // Check permissions API if available
     if ('permissions' in navigator) {
       try {
         const permission = await navigator.permissions.query({name: 'geolocation'});
         console.log('Permission state:', permission.state);
         
         if (permission.state === 'denied') {
-          console.log('Permission denied');
-          setLocationStatus('error');
+          const instructions = isMobile 
+            ? t('enableLocationMobile', "Enable location in your browser settings: Settings > Privacy & Security > Location Services")
+            : t('enableLocationDesktop', "Enable location in your browser: Click the location icon in the address bar or check browser settings");
+            
           toast({
-            title: t('locationError'),
-            description: "Location permission denied. Please enable location in browser settings.",
+            title: t('locationPermissionDenied', "Location Permission Denied"),
+            description: instructions,
             variant: "destructive",
-            duration: 8000
+            duration: 10000
           });
-          return;
+          return false;
         }
+        
+        if (permission.state === 'prompt') {
+          // Show instruction to user about upcoming permission prompt
+          toast({
+            title: t('locationPermissionPrompt', "Location Permission Required"),
+            description: t('allowLocationAccess', "Please allow location access when prompted by your browser"),
+            duration: 5000
+          });
+        }
+        
       } catch (e) {
         console.log('Permission API not available:', e);
       }
     }
 
+    // Special handling for Replit mobile app
+    if (isReplit && isMobile) {
+      toast({
+        title: t('locationInfo', "Location Info"),
+        description: t('replitMobileRestriction', "The Replit mobile app has location restrictions. For best results, open this form in your mobile browser (Safari, Chrome, etc.)"),
+        variant: "default",
+        duration: 8000
+      });
+    }
+
+    return true;
+  };
+
+  const getCurrentLocation = async () => {
+    console.log('Location request started');
+    console.log('User agent:', navigator.userAgent);
+    console.log('Protocol:', window.location.protocol);
+    
+    // Check permissions first
+    const permissionGranted = await checkLocationPermission();
+    if (!permissionGranted) {
+      setLocationStatus('error');
+      return;
+    }
+
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    console.log('Is mobile:', isMobile);
+
     setLocationStatus('loading');
     
     const options = {
-      enableHighAccuracy: true, // Re-enable for accuracy
+      enableHighAccuracy: true,
       timeout: isMobile ? 15000 : 10000,
       maximumAge: 60000
     };
@@ -192,28 +235,35 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       setLocationStatus('success');
       setIsLocationManuallyAdjusted(false);
       
+      toast({
+        title: t('locationSuccess', "Location Found"),
+        description: t('locationObtainedSuccessfully', "Your location has been set automatically"),
+        duration: 3000
+      });
+      
     } catch (error) {
       console.error('Location error:', error);
       console.log('Error code:', error.code);
       console.log('Error message:', error.message);
       setLocationStatus('error');
       
-      let errorMessage = "Unable to get your location. Please use manual location selection.";
-      if (error.code === 1) {
-        errorMessage = "Location access denied. Please enable location permissions.";
-      } else if (error.code === 2) {
-        errorMessage = "Location unavailable. Please check your GPS/network connection.";
-      } else if (error.code === 3) {
-        errorMessage = "Location request timed out.";
-      }
+      let title = t('locationError');
+      let description = t('locationErrorGeneral', "Unable to get your location. Please use manual location selection.");
       
-      if (isReplit && isMobile) {
-        errorMessage += " The Replit mobile app may have location restrictions.";
+      if (error.code === 1) {
+        title = t('locationPermissionDenied', "Location Permission Denied");
+        description = t('locationPermissionDeniedDesc', "Please enable location permissions in your browser settings and try again.");
+      } else if (error.code === 2) {
+        title = t('locationUnavailable', "Location Unavailable");
+        description = t('locationUnavailableDesc', "Please check your GPS/network connection and try again.");
+      } else if (error.code === 3) {
+        title = t('locationTimeout', "Location Timeout");
+        description = t('locationTimeoutDesc', "Location request timed out. Please try again or use manual selection.");
       }
       
       toast({
-        title: t('locationError'),
-        description: errorMessage,
+        title: title,
+        description: description,
         variant: "destructive",
         duration: 8000
       });
