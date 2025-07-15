@@ -13,7 +13,7 @@ export default function InfoPage() {
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
             {t('infoPage.title')}
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-800 max-w-2xl mx-auto bg-white/80 backdrop-blur-sm rounded-lg px-4 py-2 inline-block">
             {t('infoPage.subtitle')}
           </p>
         </div>
@@ -121,12 +121,14 @@ export default function InfoPage() {
               </div>
             </CardContent>
           </Card>
+          
+          {/* Copyright notice */}
+          <div className="text-center mt-8">
+            <div className="text-xs text-gray-600 bg-white/70 px-3 py-2 rounded backdrop-blur-sm inline-block">
+              Vehoniemenharju. Kuva: visitkangasala.fi
+            </div>
+          </div>
         </div>
-      </div>
-      
-      {/* Copyright notice */}
-      <div className="absolute bottom-4 right-4 text-xs text-gray-600 bg-white/70 px-2 py-1 rounded backdrop-blur-sm">
-        Vehoniemenharju. Kuva: visitkangasala.fi
       </div>
       </div>
     </div>
