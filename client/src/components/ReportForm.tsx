@@ -19,6 +19,7 @@ interface ReportFormData {
   latitude: number | null;
   longitude: number | null;
   district: string;
+  graffitiType: string;
   description: string;
   name: string;
   email: string;
@@ -38,6 +39,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     latitude: null,
     longitude: null,
     district: '',
+    graffitiType: '',
     description: '',
     name: '',
     email: ''
@@ -54,6 +56,15 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     'kuohenmaa', 'lamminrahka', 'lentola', 'lihasula', 'raikku',
     'ranta_koivisto', 'raudanmaa', 'riku', 'ruutana', 'saarenmaa',
     'saarikylat', 'suinula', 'tiihala', 'vatiala', 'vehkajarvi', 'vaaksy'
+  ];
+
+  const graffitiTypes = [
+    'textOrImage',
+    'sprayTag', 
+    'sprayImage',
+    'sticker',
+    'deliberateScratches',
+    'otherVandalism'
   ];
 
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -188,6 +199,15 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       return false;
     }
     
+    if (!formData.graffitiType) {
+      toast({
+        title: "Validation Error",
+        description: t('validation.selectGraffitiType'),
+        variant: "destructive"
+      });
+      return false;
+    }
+    
     if (!formData.description.trim()) {
       toast({
         title: "Validation Error",
@@ -220,6 +240,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       formDataForUpload.append('latitude', formData.latitude!.toString());
       formDataForUpload.append('longitude', formData.longitude!.toString());
       formDataForUpload.append('district', formData.district);
+      formDataForUpload.append('graffitiType', formData.graffitiType);
       formDataForUpload.append('description', formData.description);
       formDataForUpload.append('status', 'new');
       formDataForUpload.append('validated', 'pending');
@@ -251,6 +272,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         latitude: null,
         longitude: null,
         district: '',
+        graffitiType: '',
         description: '',
         name: '',
         email: ''
@@ -457,6 +479,26 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                 {districts.map((district) => (
                   <SelectItem key={district} value={district}>
                     {t(`districts.${district}`)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Graffiti Type */}
+          <div>
+            <Label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+              <FileText className="mr-2 h-4 w-4" />
+              {t('graffitiType')}
+            </Label>
+            <Select value={formData.graffitiType} onValueChange={(value) => setFormData(prev => ({ ...prev, graffitiType: value }))}>
+              <SelectTrigger className="border-municipal-border">
+                <SelectValue placeholder={t('selectGraffitiType')} />
+              </SelectTrigger>
+              <SelectContent>
+                {graffitiTypes.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {t(type)}
                   </SelectItem>
                 ))}
               </SelectContent>

@@ -73,6 +73,17 @@
   "elyKeskus": "ELY-central",
   "private": "Privat",
   "imageCopyright": "Foto: DC Productions, Pexels (royalty-free)",
+  "graffitiType": "Klottertyp",
+  "selectGraffitiType": "Välj klottertyp...",
+  "textOrImage": "Tuschtext eller bild",
+  "sprayTag": "Spray-tagg",
+  "sprayImage": "Spray-bild",
+  "sticker": "Klistermärke",
+  "deliberateScratches": "Avsiktliga repor",
+  "otherVandalism": "Annan skadegörelse",
+  "validation": {
+    "selectGraffitiType": "Välj klottertyp"
+  },
   "selectPropertyOwner": "Välj fastighetsägare",
   "propertyOwnerHelp": "Bestäm ansvarig part för rengöringsprocedurer",
   "clickToView": "Klicka för att se större bild",

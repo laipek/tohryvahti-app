@@ -73,6 +73,17 @@
   "elyKeskus": "ELY Centre",
   "private": "Private",
   "imageCopyright": "Photo: DC Productions, Pexels (royalty-free)",
+  "graffitiType": "Graffiti Type",
+  "selectGraffitiType": "Select graffiti type...",
+  "textOrImage": "Marker text or image",
+  "sprayTag": "Spray tag",
+  "sprayImage": "Spray image",
+  "sticker": "Sticker",
+  "deliberateScratches": "Deliberate scratches",
+  "otherVandalism": "Other vandalism",
+  "validation": {
+    "selectGraffitiType": "Select graffiti type"
+  },
   "selectPropertyOwner": "Select property owner",
   "propertyOwnerHelp": "Determine responsible party for cleaning procedures",
   "clickToView": "Click to view larger image",

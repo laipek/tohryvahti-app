@@ -50,6 +50,7 @@ export class MemStorage implements IStorage {
       latitude: insertReport.latitude,
       longitude: insertReport.longitude,
       district: insertReport.district,
+      graffitiType: insertReport.graffitiType || null,
       description: insertReport.description,
       name: insertReport.name || null,
       email: insertReport.email || null,

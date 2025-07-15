@@ -8,6 +8,7 @@ export const graffitiReports = pgTable("graffiti_reports", {
   latitude: real("latitude").notNull(),
   longitude: real("longitude").notNull(),
   district: text("district").notNull(),
+  graffitiType: text("graffiti_type"),
   description: text("description").notNull(),
   name: text("name"),
   email: text("email"),

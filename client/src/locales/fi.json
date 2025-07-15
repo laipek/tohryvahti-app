@@ -74,6 +74,17 @@
   "elyKeskus": "ELY-keskus",
   "private": "Yksityinen",
   "imageCopyright": "Kuva: DC Productions, Pexels (royalty-free)",
+  "graffitiType": "Töhryn tyyppi",
+  "selectGraffitiType": "Valitse töhryn tyyppi...",
+  "textOrImage": "Tussiteksti tai kuva",
+  "sprayTag": "Spray-tägi",
+  "sprayImage": "Spray-kuva",
+  "sticker": "Tarra",
+  "deliberateScratches": "Tahallinen naarmu",
+  "otherVandalism": "Muu ilkivalta",
+  "validation": {
+    "selectGraffitiType": "Valitse töhryn tyyppi"
+  },
   "selectPropertyOwner": "Valitse kiinteistön omistaja",
   "propertyOwnerHelp": "Määritä vastuullinen taho puhdistustoimenpiteitä varten",
   "clickToView": "Napsauta nähdäksesi suurempi kuva",

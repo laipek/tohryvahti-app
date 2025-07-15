@@ -199,6 +199,10 @@ Copyright notice: Localized copyright text in Finnish ("Kuva: DC Productions, Pe
 ✓ Standardized footer components across all pages (PublicForm, PublicMap, InfoPage) with identical language selector, disclaimer, and copyright styling
 ✓ Applied consistent semi-transparent backgrounds and centered language selectors for uniform user experience
 ✓ Enhanced subtitle visibility on InfoPage with semi-transparent background matching other content boxes
+✓ Added "Töhryn tyyppi" dropdown menu with 6 graffiti categories: Tussiteksti tai kuva, Spray-tägi, Spray-kuva, Tarra, Tahallinen naarmu, Muu ilkivalta
+✓ Implemented full multilingual support for graffiti type options across Finnish, Swedish, and English
+✓ Updated database schema and form validation to include graffiti type classification
+✓ Positioned graffiti type selector above description field for logical form flow
 
 ## Completed Admin Panel Features
 
