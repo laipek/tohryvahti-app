@@ -121,6 +121,10 @@
   "deleteConfirmMessage": "Haluatko varmasti poistaa tämän ilmoituksen? Tämä toiminto ei ole peruutettavissa.",
   "deleteIsPermanent": "Poistaminen on pysyvää ja kaikkia tietoja ei voi palauttaa.",
   "cancel": "Peruuta",
+  "supportedFormats": "Tuetut muodot",
+  "maxFileSize": "Maksimikoko",
+  "photoSelected": "Kuva valittu",
+  "clickMapToAdjust": "Napsauta karttaa sijainnin säätämiseksi",
   "confirmDeleteReport": "Poista ilmoitus",
   "deleting": "Poistetaan...",
   "reportDeleted": "Ilmoitus poistettu",
@@ -220,7 +224,11 @@
     "selectDistrict": "Valitse kaupunginosa",
     "addDescription": "Lisää kuvaus",
     "oneImageOnly": "Vain yksi kuva sallittu",
-    "oneImageOnlyDesc": "Voit lisätä vain yhden kuvan per ilmoitus. Valitse paras kuva graffitista."
+    "oneImageOnlyDesc": "Voit lisätä vain yhden kuvan per ilmoitus",
+    "invalidFileType": "Virheellinen tiedostomuoto",
+    "supportedFormats": "Tuetut muodot: JPEG, PNG, WebP",
+    "fileTooLarge": "Tiedosto liian suuri",
+    "maxFileSize": "Maksimikoko: 5MB"
   },
   "districts": {
     "asema": "Asema",

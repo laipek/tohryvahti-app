@@ -103,7 +103,13 @@
     "addPhoto": "Lägg till minst ett foto",
     "getLocation": "Hämta plats innan du skickar",
     "selectDistrict": "Välj stadsdel",
-    "addDescription": "Lägg till beskrivning"
+    "addDescription": "Lägg till beskrivning",
+    "oneImageOnly": "Endast en bild tillåten",
+    "oneImageOnlyDesc": "Du kan bara lägga till en bild per rapport",
+    "invalidFileType": "Ogiltig filtyp",
+    "supportedFormats": "Stödda format: JPEG, PNG, WebP",
+    "fileTooLarge": "Filen är för stor",
+    "maxFileSize": "Maximal storlek: 5MB"
   },
   "districts": {
     "asema": "Asema",
@@ -137,6 +143,11 @@
     "legalLinks": "Läs mer: {cookiePolicy} | {privacyPolicy}"
   },
   "backToHome": "Tillbaka till startsidan",
+  "supportedFormats": "Stödda format",
+  "maxFileSize": "Maximal storlek",
+  "photoSelected": "Foto valt",
+  "clickMapToAdjust": "Klicka på kartan för att justera platsen",
+  "cancel": "Avbryt",
   "cookiePolicy": {
     "title": "Cookiepolicy",
     "link": "Cookiepolicy"

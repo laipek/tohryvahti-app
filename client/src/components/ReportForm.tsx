@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Camera, MapPin, Building, FileText, Mail, User, Send, Crosshair, Check, AlertTriangle } from 'lucide-react';
+import { Camera, MapPin, Building, FileText, Mail, User, Send, Crosshair, Check, AlertTriangle, X } from 'lucide-react';
 import { MapView } from './MapView';
 import { useToast } from '@/hooks/use-toast';
 import { collection, addDoc } from 'firebase/firestore';
@@ -77,6 +77,35 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     
     // Only take the first file
     const selectedFile = files[0];
+    
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(selectedFile.type.toLowerCase())) {
+      toast({
+        title: t('validation.invalidFileType'),
+        description: t('validation.supportedFormats'),
+        variant: "destructive"
+      });
+      if (event.target) {
+        event.target.value = '';
+      }
+      return;
+    }
+    
+    // Validate file size (5MB limit)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (selectedFile.size > maxSize) {
+      toast({
+        title: t('validation.fileTooLarge'),
+        description: t('validation.maxFileSize'),
+        variant: "destructive"
+      });
+      if (event.target) {
+        event.target.value = '';
+      }
+      return;
+    }
+    
     setFormData(prev => ({ ...prev, photos: [selectedFile] }));
     
     // Create preview URL for the single image
@@ -301,8 +330,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/*"
-
+                accept="image/jpeg,image/jpg,image/png,image/webp"
                 className="hidden"
                 onChange={handlePhotoUpload}
               />
@@ -328,6 +356,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                     >
                       <FileText className="h-8 w-8 sm:h-10 sm:w-10 text-municipal-gray mb-2" />
                       <p className="text-sm sm:text-base text-municipal-gray mb-1">{t('orSelectFile')}</p>
+                      <p className="text-xs text-gray-500">{t('supportedFormats')}</p>
                     </button>
                   </>
                 ) : (
@@ -504,9 +533,17 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
               {t('privacyNotice')}
             </DialogTitle>
           </DialogHeader>
-          <p className="text-sm text-gray-600 leading-relaxed">
-            {t('privacyPhotoText')}
-          </p>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600 leading-relaxed">
+              {t('privacyPhotoText')}
+            </p>
+            <div className="bg-blue-50 p-3 rounded-lg">
+              <p className="text-xs text-gray-600">
+                <strong>{t('supportedFormats')}:</strong> JPEG, PNG, WebP<br/>
+                <strong>{t('maxFileSize')}:</strong> 5MB
+              </p>
+            </div>
+          </div>
           <DialogFooter className="flex-col sm:flex-row gap-2">
             <Button
               onClick={() => {

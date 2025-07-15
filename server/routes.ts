@@ -9,14 +9,22 @@ import { z } from "zod";
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit
+    fileSize: 5 * 1024 * 1024, // 5MB limit per file - reasonable for mobile photos
+    files: 1, // Only allow 1 file
   },
   fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed'));
+    // Check if file is an image
+    if (!file.mimetype.startsWith('image/')) {
+      return cb(new Error('Only image files are allowed'));
     }
+    
+    // Check specific image types
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.mimetype.toLowerCase())) {
+      return cb(new Error('Only JPEG, PNG, and WebP images are supported'));
+    }
+    
+    cb(null, true);
   }
 });
 
@@ -88,6 +96,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create new graffiti report
   app.post("/api/reports", upload.array('photos', 1), async (req, res) => {
     try {
+      // Check if files were uploaded
+      if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ 
+          message: "No image file provided. Please upload at least one image." 
+        });
+      }
+
       // Parse and validate request body
       const reportData = {
         ...req.body,
@@ -109,6 +124,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ 
           message: "Validation error", 
           errors: error.errors 
+        });
+      }
+      
+      // Handle multer errors
+      if (error instanceof multer.MulterError) {
+        if (error.code === 'LIMIT_FILE_SIZE') {
+          return res.status(400).json({ 
+            message: "File too large. Maximum file size is 5MB." 
+          });
+        }
+        if (error.code === 'LIMIT_FILE_COUNT') {
+          return res.status(400).json({ 
+            message: "Too many files. Only 1 image file is allowed." 
+          });
+        }
+        return res.status(400).json({ 
+          message: `File upload error: ${error.message}` 
+        });
+      }
+      
+      // Handle custom file filter errors
+      if (error.message === 'Only image files are allowed' || 
+          error.message === 'Only JPEG, PNG, and WebP images are supported') {
+        return res.status(400).json({ 
+          message: error.message 
         });
       }
       

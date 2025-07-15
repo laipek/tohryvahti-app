@@ -103,7 +103,13 @@
     "addPhoto": "Add at least one photo",
     "getLocation": "Get location before submitting",
     "selectDistrict": "Select district",
-    "addDescription": "Add description"
+    "addDescription": "Add description",
+    "oneImageOnly": "Only one image allowed",
+    "oneImageOnlyDesc": "You can only add one image per report",
+    "invalidFileType": "Invalid file type",
+    "supportedFormats": "Supported formats: JPEG, PNG, WebP",
+    "fileTooLarge": "File too large",
+    "maxFileSize": "Maximum size: 5MB"
   },
   "districts": {
     "asema": "Asema",
@@ -137,6 +143,11 @@
     "legalLinks": "Read more: {cookiePolicy} | {privacyPolicy}"
   },
   "backToHome": "Back to home",
+  "supportedFormats": "Supported formats",
+  "maxFileSize": "Maximum size",
+  "photoSelected": "Photo selected",
+  "clickMapToAdjust": "Click map to adjust location",
+  "cancel": "Cancel",
   "cookiePolicy": {
     "title": "Cookie Policy",
     "link": "Cookie Policy"
