@@ -152,11 +152,22 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
   };
 
   const uploadPhotos = async (photos: File[]): Promise<string[]> => {
+    console.log('Firebase Storage: Uploading photos to bucket gs://graffititracker-17552.firebasestorage.app');
+    
     const uploadPromises = photos.map(async (photo, index) => {
       const fileName = `graffiti-reports/${Date.now()}-${index}-${photo.name}`;
-      const storageRef = ref(storage, fileName);
-      const snapshot = await uploadBytes(storageRef, photo);
-      return getDownloadURL(snapshot.ref);
+      console.log(`Firebase Storage: Uploading ${fileName} (${photo.size} bytes)`);
+      
+      try {
+        const storageRef = ref(storage, fileName);
+        const snapshot = await uploadBytes(storageRef, photo);
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        console.log(`Firebase Storage: Successfully uploaded ${fileName} -> ${downloadURL}`);
+        return downloadURL;
+      } catch (error) {
+        console.error(`Firebase Storage: Failed to upload ${fileName}:`, error);
+        throw error;
+      }
     });
     
     return Promise.all(uploadPromises);
@@ -212,19 +223,24 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     setIsSubmitting(true);
     
     try {
-      // Create FormData for file upload
+      console.log('Starting report submission process...');
+      
+      // Upload photos to Firebase Storage first
+      const photoUrls = await uploadPhotos(formData.photos);
+      console.log('Photos uploaded to Firebase Storage:', photoUrls);
+      
+      // Create FormData for the report submission
       const formDataForUpload = new FormData();
       
-      // Add photos as files
-      formData.photos.forEach((photo, index) => {
-        formDataForUpload.append('photos', photo);
+      // Add photo URLs (not files) to the form data
+      photoUrls.forEach((url, index) => {
+        formDataForUpload.append('photos', url);
       });
       
       // Add other form fields
       formDataForUpload.append('latitude', formData.latitude!.toString());
       formDataForUpload.append('longitude', formData.longitude!.toString());
       formDataForUpload.append('district', formData.district);
-
       formDataForUpload.append('description', formData.description);
       formDataForUpload.append('status', 'new');
       formDataForUpload.append('validated', 'pending');
@@ -236,14 +252,19 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         formDataForUpload.append('email', formData.email);
       }
 
+      console.log('Submitting report to database...');
       const response = await fetch('/api/reports', {
         method: 'POST',
-        body: formDataForUpload, // Don't set Content-Type header, let browser set it with boundary
+        body: formDataForUpload,
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        console.error('API Error:', errorText);
+        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
       }
+      
+      console.log('Report submitted successfully!');
       
       toast({
         title: t('thankYou'),

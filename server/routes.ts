@@ -94,53 +94,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create new graffiti report
-  app.post("/api/reports", upload.array('photos', 1), async (req, res) => {
+  app.post("/api/reports", async (req, res) => {
     try {
-      // Check if files were uploaded
-      if (!req.files || req.files.length === 0) {
-        return res.status(400).json({ 
-          message: "No image file provided. Please upload at least one image." 
-        });
+      // Extract data from form
+      const latitude = parseFloat(req.body.latitude);
+      const longitude = parseFloat(req.body.longitude);
+      const district = req.body.district;
+      const description = req.body.description;
+      const name = req.body.name || null;
+      const email = req.body.email || null;
+      const status = req.body.status || 'new';
+      const validated = req.body.validated || 'pending';
+
+      // Check if photo URLs were provided (uploaded by client)
+      const photoUrls = req.body.photos ? (Array.isArray(req.body.photos) ? req.body.photos : [req.body.photos]) : [];
+      
+      console.log('Processing report:', {
+        latitude,
+        longitude,
+        district,
+        description,
+        photoUrls: photoUrls.length,
+        name,
+        email,
+        status,
+        validated
+      });
+
+      if (!photoUrls || photoUrls.length === 0) {
+        return res.status(400).json({ message: "No image URLs provided. Please upload at least one image." });
       }
 
-      // Parse and validate request body
+      // Create report data
       const reportData = {
-        ...req.body,
-        latitude: parseFloat(req.body.latitude),
-        longitude: parseFloat(req.body.longitude),
-        photos: req.files ? (req.files as Express.Multer.File[]).map(file => {
-          const mimeType = file.mimetype;
-          const base64Data = file.buffer.toString('base64');
-          return `data:${mimeType};base64,${base64Data}`;
-        }) : []
+        photos: photoUrls,
+        latitude,
+        longitude,
+        district,
+        description,
+        name,
+        email,
+        status,
+        validated
       };
 
       const validatedData = insertGraffitiReportSchema.parse(reportData);
       const report = await storage.createReport(validatedData);
       
+      console.log('Report created successfully:', report.id);
       res.status(201).json(report);
     } catch (error) {
+      console.error('Error creating report:', error);
       if (error instanceof z.ZodError) {
         return res.status(400).json({ 
           message: "Validation error", 
           errors: error.errors 
-        });
-      }
-      
-      // Handle multer errors
-      if (error instanceof multer.MulterError) {
-        if (error.code === 'LIMIT_FILE_SIZE') {
-          return res.status(400).json({ 
-            message: "File too large. Maximum file size is 20MB." 
-          });
-        }
-        if (error.code === 'LIMIT_FILE_COUNT') {
-          return res.status(400).json({ 
-            message: "Too many files. Only 1 image file is allowed." 
-          });
-        }
-        return res.status(400).json({ 
-          message: `File upload error: ${error.message}` 
         });
       }
       

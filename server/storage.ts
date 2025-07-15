@@ -1,4 +1,6 @@
-import { graffitiReports, type GraffitiReport, type InsertGraffitiReport, type ReportHistoryEntry, type InsertReportHistoryEntry } from "@shared/schema";
+import { graffitiReports, reportHistory, type GraffitiReport, type InsertGraffitiReport, type ReportHistoryEntry, type InsertReportHistoryEntry } from "@shared/schema";
+import { db } from "./db";
+import { eq, desc, asc } from "drizzle-orm";
 
 export interface IStorage {
   getAllReports(): Promise<GraffitiReport[]>;
@@ -197,4 +199,190 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DatabaseStorage implements IStorage {
+  async getAllReports(): Promise<GraffitiReport[]> {
+    const reports = await db.select().from(graffitiReports).orderBy(desc(graffitiReports.timestamp));
+    return reports;
+  }
+
+  async getReport(id: number): Promise<GraffitiReport | undefined> {
+    const [report] = await db.select().from(graffitiReports).where(eq(graffitiReports.id, id));
+    return report || undefined;
+  }
+
+  async createReport(insertReport: InsertGraffitiReport): Promise<GraffitiReport> {
+    const [report] = await db
+      .insert(graffitiReports)
+      .values({
+        photos: insertReport.photos as string[],
+        latitude: insertReport.latitude,
+        longitude: insertReport.longitude,
+        district: insertReport.district,
+        description: insertReport.description,
+        name: insertReport.name || null,
+        email: insertReport.email || null,
+        status: insertReport.status || "new",
+        validated: insertReport.validated || "pending",
+        propertyOwner: insertReport.propertyOwner || null,
+        propertyDescription: insertReport.propertyDescription || null
+      })
+      .returning();
+    
+    // Add creation history entry
+    await this.addHistoryEntry({
+      reportId: report.id,
+      action: 'created',
+      oldValue: null,
+      newValue: 'Report created',
+      adminUser: null,
+      notes: `Report submitted from ${insertReport.district}`
+    });
+    
+    return report;
+  }
+
+  async updateReportStatus(id: number, status: string, adminUser?: string): Promise<GraffitiReport | undefined> {
+    const report = await this.getReport(id);
+    if (!report) return undefined;
+    
+    const oldStatus = report.status;
+    const [updatedReport] = await db
+      .update(graffitiReports)
+      .set({ status })
+      .where(eq(graffitiReports.id, id))
+      .returning();
+    
+    // Add history entry
+    await this.addHistoryEntry({
+      reportId: id,
+      action: 'status_changed',
+      oldValue: oldStatus,
+      newValue: status,
+      adminUser: adminUser || 'admin',
+      notes: `Status changed from ${oldStatus} to ${status}`
+    });
+    
+    return updatedReport;
+  }
+
+  async updateReportValidation(id: number, validated: string, adminUser?: string): Promise<GraffitiReport | undefined> {
+    const report = await this.getReport(id);
+    if (!report) return undefined;
+    
+    const oldValidation = report.validated;
+    const [updatedReport] = await db
+      .update(graffitiReports)
+      .set({ validated })
+      .where(eq(graffitiReports.id, id))
+      .returning();
+    
+    // Add history entry
+    await this.addHistoryEntry({
+      reportId: id,
+      action: 'validated',
+      oldValue: oldValidation,
+      newValue: validated,
+      adminUser: adminUser || 'admin',
+      notes: `Validation changed from ${oldValidation} to ${validated}`
+    });
+    
+    return updatedReport;
+  }
+
+  async updateReportProperty(id: number, propertyOwner: string, propertyDescription?: string, adminUser?: string): Promise<GraffitiReport | undefined> {
+    const report = await this.getReport(id);
+    if (!report) return undefined;
+    
+    const oldOwner = report.propertyOwner || 'none';
+    const [updatedReport] = await db
+      .update(graffitiReports)
+      .set({ 
+        propertyOwner, 
+        propertyDescription: propertyDescription || null 
+      })
+      .where(eq(graffitiReports.id, id))
+      .returning();
+    
+    // Add history entry
+    await this.addHistoryEntry({
+      reportId: id,
+      action: 'property_updated',
+      oldValue: oldOwner,
+      newValue: propertyOwner,
+      adminUser: adminUser || 'admin',
+      notes: `Property owner updated: ${propertyDescription || 'No description'}`
+    });
+    
+    return updatedReport;
+  }
+
+  async getReportsByStatus(status: string): Promise<GraffitiReport[]> {
+    const reports = await db
+      .select()
+      .from(graffitiReports)
+      .where(eq(graffitiReports.status, status))
+      .orderBy(desc(graffitiReports.timestamp));
+    return reports;
+  }
+
+  async getReportsByDistrict(district: string): Promise<GraffitiReport[]> {
+    const reports = await db
+      .select()
+      .from(graffitiReports)
+      .where(eq(graffitiReports.district, district))
+      .orderBy(desc(graffitiReports.timestamp));
+    return reports;
+  }
+
+  async getValidatedReports(): Promise<GraffitiReport[]> {
+    const reports = await db
+      .select()
+      .from(graffitiReports)
+      .where(eq(graffitiReports.validated, 'approved'))
+      .orderBy(desc(graffitiReports.timestamp));
+    return reports;
+  }
+
+  async getPendingReports(): Promise<GraffitiReport[]> {
+    const reports = await db
+      .select()
+      .from(graffitiReports)
+      .where(eq(graffitiReports.validated, 'pending'))
+      .orderBy(desc(graffitiReports.timestamp));
+    return reports;
+  }
+
+  async getReportHistory(reportId: number): Promise<ReportHistoryEntry[]> {
+    const history = await db
+      .select()
+      .from(reportHistory)
+      .where(eq(reportHistory.reportId, reportId))
+      .orderBy(desc(reportHistory.timestamp));
+    return history;
+  }
+
+  async addHistoryEntry(entry: InsertReportHistoryEntry): Promise<ReportHistoryEntry> {
+    const [historyEntry] = await db
+      .insert(reportHistory)
+      .values(entry)
+      .returning();
+    return historyEntry;
+  }
+
+  async deleteReport(id: number): Promise<boolean> {
+    try {
+      // Delete history entries first
+      await db.delete(reportHistory).where(eq(reportHistory.reportId, id));
+      
+      // Delete the report
+      const result = await db.delete(graffitiReports).where(eq(graffitiReports.id, id));
+      
+      return true;
+    } catch (error) {
+      console.error('Error deleting report:', error);
+      return false;
+    }
+  }
+}
+
+export const storage = new DatabaseStorage();
