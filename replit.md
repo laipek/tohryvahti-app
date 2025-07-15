@@ -9,8 +9,8 @@ This is a full-stack web application for reporting and managing graffiti inciden
 Preferred communication style: Simple, everyday language.
 Default application language: Finnish (fi) - users should see Finnish text by default, with option to switch to Swedish or English.
 Districts updated to Finnish municipalities: Asema, Haapaniemi, Huutijärvi, Ilkko, Kangasalan keskusta, Kuohenmaa, Lamminrahka, Lentola, Lihasula, Raikku, Ranta-Koivisto, Raudanmaa, Riku, Ruutana, Saarenmaa, Saarikylät, Suinula, Tiihala, Vatiala, Vehkajärvi, Vääksy.
-Background image: Professional royalty-free photo of Lake Saimaa from Pixabay, resembling Vehoniemenharju landscape.
-Copyright notice: "Lake Saimaa, Finland. Image by MikaelT from Pixabay (royalty-free)." displayed consistently across all pages.
+Background image: Professional royalty-free aerial photo of Finnish lake landscape from Pexels, showing authentic Finnish scenery.
+Copyright notice: "Finnish lake landscape. Photo by DC Productions from Pexels (royalty-free)." displayed consistently across all pages.
 
 ## System Architecture
 
