@@ -10,7 +10,7 @@ import { MapView } from './MapView';
 import { ReportModal } from './ReportModal';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
-import { Map, Table, Eye, Search, Filter, ArrowUpDown, AlertTriangle, Check, X, CircleAlert, Clock, Calendar, Download, Upload, Plus, Trash2, BarChart3, Monitor, Smartphone } from 'lucide-react';
+import { Map, Table, Eye, Search, Filter, ArrowUpDown, AlertTriangle, Check, X, CircleAlert, Clock, Calendar, Download, Upload, Plus, Trash2, BarChart3 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import type { GraffitiReport } from '@shared/schema';
 
@@ -28,7 +28,7 @@ export function AdminDashboard() {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [selectedReport, setSelectedReport] = useState<GraffitiReport | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isMobileView, setIsMobileView] = useState(false);
+
   const [showAnalytics, setShowAnalytics] = useState(false);
 
   // Fetch all reports for admin
@@ -298,25 +298,6 @@ export function AdminDashboard() {
   const AdminToolbar = () => (
     <div className="flex flex-wrap gap-4 mb-6 p-4 bg-background/80 backdrop-blur-sm rounded-lg border">
       <div className="flex items-center gap-2">
-        <Button
-          variant={isMobileView ? "outline" : "default"}
-          size="sm"
-          onClick={() => setIsMobileView(false)}
-        >
-          <Monitor className="h-4 w-4 mr-2" />
-          {t('desktopView')}
-        </Button>
-        <Button
-          variant={isMobileView ? "default" : "outline"}
-          size="sm"
-          onClick={() => setIsMobileView(true)}
-        >
-          <Smartphone className="h-4 w-4 mr-2" />
-          {t('mobileView')}
-        </Button>
-      </div>
-      
-      <div className="flex items-center gap-2">
         <Button onClick={exportReports} size="sm" variant="outline">
           <Download className="h-4 w-4 mr-2" />
           {t('exportReports')}
@@ -565,26 +546,8 @@ export function AdminDashboard() {
         {viewMode === 'table' && (
           <Card className="bg-white shadow-sm">
             <CardHeader>
-              <CardTitle className="text-lg flex items-center justify-between">
+              <CardTitle className="text-lg flex items-center">
                 <span>{t('graffitiReports')} ({filteredReports.length})</span>
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleSort('timestamp')}
-                    className="flex items-center"
-                  >
-                    {t('date')} <ArrowUpDown className="h-3 w-3 ml-1" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleSort('validated')}
-                    className="flex items-center"
-                  >
-                    {t('validationStatus')} <ArrowUpDown className="h-3 w-3 ml-1" />
-                  </Button>
-                </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
@@ -602,7 +565,15 @@ export function AdminDashboard() {
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          {t('date')}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleSort('timestamp')}
+                            className="h-auto p-0 font-medium hover:bg-transparent text-gray-500 hover:text-gray-700"
+                          >
+                            {t('date')}
+                            {getSortIcon('timestamp')}
+                          </Button>
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           <Button
@@ -633,7 +604,15 @@ export function AdminDashboard() {
                           {t('description')}
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          {t('validationStatus')}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleSort('validated')}
+                            className="h-auto p-0 font-medium hover:bg-transparent text-gray-500 hover:text-gray-700"
+                          >
+                            {t('validationStatus')}
+                            {getSortIcon('validated')}
+                          </Button>
                         </th>
                         <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
                           <Button
@@ -660,8 +639,8 @@ export function AdminDashboard() {
                         >
                           <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm text-gray-900">
                             <div className="flex flex-col">
-                              <span className="font-medium">{formatDate(report.timestamp).split(' ')[0]}</span>
-                              <span className="text-gray-500 text-xs">{formatDate(report.timestamp).split(' ')[1] || ''}</span>
+                              <span className="font-medium">{new Date(report.timestamp).toLocaleDateString('fi-FI')}</span>
+                              <span className="text-gray-500 text-xs">klo {new Date(report.timestamp).toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' })}</span>
                             </div>
                           </td>
                           <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm text-gray-900">

@@ -86,7 +86,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create new graffiti report
-  app.post("/api/reports", upload.array('photos', 5), async (req, res) => {
+  app.post("/api/reports", upload.array('photos', 1), async (req, res) => {
     try {
       // Parse and validate request body
       const reportData = {

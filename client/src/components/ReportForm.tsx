@@ -57,11 +57,31 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
 
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
-    setFormData(prev => ({ ...prev, photos: files }));
     
-    // Create preview URLs
-    const urls = files.map(file => URL.createObjectURL(file));
-    setImagePreviewUrls(urls);
+    // Clear previous selection and check for new files
+    if (files.length === 0) return;
+    
+    // Warn user if they already have a photo and are trying to add more
+    if (formData.photos.length > 0) {
+      toast({
+        title: t('validation.oneImageOnly'),
+        description: t('validation.oneImageOnlyDesc'),
+        variant: "destructive"
+      });
+      // Reset the input value to prevent confusion
+      if (event.target) {
+        event.target.value = '';
+      }
+      return;
+    }
+    
+    // Only take the first file
+    const selectedFile = files[0];
+    setFormData(prev => ({ ...prev, photos: [selectedFile] }));
+    
+    // Create preview URL for the single image
+    const url = URL.createObjectURL(selectedFile);
+    setImagePreviewUrls([url]);
   };
 
   const getCurrentLocation = () => {
@@ -282,44 +302,67 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                 ref={fileInputRef}
                 type="file"
                 accept="image/*"
-                multiple
+
                 className="hidden"
                 onChange={handlePhotoUpload}
               />
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowPrivacyDialog(true);
-                  }}
-                  className="flex-1 flex flex-col items-center cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  <Camera className="h-8 w-8 sm:h-10 sm:w-10 text-municipal-blue mb-2" />
-                  <p className="text-sm sm:text-base text-municipal-gray mb-1">{t('tapToTakePhoto')}</p>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowPrivacyDialog(true);
-                  }}
-                  className="flex-1 flex flex-col items-center cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  <FileText className="h-8 w-8 sm:h-10 sm:w-10 text-municipal-gray mb-2" />
-                  <p className="text-sm sm:text-base text-municipal-gray mb-1">{t('orSelectFile')}</p>
-                </button>
+                {formData.photos.length === 0 ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowPrivacyDialog(true);
+                      }}
+                      className="flex-1 flex flex-col items-center cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      <Camera className="h-8 w-8 sm:h-10 sm:w-10 text-municipal-blue mb-2" />
+                      <p className="text-sm sm:text-base text-municipal-gray mb-1">{t('tapToTakePhoto')}</p>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowPrivacyDialog(true);
+                      }}
+                      className="flex-1 flex flex-col items-center cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      <FileText className="h-8 w-8 sm:h-10 sm:w-10 text-municipal-gray mb-2" />
+                      <p className="text-sm sm:text-base text-municipal-gray mb-1">{t('orSelectFile')}</p>
+                    </button>
+                  </>
+                ) : (
+                  <div className="text-center text-green-600 py-4">
+                    <Check className="h-8 w-8 mx-auto mb-2" />
+                    <p className="text-sm">{t('photoSelected')}</p>
+                  </div>
+                )}
               </div>
             </div>
             
             {imagePreviewUrls.length > 0 && (
-              <div className="mt-3 sm:mt-4 grid grid-cols-2 gap-2 sm:gap-4">
-                {imagePreviewUrls.map((url, index) => (
+              <div className="mt-3 sm:mt-4">
+                <div className="relative inline-block">
                   <img
-                    key={index}
-                    src={url}
-                    alt={`Preview ${index + 1}`}
-                    className="w-full h-20 sm:h-24 object-cover rounded-lg"
+                    src={imagePreviewUrls[0]}
+                    alt="Preview"
+                    className="w-32 h-32 object-cover rounded-lg"
                   />
-                ))}
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    className="absolute -top-2 -right-2 h-6 w-6 p-0 rounded-full"
+                    onClick={() => {
+                      setFormData(prev => ({ ...prev, photos: [] }));
+                      setImagePreviewUrls([]);
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = '';
+                      }
+                    }}
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </div>
               </div>
             )}
           </div>
@@ -345,9 +388,19 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                   latitude={formData.latitude}
                   longitude={formData.longitude}
                   className="h-32 sm:h-48 rounded-lg"
+                  onClick={(lat, lng) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      latitude: lat,
+                      longitude: lng
+                    }));
+                  }}
                 />
                 <p className="text-sm text-municipal-gray mt-2">
                   {t('coordinates')}: {formData.latitude.toFixed(6)}, {formData.longitude.toFixed(6)}
+                </p>
+                <p className="text-xs text-municipal-gray mt-1">
+                  {t('clickMapToAdjust')}
                 </p>
               </div>
             )}

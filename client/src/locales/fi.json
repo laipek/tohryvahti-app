@@ -149,11 +149,14 @@
   "reportDetails": "Ilmoituksen tiedot",
   "coordinates": "Koordinaatit",
   "reportLocationLabel": "Ilmoituksen sijainti",
+  "clickMapToAdjust": "Klikkaa karttaa säätääksesi sijaintia tarkemmin",
   "validation": {
     "addPhoto": "Lisää vähintään yksi kuva",
     "getLocation": "Hae sijainti ennen lähettämistä",
     "selectDistrict": "Valitse kaupunginosa",
-    "addDescription": "Lisää kuvaus"
+    "addDescription": "Lisää kuvaus",
+    "oneImageOnly": "Vain yksi kuva sallittu",
+    "oneImageOnlyDesc": "Voit lisätä vain yhden kuvan per ilmoitus. Valitse paras kuva graffitista."
   },
   "districts": {
     "asema": "Asema",
