@@ -130,7 +130,7 @@
     "title": "Tietoa Töhryvahdista",
     "subtitle": "Helppokäyttöinen työkalu töhryjen ja ilkivallan raportointiin",
     "whatIsTitle": "Mikä on Töhryvahti?",
-    "whatIsContent": "Töhryvahti on kaupunkilaisille, taloyhtiöille ja viranomaisille suunnattu helppokäyttöinen työkalu, jonka avulla voi ilmoittaa töhryistä ja ilkivallasta suoraan kartalle. Tavoitteena on luoda siistimpi ja viihtyisämpi elinympäristö sekä helpottaa siivouksen ja valvonnan suunnittelua.",
+    "whatIsContent": "Töhryvahti on kaupunkilaisille ja viranomaisille suunnattu helppokäyttöinen työkalu, jonka avulla voi ilmoittaa töhryistä ja ilkivallasta suoraan kartalle. Tavoitteena on mahdollistaa siistimpi ja viihtyisämpi elinympäristö sekä helpottaa siivouksen ja valvonnan suunnittelua – riippumatta siitä, kenen hallinnassa ilkivallan kohde on.",
     "whatCanDoTitle": "Mitä Töhryvahdilla voi tehdä?",
     "reportEasily": "Ilmoita töhry helposti",
     "reportEasilyDesc": "ota kuva, paikanna sijainti kartalta ja lisää halutessasi lisätietoja.",
@@ -142,10 +142,12 @@
     "dataUsageIntro": "Tiedot tallennetaan anonymisoidusti ja niitä voidaan hyödyntää esimerkiksi:",
     "budgetPlanning": "kaupunkien budjettisuunnittelussa ja puhdistustarpeiden priorisoinnissa",
     "statisticalTracking": "tilastollisessa seurannassa ja toistuvien ongelma-alueiden tunnistamisessa",
-    "serviceProviders": "palveluntarjoajien tarjouspyyntöjen ja sopimusten tukena",
+    "serviceProviders": "palveluntarjoajien tarjoustyön ja sopimusten tukena",
     "residentInfluence": "asukkaiden vaikuttamismahdollisuuksien lisäämisessä",
     "officialServiceTitle": "Onko tämä virallinen palvelu?",
-    "officialServiceContent": "Töhryvahti on kaupungista riippumaton kansalaislähtöinen projekti, joka on tällä hetkellä kehitysvaiheessa. Tavoitteena on käynnistää yhteistyötä kaupunkien, kiinteistönomistajien ja siivouspalvelujen kanssa, jotta tiedosta saadaan mahdollisimman paljon hyötyä."
+    "officialServiceContent": "Töhryvahti on kaupungista riippumaton kansalaislähtöinen projekti, joka on tällä hetkellä kehitysvaiheessa. Tavoitteena on käynnistää yhteistyö kaupunkien, viranomaisten, kiinteistönomistajien ja siivouspalvelujen kanssa, jotta kerättyä tietoa voidaan hyödyntää mahdollisimman tehokkaasti.",
+    "contactTitle": "Yhteystiedot",
+    "contactContent": "Lisätietoja, kysymykset ja kommentit osoitteeseen tuki(at)tohryvahti.fi"
   },
   "reportValidation": "Ilmoituksen vahvistus",
   "validationHelp": "Voit muuttaa vahvistustilaa tarpeen mukaan",

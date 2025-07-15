@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
-import { Info, Target, BarChart3, Shield } from 'lucide-react';
+import { Info, Target, BarChart3, Shield, Mail } from 'lucide-react';
 
 export default function InfoPage() {
   const { t } = useTranslation();
@@ -96,6 +96,25 @@ export default function InfoPage() {
                   </h2>
                   <p className="text-gray-700 leading-relaxed">
                     {t('infoPage.officialServiceContent')}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Contact Information */}
+          <Card className="bg-white/70 backdrop-blur-md border-municipal-border/40 shadow-lg">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="bg-municipal-primary rounded-full p-3 flex-shrink-0">
+                  <Mail className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900 mb-3">
+                    {t('infoPage.contactTitle')}
+                  </h2>
+                  <p className="text-gray-700 leading-relaxed">
+                    {t('infoPage.contactContent')}
                   </p>
                 </div>
               </div>
