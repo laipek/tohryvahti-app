@@ -47,7 +47,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
   const [locationStatus, setLocationStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
   const [showPrivacyDialog, setShowPrivacyDialog] = useState(false);
-  const [isLocationManuallyAdjusted, setIsLocationManuallyAdjusted] = useState(false);
+
 
   const districts = [
     'asema', 'haapaniemi', 'huutijarvi', 'ilkko', 'kangasalan_keskusta',
@@ -117,63 +117,33 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
   };
 
   const getCurrentLocation = () => {
-    console.log('getCurrentLocation called');
-    
     if (!navigator.geolocation) {
-      console.log('Geolocation not supported');
       toast({
         title: "Error",
         description: "Geolocation is not supported by this browser",
         variant: "destructive"
       });
-      setLocationStatus('error');
       return;
     }
 
-    console.log('Setting location status to loading');
     setLocationStatus('loading');
     
-    console.log('Calling navigator.geolocation.getCurrentPosition');
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        console.log('Location success:', position.coords);
         setFormData(prev => ({
           ...prev,
           latitude: position.coords.latitude,
           longitude: position.coords.longitude
         }));
         setLocationStatus('success');
-        setIsLocationManuallyAdjusted(false);
       },
       (error) => {
-        console.error('Location error:', error);
+        console.error('Error getting location:', error);
         setLocationStatus('error');
-        
-        let title = t('locationError');
-        let description = '';
-        
-        switch (error.code) {
-          case error.PERMISSION_DENIED:
-            title = t('locationPermissionDenied');
-            description = t('locationPermissionDeniedDesc');
-            break;
-          case error.POSITION_UNAVAILABLE:
-            title = t('locationUnavailable');
-            description = t('locationUnavailableDesc');
-            break;
-          case error.TIMEOUT:
-            title = t('locationTimeout');
-            description = t('locationTimeoutDesc');
-            break;
-          default:
-            description = t('locationErrorGeneric');
-        }
-        
         toast({
-          title,
-          description,
-          variant: "destructive",
-          duration: 6000
+          title: t('locationError'),
+          description: "Unable to get your location. Please try again or enter it manually.",
+          variant: "destructive"
         });
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
@@ -307,7 +277,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         email: ''
       });
       setLocationStatus('idle');
-      setIsLocationManuallyAdjusted(false);
+
       
       onSubmitSuccess();
     } catch (error) {
@@ -334,19 +304,15 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       case 'success':
         return (
           <>
-            {isLocationManuallyAdjusted ? (
-              <Crosshair className="mr-2 h-4 w-4" />
-            ) : (
-              <Check className="mr-2 h-4 w-4" />
-            )}
-            {isLocationManuallyAdjusted ? t('obtainAutomatically') : t('locationObtained')}
+            <Check className="mr-2 h-4 w-4" />
+            {t('locationObtained')}
           </>
         );
       case 'error':
         return (
           <>
-            <RotateCcw className="mr-2 h-4 w-4" />
-            {t('getCurrentLocation')}
+            <AlertTriangle className="mr-2 h-4 w-4" />
+            {t('locationError')}
           </>
         );
       default:
@@ -469,24 +435,6 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
               {getLocationButtonContent()}
             </Button>
             
-            {/* Location Error Help Text */}
-            {locationStatus === 'error' && (
-              <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                <div className="flex items-start space-x-2">
-                  <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                  <div className="text-sm">
-                    <p className="font-medium text-amber-800 mb-2">{t('locationHelp')}</p>
-                    <p className="text-amber-700 mb-2">{t('locationHelpDesc')}</p>
-                    <div className="text-xs text-amber-600 space-y-1">
-                      <p>• {t('enableLocationInBrowser')}</p>
-                      <p>• {t('enableLocationInSettings')}</p>
-                      <p>• {t('manualLocationOption')}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {formData.latitude && formData.longitude && (
               <div className="mt-3 sm:mt-4">
                 <MapView
@@ -500,7 +448,6 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                       latitude: lat,
                       longitude: lng
                     }));
-                    setIsLocationManuallyAdjusted(true); // Mark as manually adjusted
                   }}
                 />
                 <p className="text-sm text-municipal-gray mt-2">
@@ -526,7 +473,6 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                       latitude: 61.4639,
                       longitude: 24.0764
                     }));
-                    setIsLocationManuallyAdjusted(true);
                     setLocationStatus('success');
                   }}
                 >
