@@ -1,0 +1,102 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradients for sky -->
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#B0E0E6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F0F8FF;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Gradient for lake -->
+    <linearGradient id="lakeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4682B4;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#1E90FF;stop-opacity:0.7" />
+      <stop offset="100%" style="stop-color:#191970;stop-opacity:0.9" />
+    </linearGradient>
+    
+    <!-- Forest gradients -->
+    <linearGradient id="forestGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#228B22;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#006400;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="forestGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#32CD32;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#228B22;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Sky background -->
+  <rect width="1920" height="1080" fill="url(#skyGradient)" />
+  
+  <!-- Distant mountains/hills -->
+  <polygon points="0,400 400,300 800,320 1200,280 1600,300 1920,320 1920,1080 0,1080" fill="#696969" opacity="0.6"/>
+  
+  <!-- Background forest layer -->
+  <polygon points="0,450 300,380 600,400 900,360 1200,380 1500,350 1920,370 1920,1080 0,1080" fill="url(#forestGradient1)" opacity="0.8"/>
+  
+  <!-- Mid-ground forest -->
+  <polygon points="0,500 200,450 500,470 800,440 1100,460 1400,430 1700,450 1920,440 1920,1080 0,1080" fill="url(#forestGradient2)" opacity="0.9"/>
+  
+  <!-- Lake -->
+  <ellipse cx="960" cy="680" rx="600" ry="120" fill="url(#lakeGradient)" />
+  
+  <!-- Lake shore -->
+  <path d="M300 700 Q960 650 1620 700 Q960 750 300 700" fill="#8B4513" opacity="0.3"/>
+  
+  <!-- Foreground trees (left side) -->
+  <g opacity="0.9">
+    <!-- Pine trees -->
+    <polygon points="100,500 120,300 140,500" fill="#1F4E1F"/>
+    <polygon points="95,520 145,520 120,400" fill="#2F5F2F"/>
+    
+    <polygon points="180,480 200,280 220,480" fill="#1F4E1F"/>
+    <polygon points="175,500 225,500 200,380" fill="#2F5F2F"/>
+    
+    <polygon points="260,520 280,320 300,520" fill="#1F4E1F"/>
+    <polygon points="255,540 305,540 280,420" fill="#2F5F2F"/>
+  </g>
+  
+  <!-- Foreground trees (right side) -->
+  <g opacity="0.9">
+    <polygon points="1620,480 1640,280 1660,480" fill="#1F4E1F"/>
+    <polygon points="1615,500 1665,500 1640,380" fill="#2F5F2F"/>
+    
+    <polygon points="1700,520 1720,320 1740,520" fill="#1F4E1F"/>
+    <polygon points="1695,540 1745,540 1720,420" fill="#2F5F2F"/>
+    
+    <polygon points="1780,500 1800,300 1820,500" fill="#1F4E1F"/>
+    <polygon points="1775,520 1825,520 1800,400" fill="#2F5F2F"/>
+  </g>
+  
+  <!-- Birch trees (characteristic of Finland) -->
+  <g opacity="0.8">
+    <rect x="450" y="350" width="8" height="250" fill="#F5F5DC" stroke="#000" stroke-width="0.5"/>
+    <circle cx="454" cy="340" r="25" fill="#90EE90" opacity="0.7"/>
+    
+    <rect x="520" y="370" width="8" height="230" fill="#F5F5DC" stroke="#000" stroke-width="0.5"/>
+    <circle cx="524" cy="360" r="30" fill="#90EE90" opacity="0.7"/>
+    
+    <rect x="1350" y="360" width="8" height="240" fill="#F5F5DC" stroke="#000" stroke-width="0.5"/>
+    <circle cx="1354" cy="350" r="28" fill="#90EE90" opacity="0.7"/>
+    
+    <rect x="1420" y="380" width="8" height="220" fill="#F5F5DC" stroke="#000" stroke-width="0.5"/>
+    <circle cx="1424" cy="370" r="32" fill="#90EE90" opacity="0.7"/>
+  </g>
+  
+  <!-- Water ripples -->
+  <ellipse cx="860" cy="680" rx="50" ry="5" fill="#87CEEB" opacity="0.5"/>
+  <ellipse cx="1060" cy="690" rx="40" ry="4" fill="#87CEEB" opacity="0.4"/>
+  <ellipse cx="780" cy="675" rx="30" ry="3" fill="#87CEEB" opacity="0.6"/>
+  
+  <!-- Clouds -->
+  <g opacity="0.3">
+    <circle cx="300" cy="150" r="40" fill="white"/>
+    <circle cx="340" cy="150" r="50" fill="white"/>
+    <circle cx="380" cy="150" r="35" fill="white"/>
+    
+    <circle cx="1200" cy="120" r="45" fill="white"/>
+    <circle cx="1250" cy="120" r="55" fill="white"/>
+    <circle cx="1300" cy="120" r="40" fill="white"/>
+  </g>
+</svg>
