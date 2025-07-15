@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { MapView } from './MapView';
+import { ImagePopup } from './ImagePopup';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { X, ZoomIn, History, Clock, Trash2, AlertTriangle, Edit, Save, XCircle } from 'lucide-react';
@@ -219,9 +220,12 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
                     src={report.photos[0]}
                     alt="Graffiti report"
                     className="w-full h-48 object-cover rounded-lg border border-municipal-border cursor-pointer hover:opacity-90 transition-opacity"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      console.log('Image clicked!', report.photos[0]);
                       setSelectedImage(report.photos[0]);
                       setIsImagePopupOpen(true);
+                      console.log('Image popup state set:', true);
                     }}
                   />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-20 rounded-lg">
@@ -711,29 +715,12 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
 
     </Dialog>
     
-    {/* Image Popup Dialog - Separate from main dialog to avoid nesting issues */}
-    <Dialog open={isImagePopupOpen} onOpenChange={setIsImagePopupOpen}>
-      <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black">
-        <div className="relative w-full h-[95vh]">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsImagePopupOpen(false)}
-            className="absolute top-4 right-4 z-50 bg-black bg-opacity-50 text-white hover:bg-opacity-75"
-          >
-            <X className="h-4 w-4" />
-          </Button>
-          {selectedImage && (
-            <img
-              src={selectedImage}
-              alt="Full size graffiti report"
-              className="w-full h-full object-contain"
-              style={{ maxHeight: '95vh', maxWidth: '95vw' }}
-            />
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
+    {/* Image Popup - Separate component to avoid nesting issues */}
+    <ImagePopup 
+      isOpen={isImagePopupOpen}
+      onClose={() => setIsImagePopupOpen(false)}
+      imageUrl={selectedImage}
+    />
     </>
   );
 }
