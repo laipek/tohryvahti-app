@@ -217,6 +217,8 @@ Copyright notice: Localized copyright text in Finnish ("Kuva: DC Productions, Pe
 ✓ **Mobile Location Support**: Added mobile browser detection with adjusted timeout and accuracy settings
 ✓ **Manual Location Option**: Added fallback manual location selection when GPS fails or is disabled
 ✓ **Cross-Platform Compatibility**: Different geolocation settings for mobile vs desktop for better reliability
+✓ **Replit Mobile App Compatibility**: Identified location restrictions in Replit mobile app - works in regular mobile browsers
+✓ **Manual Location Adjustment**: Restored feature to show "automatic location" button when user manually adjusts location on map
 
 ## Completed Admin Panel Features
 

@@ -45,6 +45,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [locationStatus, setLocationStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [isLocationManuallyAdjusted, setIsLocationManuallyAdjusted] = useState(false);
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
   const [showPrivacyDialog, setShowPrivacyDialog] = useState(false);
 
@@ -189,6 +190,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         longitude: position.coords.longitude
       }));
       setLocationStatus('success');
+      setIsLocationManuallyAdjusted(false);
       
     } catch (error) {
       console.error('Location error:', error);
@@ -345,6 +347,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
         email: ''
       });
       setLocationStatus('idle');
+      setIsLocationManuallyAdjusted(false);
 
       
       onSubmitSuccess();
@@ -372,8 +375,12 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       case 'success':
         return (
           <>
-            <Check className="mr-2 h-4 w-4" />
-            {t('locationObtained')}
+            {isLocationManuallyAdjusted ? (
+              <Crosshair className="mr-2 h-4 w-4" />
+            ) : (
+              <Check className="mr-2 h-4 w-4" />
+            )}
+            {isLocationManuallyAdjusted ? t('obtainAutomatically') : t('locationObtained')}
           </>
         );
       case 'error':
@@ -516,6 +523,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                       latitude: lat,
                       longitude: lng
                     }));
+                    setIsLocationManuallyAdjusted(true);
                   }}
                 />
                 <p className="text-sm text-municipal-gray mt-2">
@@ -542,6 +550,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
                       longitude: 24.0764
                     }));
                     setLocationStatus('success');
+                    setIsLocationManuallyAdjusted(true);
                   }}
                 >
                   <MapPin className="mr-2 h-4 w-4" />
