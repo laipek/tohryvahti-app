@@ -178,20 +178,20 @@ export default function PublicMap() {
 
         {/* Statistics */}
         <div className="mt-6 flex justify-center">
-          <Card className="bg-white/60 backdrop-blur-md border-municipal-border/30 shadow-lg w-full max-w-2xl">
-            <CardContent className="p-6">
-              <div className="space-y-4">
+          <Card className="bg-white/60 backdrop-blur-md border-municipal-border/30 shadow-lg w-full max-w-lg">
+            <CardContent className="p-4">
+              <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-base text-municipal-gray">{t('verifiedOnMap')}</span>
-                  <span className="text-xl font-bold text-gray-900">{reports.length}</span>
+                  <span className="text-sm text-municipal-gray">{t('verifiedOnMap')}</span>
+                  <span className="text-lg font-semibold text-gray-900">{reports.length}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-base text-municipal-gray">{t('cleaned')}</span>
-                  <span className="text-base font-medium text-gray-500">{t('featureComingSoon')}</span>
+                  <span className="text-sm text-municipal-gray">{t('cleaned')}</span>
+                  <span className="text-sm font-medium text-gray-500">{t('featureComingSoon')}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-base text-municipal-gray">{t('inProgress')}</span>
-                  <span className="text-base font-medium text-gray-500">{t('featureComingSoon')}</span>
+                  <span className="text-sm text-municipal-gray">{t('inProgress')}</span>
+                  <span className="text-sm font-medium text-gray-500">{t('featureComingSoon')}</span>
                 </div>
               </div>
             </CardContent>
