@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Info, Target, BarChart3, Shield, Mail, Database } from 'lucide-react';
+import { LanguageSelector } from '@/components/LanguageSelector';
 
 export default function InfoPage() {
   const { t } = useTranslation();
@@ -13,7 +14,7 @@ export default function InfoPage() {
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
             {t('infoPage.title')}
           </h1>
-          <p className="text-lg text-gray-800 max-w-2xl mx-auto bg-white/80 backdrop-blur-sm rounded-lg px-4 py-2 inline-block">
+          <p className="text-lg text-gray-800 max-w-2xl mx-auto bg-white/70 backdrop-blur-md rounded-lg px-4 py-2 inline-block">
             {t('infoPage.subtitle')}
           </p>
         </div>
@@ -121,6 +122,13 @@ export default function InfoPage() {
               </div>
             </CardContent>
           </Card>
+          
+          {/* Language selector */}
+          <div className="mt-12">
+            <div className="flex justify-center items-center px-4 py-4 bg-black/40 backdrop-blur-sm rounded-lg">
+              <LanguageSelector />
+            </div>
+          </div>
           
           {/* Copyright notice */}
           <div className="text-center mt-8">

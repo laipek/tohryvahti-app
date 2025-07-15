@@ -44,10 +44,8 @@ export default function PublicForm() {
       </div>
       {/* Language selector and footer */}
       <div className="mt-12 space-y-6">
-        <div className="flex justify-between items-center px-4 py-4 bg-black/40 backdrop-blur-sm rounded-lg">
-          <div className="flex items-center">
-            <LanguageSelector />
-          </div>
+        <div className="flex justify-center items-center px-4 py-4 bg-black/40 backdrop-blur-sm rounded-lg">
+          <LanguageSelector />
         </div>
         
         {/* Disclaimer and beta notice */}
