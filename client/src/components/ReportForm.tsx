@@ -363,9 +363,22 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('API Error:', errorText);
-        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+        const errorData = await response.json();
+        console.error('API Error:', JSON.stringify(errorData));
+        
+        // Show appropriate error message based on current language
+        let errorMessage = errorData.message || 'Failed to submit report';
+        
+        // If server provides localized messages, use them
+        if (i18n.language === 'fi' && errorData.message) {
+          errorMessage = errorData.message;
+        } else if (i18n.language === 'sv' && errorData.messageSv) {
+          errorMessage = errorData.messageSv;
+        } else if (i18n.language === 'en' && errorData.messageEn) {
+          errorMessage = errorData.messageEn;
+        }
+        
+        throw new Error(errorMessage);
       }
       
       console.log('Report submitted successfully!');
@@ -393,8 +406,8 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     } catch (error) {
       console.error('Error submitting report:', error);
       toast({
-        title: "Virhe",
-        description: "Ilmoituksen lähettäminen epäonnistui. Yritä uudelleen.",
+        title: t('error', "Virhe"),
+        description: error.message || t('submitError', "Ilmoituksen lähettäminen epäonnistui. Yritä uudelleen."),
         variant: "destructive"
       });
     } finally {

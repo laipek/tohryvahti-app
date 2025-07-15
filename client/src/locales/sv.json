@@ -113,6 +113,8 @@
   "locationTimeoutDesc": "Platssökning översteg tidsgräns. Försök igen eller använd manuell val.",
   "uploadingReport": "Skickar rapport",
   "processingImages": "Bearbetar bilder och sparar data...",
+  "error": "Fel",
+  "submitError": "Rapportöverföring misslyckades. Försök igen.",
   "validation": {
     "selectGraffitiType": "Välj klottertyp"
   },

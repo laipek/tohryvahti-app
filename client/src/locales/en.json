@@ -113,6 +113,8 @@
   "locationTimeoutDesc": "Location request timed out. Please try again or use manual selection.",
   "uploadingReport": "Uploading Report",
   "processingImages": "Processing images and saving data...",
+  "error": "Error",
+  "submitError": "Report submission failed. Please try again.",
   "validation": {
     "selectGraffitiType": "Select graffiti type"
   },

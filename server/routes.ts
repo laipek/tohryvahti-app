@@ -23,9 +23,9 @@ const firebaseStorage = getStorage(firebaseApp);
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 15 * 1024 * 1024, // 15MB limit per file for smartphone photos
+    fileSize: 20 * 1024 * 1024, // 20MB limit per file for smartphone photos
     files: 5, // Allow up to 5 files
-    fieldSize: 100 * 1024 * 1024, // 100MB total form size limit
+    fieldSize: 200 * 1024 * 1024, // 200MB total form size limit
   },
   fileFilter: (req, file, cb) => {
     // Check if file is an image
@@ -271,20 +271,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      // Handle multer errors
+      // Handle multer errors with Finnish error messages
       if (error instanceof multer.MulterError) {
         if (error.code === 'LIMIT_FILE_SIZE') {
           return res.status(400).json({ 
-            message: "File too large. Maximum file size is 20MB." 
+            message: "Tiedosto on liian suuri. Enimmäiskoko on 20MB per tiedosto.",
+            messageEn: "File too large. Maximum file size is 20MB per file.",
+            messageSv: "Filen är för stor. Maximal filstorlek är 20MB per fil."
           });
         }
         if (error.code === 'LIMIT_FILE_COUNT') {
           return res.status(400).json({ 
-            message: "Too many files. Maximum 5 images allowed." 
+            message: "Liian monta tiedostoa. Enintään 5 tiedostoa sallittu.",
+            messageEn: "Too many files. Maximum 5 files allowed.",
+            messageSv: "För många filer. Högst 5 filer tillåtna."
           });
         }
         return res.status(400).json({ 
-          message: `File upload error: ${error.message}` 
+          message: "Tiedoston latausvirhe: " + error.message,
+          messageEn: "File upload error: " + error.message,
+          messageSv: "Filuppladdningsfel: " + error.message
         });
       }
       

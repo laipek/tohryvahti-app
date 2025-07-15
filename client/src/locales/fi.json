@@ -114,6 +114,8 @@
   "locationTimeoutDesc": "Sijaintihaku aikakatkaistiin. Yritä uudelleen tai käytä manuaalista valintaa.",
   "uploadingReport": "Lähetetään ilmoitusta",
   "processingImages": "Käsitellään kuvia ja tallennetaan tietoja...",
+  "error": "Virhe",
+  "submitError": "Ilmoituksen lähettäminen epäonnistui. Yritä uudelleen.",
   "validation": {
     "selectGraffitiType": "Valitse töhryn tyyppi"
   },
