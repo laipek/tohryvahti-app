@@ -600,6 +600,9 @@ export function AdminDashboard() {
                             {getSortIcon('district')}
                           </Button>
                         </th>
+                        <th className="px-2 sm:px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell w-32 xl:w-40">
+                          {t('graffitiType')}
+                        </th>
                         <th className="px-2 sm:px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell min-w-48 xl:min-w-64">
                           {t('description')}
                         </th>
@@ -658,6 +661,11 @@ export function AdminDashboard() {
                           <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap text-xs xl:text-sm text-gray-900">
                             <div className="truncate">
                               {t(`districts.${report.district}`)}
+                            </div>
+                          </td>
+                          <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap text-xs xl:text-sm text-gray-900 hidden lg:table-cell">
+                            <div className="truncate">
+                              {report.graffitiType ? t(report.graffitiType) : '-'}
                             </div>
                           </td>
                           <td className="px-2 sm:px-3 xl:px-6 py-4 text-xs xl:text-sm text-gray-900 hidden md:table-cell">

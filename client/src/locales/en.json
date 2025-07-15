@@ -84,6 +84,8 @@
   "validation": {
     "selectGraffitiType": "Select graffiti type"
   },
+  "underDevelopment": "Under Development",
+  "featureComingSoon": "Under Development",
   "selectPropertyOwner": "Select property owner",
   "propertyOwnerHelp": "Determine responsible party for cleaning procedures",
   "clickToView": "Click to view larger image",

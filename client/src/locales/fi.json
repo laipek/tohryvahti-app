@@ -85,6 +85,7 @@
   "validation": {
     "selectGraffitiType": "Valitse töhryn tyyppi"
   },
+  "underDevelopment": "Kehitteillä",
   "selectPropertyOwner": "Valitse kiinteistön omistaja",
   "propertyOwnerHelp": "Määritä vastuullinen taho puhdistustoimenpiteitä varten",
   "clickToView": "Napsauta nähdäksesi suurempi kuva",
@@ -276,7 +277,7 @@
     "property_updated": "Kiinteistötiedot päivitetty"
   },
   "verifiedOnMap": "Vahvistettu kartalla",
-  "featureComingSoon": "Ominaisuus tulossa pian",
+  "featureComingSoon": "Kehitteillä",
   "exportReports": "Vie raportit",
   "importReports": "Tuo raportit",
   "addReport": "Lisää raportti",

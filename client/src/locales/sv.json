@@ -84,6 +84,8 @@
   "validation": {
     "selectGraffitiType": "Välj klottertyp"
   },
+  "underDevelopment": "Under utveckling",
+  "featureComingSoon": "Under utveckling",
   "selectPropertyOwner": "Välj fastighetsägare",
   "propertyOwnerHelp": "Bestäm ansvarig part för rengöringsprocedurer",
   "clickToView": "Klicka för att se större bild",
