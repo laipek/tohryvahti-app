@@ -242,7 +242,7 @@
     "invalidFileType": "Virheellinen tiedostomuoto",
     "supportedFormats": "Tuetut muodot: JPEG, PNG, WebP",
     "fileTooLarge": "Tiedosto liian suuri",
-    "maxFileSize": "Maksimikoko: 5MB"
+    "maxFileSize": "Maksimikoko: 20MB"
   },
   "districts": {
     "asema": "Asema",

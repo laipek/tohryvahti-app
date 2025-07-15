@@ -555,7 +555,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
             <div className="bg-blue-50 p-3 rounded-lg">
               <p className="text-xs text-gray-600">
                 <strong>{t('supportedFormats')}:</strong> JPEG, PNG, WebP<br/>
-                <strong>{t('maxFileSize')}:</strong> 5MB
+                <strong>{t('maxFileSize')}</strong>
               </p>
             </div>
           </div>
