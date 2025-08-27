@@ -323,27 +323,29 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="asema">{t('districts.asema')}</SelectItem>
-                        <SelectItem value="haapaniemi">{t('districts.haapaniemi')}</SelectItem>
-                        <SelectItem value="huutijarvi">{t('districts.huutijarvi')}</SelectItem>
-                        <SelectItem value="ilkko">{t('districts.ilkko')}</SelectItem>
-                        <SelectItem value="kangasalan-keskusta">{t('districts.kangasalan-keskusta')}</SelectItem>
-                        <SelectItem value="kuohenmaa">{t('districts.kuohenmaa')}</SelectItem>
-                        <SelectItem value="lamminrahka">{t('districts.lamminrahka')}</SelectItem>
-                        <SelectItem value="lentola">{t('districts.lentola')}</SelectItem>
+                        <SelectItem value="suinula_haviseva">{t('districts.suinula_haviseva')}</SelectItem>
                         <SelectItem value="lihasula">{t('districts.lihasula')}</SelectItem>
-                        <SelectItem value="raikku">{t('districts.raikku')}</SelectItem>
-                        <SelectItem value="ranta-koivisto">{t('districts.ranta-koivisto')}</SelectItem>
-                        <SelectItem value="raudanmaa">{t('districts.raudanmaa')}</SelectItem>
-                        <SelectItem value="riku">{t('districts.riku')}</SelectItem>
                         <SelectItem value="ruutana">{t('districts.ruutana')}</SelectItem>
+                        <SelectItem value="lamminrahka">{t('districts.lamminrahka')}</SelectItem>
+                        <SelectItem value="vati">{t('districts.vati')}</SelectItem>
+                        <SelectItem value="asenariiku">{t('districts.asenariiku')}</SelectItem>
+                        <SelectItem value="suorama">{t('districts.suorama')}</SelectItem>
+                        <SelectItem value="ilkko">{t('districts.ilkko')}</SelectItem>
+                        <SelectItem value="keskusta">{t('districts.keskusta')}</SelectItem>
+                        <SelectItem value="ranta_koivisto">{t('districts.ranta_koivisto')}</SelectItem>
                         <SelectItem value="saarenmaa">{t('districts.saarenmaa')}</SelectItem>
-                        <SelectItem value="saarikylat">{t('districts.saarikylat')}</SelectItem>
-                        <SelectItem value="suinula">{t('districts.suinula')}</SelectItem>
+                        <SelectItem value="haapaniemi">{t('districts.haapaniemi')}</SelectItem>
+                        <SelectItem value="kuohenmaa">{t('districts.kuohenmaa')}</SelectItem>
+                        <SelectItem value="huutijarvi">{t('districts.huutijarvi')}</SelectItem>
                         <SelectItem value="tiihala">{t('districts.tiihala')}</SelectItem>
-                        <SelectItem value="vatiala">{t('districts.vatiala')}</SelectItem>
-                        <SelectItem value="vehkajarvi">{t('districts.vehkajarvi')}</SelectItem>
                         <SelectItem value="vaaksy">{t('districts.vaaksy')}</SelectItem>
+                        <SelectItem value="raikku">{t('districts.raikku')}</SelectItem>
+                        <SelectItem value="saarikylat">{t('districts.saarikylat')}</SelectItem>
+                        <SelectItem value="sahalahti">{t('districts.sahalahti')}</SelectItem>
+                        <SelectItem value="lahdenkulma_malahden_kirkonkyla">{t('districts.lahdenkulma_malahden_kirkonkyla')}</SelectItem>
+                        <SelectItem value="pohja">{t('districts.pohja')}</SelectItem>
+                        <SelectItem value="vehkajarvi">{t('districts.vehkajarvi')}</SelectItem>
+                        <SelectItem value="pakkala">{t('districts.pakkala')}</SelectItem>
                       </SelectContent>
                     </Select>
                   ) : (
