@@ -52,10 +52,11 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
 
   const districts = [
     'asema', 'haapaniemi', 'huutijarvi', 'ilkko', 'keskusta',
-    'kuohenmaa', 'lamminrahka', 'vatiala', 'lentola', 'lihasula',
-    'raikku', 'ranta_koivisto', 'raudanmaa', 'riku', 'ruutana',
-    'saarenmaa', 'saarikylat', 'suinula_haviseva', 'suorama', 'tiihala', 'vaaksy',
-    'sahalahti', 'lahdenkulma', 'kuhmalahden_kirkonkyla', 'pohja', 'vehkajarvi', 'pakkala'
+    'kuhmalahden_kirkonkyla', 'kuohenmaa', 'lahdenkulma', 'lamminrahka', 'lentola',
+    'lihasula', 'pakkala', 'pohja', 'raikku', 'ranta_koivisto',
+    'raudanmaa', 'riku', 'ruutana', 'saarenmaa', 'saarikylat',
+    'sahalahti', 'suinula_haviseva', 'suorama', 'tiihala', 'vaaksy',
+    'vatiala', 'vehkajarvi'
   ];
 
 
