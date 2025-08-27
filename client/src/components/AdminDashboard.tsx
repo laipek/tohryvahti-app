@@ -33,10 +33,10 @@ export function AdminDashboard() {
   const [selectedReports, setSelectedReports] = useState<Set<number>>(new Set());
   const [showBulkEdit, setShowBulkEdit] = useState(false);
   const [bulkEditData, setBulkEditData] = useState({
-    district: '',
-    status: '',
-    validated: '',
-    ownership: ''
+    district: 'no-change',
+    status: 'no-change',
+    validated: 'no-change',
+    ownership: 'no-change'
   });
 
   const [showAnalytics, setShowAnalytics] = useState(false);
@@ -336,7 +336,7 @@ export function AdminDashboard() {
   const clearSelection = () => {
     setSelectedReports(new Set());
     setShowBulkEdit(false);
-    setBulkEditData({ district: '', status: '', validated: '', ownership: '' });
+    setBulkEditData({ district: 'no-change', status: 'no-change', validated: 'no-change', ownership: 'no-change' });
   };
 
   // Bulk update mutation
@@ -356,10 +356,18 @@ export function AdminDashboard() {
 
   const handleBulkUpdate = () => {
     const updates: any = {};
-    if (bulkEditData.district) updates.district = bulkEditData.district;
-    if (bulkEditData.status) updates.status = bulkEditData.status;
-    if (bulkEditData.validated) updates.validated = bulkEditData.validated;
-    if (bulkEditData.ownership) updates.ownership = bulkEditData.ownership;
+    if (bulkEditData.district && bulkEditData.district !== 'no-change') {
+      updates.district = bulkEditData.district;
+    }
+    if (bulkEditData.status && bulkEditData.status !== 'no-change') {
+      updates.status = bulkEditData.status;
+    }
+    if (bulkEditData.validated && bulkEditData.validated !== 'no-change') {
+      updates.validated = bulkEditData.validated;
+    }
+    if (bulkEditData.ownership && bulkEditData.ownership !== 'no-change') {
+      updates.propertyOwner = bulkEditData.ownership; // Note: backend expects 'propertyOwner'
+    }
 
     if (Object.keys(updates).length === 0) {
       toast({ title: t('error'), description: t('selectFieldsToUpdate'), variant: 'destructive' });
@@ -516,7 +524,7 @@ export function AdminDashboard() {
                       <SelectValue placeholder={t('selectDistrict')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">{t('noChange')}</SelectItem>
+                      <SelectItem value="no-change">{t('noChange')}</SelectItem>
                       {districts.map(district => (
                         <SelectItem key={district} value={district}>
                           {t(`districts.${district}`)}
@@ -533,7 +541,7 @@ export function AdminDashboard() {
                       <SelectValue placeholder={t('selectStatus')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">{t('noChange')}</SelectItem>
+                      <SelectItem value="no-change">{t('noChange')}</SelectItem>
                       <SelectItem value="new">{t('new')}</SelectItem>
                       <SelectItem value="progress">{t('progress')}</SelectItem>
                       <SelectItem value="cleaned">{t('cleaned')}</SelectItem>
@@ -548,7 +556,7 @@ export function AdminDashboard() {
                       <SelectValue placeholder={t('selectValidation')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">{t('noChange')}</SelectItem>
+                      <SelectItem value="no-change">{t('noChange')}</SelectItem>
                       <SelectItem value="approved">{t('approved')}</SelectItem>
                       <SelectItem value="rejected">{t('rejected')}</SelectItem>
                     </SelectContent>
@@ -562,7 +570,7 @@ export function AdminDashboard() {
                       <SelectValue placeholder={t('selectOwnership')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">{t('noChange')}</SelectItem>
+                      <SelectItem value="no-change">{t('noChange')}</SelectItem>
                       <SelectItem value="city">{t('city')}</SelectItem>
                       <SelectItem value="ely">{t('elyCenter')}</SelectItem>
                       <SelectItem value="private">{t('private')}</SelectItem>
