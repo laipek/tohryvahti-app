@@ -341,6 +341,7 @@ export function ReportModal({ report, isOpen, onClose, onStatusUpdate, onPropert
                         <SelectItem value="saarenmaa">{t('districts.saarenmaa')}</SelectItem>
                         <SelectItem value="saarikylat">{t('districts.saarikylat')}</SelectItem>
                         <SelectItem value="suinula_haviseva">{t('districts.suinula_haviseva')}</SelectItem>
+                        <SelectItem value="suorama">{t('districts.suorama')}</SelectItem>
                         <SelectItem value="tiihala">{t('districts.tiihala')}</SelectItem>
                         <SelectItem value="vaaksy">{t('districts.vaaksy')}</SelectItem>
                         <SelectItem value="sahalahti">{t('districts.sahalahti')}</SelectItem>

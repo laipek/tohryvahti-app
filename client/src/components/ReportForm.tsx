@@ -54,7 +54,7 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
     'asema', 'haapaniemi', 'huutijarvi', 'ilkko', 'keskusta',
     'kuohenmaa', 'lamminrahka', 'vatiala', 'lentola', 'lihasula',
     'raikku', 'ranta_koivisto', 'raudanmaa', 'riku', 'ruutana',
-    'saarenmaa', 'saarikylat', 'suinula_haviseva', 'tiihala', 'vaaksy',
+    'saarenmaa', 'saarikylat', 'suinula_haviseva', 'suorama', 'tiihala', 'vaaksy',
     'sahalahti', 'lahdenkulma', 'kuhmalahden_kirkonkyla', 'pohja', 'vehkajarvi', 'pakkala'
   ];
 
