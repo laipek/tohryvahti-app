@@ -19,6 +19,7 @@ export interface IStorage {
   deleteReport(id: number): Promise<boolean>;
   updateReportPhotos(id: number, photoUrls: string[]): Promise<GraffitiReport | undefined>;
   updateReportMetadata(id: number, folderPath: string, csvData: string): Promise<GraffitiReport | undefined>;
+  bulkUpdateReport(id: number, updates: Partial<GraffitiReport>): Promise<GraffitiReport | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -311,6 +312,15 @@ export class MemStorage implements IStorage {
     }
     
     const updatedReport = { ...report, folderPath, csvData };
+    this.reports.set(id, updatedReport);
+    return updatedReport;
+  }
+
+  async bulkUpdateReport(id: number, updates: Partial<GraffitiReport>): Promise<GraffitiReport | undefined> {
+    const report = this.reports.get(id);
+    if (!report) return undefined;
+
+    const updatedReport = { ...report, ...updates };
     this.reports.set(id, updatedReport);
     return updatedReport;
   }
@@ -716,6 +726,59 @@ export class DatabaseStorage implements IStorage {
       
       await this.updateReportMetadata(report.id, report.folderPath, csvContent);
     }
+  }
+
+  async bulkUpdateReport(id: number, updates: Partial<GraffitiReport>): Promise<GraffitiReport | undefined> {
+    const existingReport = await this.getReport(id);
+    if (!existingReport) return undefined;
+
+    // Build update object with only allowed fields
+    const updateData: any = {};
+    if (updates.district && updates.district !== existingReport.district) {
+      updateData.district = updates.district;
+    }
+    if (updates.status && updates.status !== existingReport.status) {
+      updateData.status = updates.status;
+    }
+    if (updates.validated && updates.validated !== existingReport.validated) {
+      updateData.validated = updates.validated;
+    }
+    if (updates.propertyOwner && updates.propertyOwner !== existingReport.propertyOwner) {
+      updateData.propertyOwner = updates.propertyOwner;
+    }
+
+    // Only update if there are actual changes
+    if (Object.keys(updateData).length === 0) {
+      return existingReport;
+    }
+
+    const [updatedReport] = await db
+      .update(graffitiReports)
+      .set(updateData)
+      .where(eq(graffitiReports.id, id))
+      .returning();
+
+    // Add history entry for bulk update
+    const changes = Object.entries(updateData).map(([key, newValue]) => {
+      const oldValue = (existingReport as any)[key];
+      return `${key}: "${oldValue}" → "${newValue}"`;
+    }).join(', ');
+
+    await this.addHistoryEntry({
+      reportId: id,
+      action: 'bulk_updated',
+      oldValue: 'Multiple fields changed',
+      newValue: 'Bulk update applied',
+      adminUser: 'admin',
+      notes: `Bulk update: ${changes}`
+    });
+
+    // Regenerate CSV file with updated data
+    if (updatedReport) {
+      await this.regenerateReportCsv(updatedReport);
+    }
+
+    return updatedReport;
   }
 }
 

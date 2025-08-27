@@ -307,6 +307,71 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Bulk update reports
+  app.patch("/api/reports/bulk-update", async (req, res) => {
+    try {
+      const { reportIds, updates } = req.body;
+      
+      if (!Array.isArray(reportIds) || reportIds.length === 0) {
+        return res.status(400).json({ message: "reportIds must be a non-empty array" });
+      }
+      
+      if (!updates || typeof updates !== 'object') {
+        return res.status(400).json({ message: "updates object is required" });
+      }
+      
+      // Validate update fields
+      const allowedUpdates = ['district', 'status', 'validated', 'ownership'];
+      const updateKeys = Object.keys(updates);
+      const invalidKeys = updateKeys.filter(key => !allowedUpdates.includes(key));
+      
+      if (invalidKeys.length > 0) {
+        return res.status(400).json({ 
+          message: `Invalid update fields: ${invalidKeys.join(', ')}` 
+        });
+      }
+      
+      // Validate update values
+      if (updates.status && !["new", "progress", "cleaned"].includes(updates.status)) {
+        return res.status(400).json({ message: "Invalid status value" });
+      }
+      
+      if (updates.validated && !["pending", "approved", "rejected"].includes(updates.validated)) {
+        return res.status(400).json({ message: "Invalid validation value" });
+      }
+      
+      if (updates.ownership && !["city", "ely", "private"].includes(updates.ownership)) {
+        return res.status(400).json({ message: "Invalid ownership value" });
+      }
+      
+      // Perform bulk update
+      const updatedReports = [];
+      for (const reportId of reportIds) {
+        if (typeof reportId !== 'number' || isNaN(reportId)) {
+          continue; // Skip invalid IDs
+        }
+        
+        try {
+          const updatedReport = await storage.bulkUpdateReport(reportId, updates);
+          if (updatedReport) {
+            updatedReports.push(updatedReport);
+          }
+        } catch (error: any) {
+          console.error(`Failed to update report ${reportId}:`, error);
+          // Continue with other reports even if one fails
+        }
+      }
+      
+      res.json({ 
+        message: `Successfully updated ${updatedReports.length} of ${reportIds.length} reports`,
+        updatedReports 
+      });
+    } catch (error: any) {
+      console.error("Error in bulk update:", error);
+      res.status(500).json({ message: "Failed to perform bulk update" });
+    }
+  });
+
   // Update report status
   app.patch("/api/reports/:id/status", async (req, res) => {
     try {

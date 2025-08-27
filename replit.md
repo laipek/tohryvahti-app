@@ -37,11 +37,13 @@ Form language: "Ilmoita ilkivallasta" across all languages.
 - **Admin Dashboard**: Comprehensive panel for municipal staff including:
     - Statistics overview and interactive map.
     - Table view with sortable columns (Date, Report ID, District, Validation Status, Status) and filtering.
+    - Multi-select functionality with checkboxes for bulk operations.
+    - **Bulk Edit Panel**: Mass editing capabilities allowing admins to update multiple reports simultaneously for district, status, validation, and property ownership changes.
     - Report detail modal for status management, property ownership classification (city, ELY-keskus, private), and validation.
     - Real-time updates.
     - Export functionality (CSV download).
     - Analytics dashboard with 30-day daily reporting trends.
-    - Change history tracking for all report modifications.
+    - Change history tracking for all report modifications, including bulk updates.
     - Delete functionality with comprehensive cleanup (database, history, Firebase images/CSV).
 - **Internationalization**: Full UI translation coverage with browser language detection and persistent preference storage.
 - **Data Flow**: Images uploaded to Firebase, report data to PostgreSQL. Admin actions update database and Firebase CSVs, with comprehensive deletion for full cleanup. Enhanced GPS error handling and manual location selection for mobile compatibility.

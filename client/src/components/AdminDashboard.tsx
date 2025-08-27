@@ -10,7 +10,7 @@ import { MapView } from './MapView';
 import { ReportModal } from './ReportModal';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
-import { Map, Table, Eye, Search, Filter, ArrowUpDown, AlertTriangle, Check, X, CircleAlert, Clock, Calendar, Download, Upload, Plus, Trash2, BarChart3 } from 'lucide-react';
+import { Map, Table, Eye, Search, Filter, ArrowUpDown, AlertTriangle, Check, X, CircleAlert, Clock, Calendar, Download, Upload, Plus, Trash2, BarChart3, Edit3, Square, CheckSquare, MinusSquare } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import type { GraffitiReport } from '@shared/schema';
 
@@ -28,6 +28,16 @@ export function AdminDashboard() {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [selectedReport, setSelectedReport] = useState<GraffitiReport | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Bulk edit state
+  const [selectedReports, setSelectedReports] = useState<Set<number>>(new Set());
+  const [showBulkEdit, setShowBulkEdit] = useState(false);
+  const [bulkEditData, setBulkEditData] = useState({
+    district: '',
+    status: '',
+    validated: '',
+    ownership: ''
+  });
 
   const [showAnalytics, setShowAnalytics] = useState(false);
 
@@ -79,14 +89,14 @@ export function AdminDashboard() {
 
   // Statistics
   const stats = {
-    total: reports.length,
-    pending: reports.filter(r => r.validated === 'pending').length,
-    approved: reports.filter(r => r.validated === 'approved').length,
-    rejected: reports.filter(r => r.validated === 'rejected').length,
-    new: reports.filter(r => r.status === 'new').length,
-    progress: reports.filter(r => r.status === 'progress').length,
-    cleaned: reports.filter(r => r.status === 'cleaned').length,
-    thisMonth: reports.filter(r => {
+    total: (reports as GraffitiReport[]).length,
+    pending: (reports as GraffitiReport[]).filter(r => r.validated === 'pending').length,
+    approved: (reports as GraffitiReport[]).filter(r => r.validated === 'approved').length,
+    rejected: (reports as GraffitiReport[]).filter(r => r.validated === 'rejected').length,
+    new: (reports as GraffitiReport[]).filter(r => r.status === 'new').length,
+    progress: (reports as GraffitiReport[]).filter(r => r.status === 'progress').length,
+    cleaned: (reports as GraffitiReport[]).filter(r => r.status === 'cleaned').length,
+    thisMonth: (reports as GraffitiReport[]).filter((r: GraffitiReport) => {
       const reportDate = new Date(r.timestamp);
       const now = new Date();
       return reportDate.getMonth() === now.getMonth() && reportDate.getFullYear() === now.getFullYear();
@@ -94,15 +104,15 @@ export function AdminDashboard() {
   };
 
   // Filter and sort reports
-  const filteredReports = reports
-    .filter(report => {
+  const filteredReports = (reports as GraffitiReport[])
+    .filter((report: GraffitiReport) => {
       if (statusFilter !== 'all' && report.status !== statusFilter) return false;
       if (validationFilter !== 'all' && report.validated !== validationFilter) return false;
       if (districtFilter !== 'all' && report.district !== districtFilter) return false;
       if (searchTerm && !report.description.toLowerCase().includes(searchTerm.toLowerCase())) return false;
       return true;
     })
-    .sort((a, b) => {
+    .sort((a: GraffitiReport, b: GraffitiReport) => {
       let comparison = 0;
       switch (sortBy) {
         case 'timestamp':
@@ -124,8 +134,8 @@ export function AdminDashboard() {
       return sortOrder === 'asc' ? comparison : -comparison;
     });
 
-  // Get unique districts for filter dropdown
-  const districts = [...new Set(reports.map(r => r.district))];
+  // Get unique districts for filter dropdown  
+  const availableDistricts = Array.from(new Set((reports as GraffitiReport[]).map(r => r.district)));
 
   const handleSort = (field: typeof sortBy) => {
     if (sortBy === field) {
@@ -277,7 +287,7 @@ export function AdminDashboard() {
   };
 
   // Analytics data
-  const analyticsData = reports.reduce((acc, report) => {
+  const analyticsData = (reports as GraffitiReport[]).reduce((acc: Record<string, number>, report: GraffitiReport) => {
     const date = new Date(report.timestamp).toLocaleDateString('fi-FI');
     acc[date] = (acc[date] || 0) + 1;
     return acc;
@@ -293,6 +303,74 @@ export function AdminDashboard() {
     date,
     reports: analyticsData[date] || 0
   }));
+
+  // Districts list for bulk edit
+  const districts = [
+    'asema', 'haapaniemi', 'huutijarvi', 'ilkko', 'keskusta',
+    'kuhmalahden_kirkonkyla', 'kuohenmaa', 'lahdenkulma', 'lamminrahka', 'lentola',
+    'lihasula', 'pakkala', 'pohja', 'raikku', 'ranta_koivisto',
+    'raudanmaa', 'riku', 'ruutana', 'saarenmaa', 'saarikylat',
+    'sahalahti', 'suinula_haviseva', 'suorama', 'tiihala', 'vaaksy',
+    'vatiala', 'vehkajarvi'
+  ];
+
+  // Bulk edit functions
+  const toggleReportSelection = (reportId: number) => {
+    const newSelection = new Set(selectedReports);
+    if (newSelection.has(reportId)) {
+      newSelection.delete(reportId);
+    } else {
+      newSelection.add(reportId);
+    }
+    setSelectedReports(newSelection);
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedReports.size === filteredReports.length) {
+      setSelectedReports(new Set());
+    } else {
+      setSelectedReports(new Set(filteredReports.map((r: GraffitiReport) => r.id)));
+    }
+  };
+
+  const clearSelection = () => {
+    setSelectedReports(new Set());
+    setShowBulkEdit(false);
+    setBulkEditData({ district: '', status: '', validated: '', ownership: '' });
+  };
+
+  // Bulk update mutation
+  const bulkUpdateMutation = useMutation({
+    mutationFn: async (updateData: { reportIds: number[], updates: any }) => {
+      return apiRequest('PATCH', '/api/reports/bulk-update', updateData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/reports'] });
+      toast({ title: t('success'), description: t('bulkUpdateSuccess') });
+      clearSelection();
+    },
+    onError: () => {
+      toast({ title: t('error'), description: t('bulkUpdateFailed'), variant: 'destructive' });
+    }
+  });
+
+  const handleBulkUpdate = () => {
+    const updates: any = {};
+    if (bulkEditData.district) updates.district = bulkEditData.district;
+    if (bulkEditData.status) updates.status = bulkEditData.status;
+    if (bulkEditData.validated) updates.validated = bulkEditData.validated;
+    if (bulkEditData.ownership) updates.ownership = bulkEditData.ownership;
+
+    if (Object.keys(updates).length === 0) {
+      toast({ title: t('error'), description: t('selectFieldsToUpdate'), variant: 'destructive' });
+      return;
+    }
+
+    bulkUpdateMutation.mutate({
+      reportIds: Array.from(selectedReports),
+      updates
+    });
+  };
 
   // Enhanced toolbar component
   const AdminToolbar = () => (
@@ -321,6 +399,17 @@ export function AdminDashboard() {
           <BarChart3 className="h-4 w-4 mr-2" />
           {t('analytics')}
         </Button>
+        
+        {selectedReports.size > 0 && (
+          <Button
+            variant="default"
+            size="sm"
+            onClick={() => setShowBulkEdit(!showBulkEdit)}
+          >
+            <Edit3 className="h-4 w-4 mr-2" />
+            {t('bulkEdit')} ({selectedReports.size})
+          </Button>
+        )}
       </div>
     </div>
   );
@@ -403,6 +492,99 @@ export function AdminDashboard() {
         
         {/* Analytics View */}
         {showAnalytics && <AnalyticsView />}
+        
+        {/* Bulk Edit Panel */}
+        {showBulkEdit && selectedReports.size > 0 && (
+          <Card className="mb-6 border-blue-200">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center justify-between text-lg">
+                <div className="flex items-center gap-2">
+                  <Edit3 className="h-5 w-5" />
+                  {t('bulkEditReports')} ({selectedReports.size} {t('selected')})
+                </div>
+                <Button variant="outline" size="sm" onClick={clearSelection}>
+                  {t('cancel')}
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">{t('district')}</label>
+                  <Select value={bulkEditData.district} onValueChange={(value) => setBulkEditData(prev => ({...prev, district: value}))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('selectDistrict')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">{t('noChange')}</SelectItem>
+                      {districts.map(district => (
+                        <SelectItem key={district} value={district}>
+                          {t(`districts.${district}`)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-2 block">{t('status')}</label>
+                  <Select value={bulkEditData.status} onValueChange={(value) => setBulkEditData(prev => ({...prev, status: value}))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('selectStatus')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">{t('noChange')}</SelectItem>
+                      <SelectItem value="new">{t('new')}</SelectItem>
+                      <SelectItem value="progress">{t('progress')}</SelectItem>
+                      <SelectItem value="cleaned">{t('cleaned')}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-2 block">{t('validationStatus')}</label>
+                  <Select value={bulkEditData.validated} onValueChange={(value) => setBulkEditData(prev => ({...prev, validated: value}))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('selectValidation')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">{t('noChange')}</SelectItem>
+                      <SelectItem value="approved">{t('approved')}</SelectItem>
+                      <SelectItem value="rejected">{t('rejected')}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-2 block">{t('ownership')}</label>
+                  <Select value={bulkEditData.ownership} onValueChange={(value) => setBulkEditData(prev => ({...prev, ownership: value}))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('selectOwnership')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">{t('noChange')}</SelectItem>
+                      <SelectItem value="city">{t('city')}</SelectItem>
+                      <SelectItem value="ely">{t('elyCenter')}</SelectItem>
+                      <SelectItem value="private">{t('private')}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={clearSelection}>
+                  {t('cancel')}
+                </Button>
+                <Button 
+                  onClick={handleBulkUpdate}
+                  disabled={bulkUpdateMutation.isPending}
+                >
+                  {bulkUpdateMutation.isPending ? t('updating') : t('updateSelected')}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
         {/* Statistics Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6">
           <Card 
@@ -517,7 +699,7 @@ export function AdminDashboard() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">{t('allDistricts')}</SelectItem>
-                  {districts.map(district => (
+                  {availableDistricts.map(district => (
                     <SelectItem key={district} value={district}>
                       {t(`districts.${district}`)}
                     </SelectItem>
@@ -637,19 +819,44 @@ export function AdminDashboard() {
                       {filteredReports.map((report) => (
                         <tr 
                           key={report.id} 
-                          className="hover:bg-gray-50 cursor-pointer"
-                          onClick={() => openReportModal(report)}
+                          className={`hover:bg-gray-50 ${selectedReports.has(report.id) ? 'bg-blue-50 border-blue-200' : ''}`}
                         >
-                          <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap text-xs xl:text-sm text-gray-900">
+                          <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleReportSelection(report.id);
+                              }}
+                              className="h-auto p-1"
+                            >
+                              {selectedReports.has(report.id) ? (
+                                <CheckSquare className="h-4 w-4 text-blue-600" />
+                              ) : (
+                                <Square className="h-4 w-4" />
+                              )}
+                            </Button>
+                          </td>
+                          <td 
+                            className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap text-xs xl:text-sm text-gray-900 cursor-pointer"
+                            onClick={() => openReportModal(report)}
+                          >
                             <div className="flex flex-col">
                               <span className="font-medium">{new Date(report.timestamp).toLocaleDateString('fi-FI')}</span>
                               <span className="text-gray-500 text-xs">klo {new Date(report.timestamp).toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' })}</span>
                             </div>
                           </td>
-                          <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap text-xs xl:text-sm text-gray-900">
+                          <td 
+                            className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap text-xs xl:text-sm text-gray-900 cursor-pointer"
+                            onClick={() => openReportModal(report)}
+                          >
                             <span className="font-mono font-bold text-blue-600">#{report.id}</span>
                           </td>
-                          <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap">
+                          <td 
+                            className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap cursor-pointer"
+                            onClick={() => openReportModal(report)}
+                          >
                             {report.photos && report.photos.length > 0 && (
                               <img 
                                 src={report.photos[0]} 
@@ -658,17 +865,26 @@ export function AdminDashboard() {
                               />
                             )}
                           </td>
-                          <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap text-xs xl:text-sm text-gray-900">
+                          <td 
+                            className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap text-xs xl:text-sm text-gray-900 cursor-pointer"
+                            onClick={() => openReportModal(report)}
+                          >
                             <div className="truncate">
                               {t(`districts.${report.district}`)}
                             </div>
                           </td>
-                          <td className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap text-xs xl:text-sm text-gray-900 hidden lg:table-cell">
+                          <td 
+                            className="px-2 sm:px-3 xl:px-6 py-4 whitespace-nowrap text-xs xl:text-sm text-gray-900 hidden lg:table-cell cursor-pointer"
+                            onClick={() => openReportModal(report)}
+                          >
                             <div className="truncate">
                               {report.graffitiType ? t(report.graffitiType) : '-'}
                             </div>
                           </td>
-                          <td className="px-2 sm:px-3 xl:px-6 py-4 text-xs xl:text-sm text-gray-900 hidden md:table-cell">
+                          <td 
+                            className="px-2 sm:px-3 xl:px-6 py-4 text-xs xl:text-sm text-gray-900 hidden md:table-cell cursor-pointer"
+                            onClick={() => openReportModal(report)}
+                          >
                             <div className="line-clamp-2 xl:line-clamp-3" title={report.description}>
                               {report.description}
                             </div>
