@@ -754,6 +754,22 @@ export function AdminDashboard() {
                   <table className="w-full table-auto divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
+                        <th className="px-2 sm:px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleSelectAll}
+                            className="h-auto p-1"
+                          >
+                            {selectedReports.size === filteredReports.length && filteredReports.length > 0 ? (
+                              <CheckSquare className="h-4 w-4 text-blue-600" />
+                            ) : selectedReports.size > 0 ? (
+                              <MinusSquare className="h-4 w-4 text-blue-600" />
+                            ) : (
+                              <Square className="h-4 w-4" />
+                            )}
+                          </Button>
+                        </th>
                         <th className="px-2 sm:px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32 xl:w-40">
                           <Button
                             variant="ghost"
