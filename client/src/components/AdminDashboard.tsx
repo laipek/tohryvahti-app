@@ -758,7 +758,7 @@ export function AdminDashboard() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={handleSelectAll}
+                            onClick={toggleSelectAll}
                             className="h-auto p-1"
                           >
                             {selectedReports.size === filteredReports.length && filteredReports.length > 0 ? (
