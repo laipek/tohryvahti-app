@@ -295,8 +295,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Handle custom file filter errors
-      if (error.message === 'Only image files are allowed' || 
-          error.message === 'Only JPEG, PNG, and WebP images are supported') {
+      if (error instanceof Error && (error.message === 'Only image files are allowed' || 
+          error.message === 'Only JPEG, PNG, and WebP images are supported')) {
         return res.status(400).json({ 
           message: error.message 
         });
