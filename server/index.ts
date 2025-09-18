@@ -1,6 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { createServer } from "http";
-import { registerRoutes } from "./routes.js";
+import { registerRoutes } from "./routes-bridge";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
