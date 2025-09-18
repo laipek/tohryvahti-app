@@ -1,5 +1,4 @@
 import type { Express } from "express";
-import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import multer from "multer";
 import { insertGraffitiReportSchema } from "@shared/schema";
@@ -43,7 +42,7 @@ const upload = multer({
   }
 });
 
-export async function registerRoutes(app: Express): Promise<Server> {
+export function registerRoutes(app: Express): void {
   // Admin route debugging for deployment
   app.get("/admin", (req, res, next) => {
     console.log("Admin route accessed:", req.url);
@@ -535,6 +534,5 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  const httpServer = createServer(app);
-  return httpServer;
+  // Routes registered successfully
 }

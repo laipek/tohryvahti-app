@@ -1,5 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
-import { registerRoutes } from "./routes";
+import { createServer } from "http";
+import { registerRoutes } from "./routes.js";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
@@ -36,35 +37,36 @@ app.use((req, res, next) => {
   next();
 });
 
-(async () => {
-  const server = await registerRoutes(app);
+// Register routes synchronously
+registerRoutes(app);
 
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
+// Error handler - don't throw to avoid function crashes
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+  const status = err.status || err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+  res.status(status).json({ message });
+  // Don't throw - causes Vercel function crashes
+});
 
-    res.status(status).json({ message });
-    throw err;
-  });
+// Serve static files in production
+if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
+  serveStatic(app);
+}
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
-  } else {
-    serveStatic(app);
-  }
+// Export app for Vercel serverless functions
+export default app;
 
-  // For Vercel serverless functions, export the app instead of listening
-  if (process.env.VERCEL) {
-    // Export for Vercel serverless
-    module.exports = app;
-  } else {
-    // ALWAYS serve the app on the port specified in the environment variable PORT
-    // Other ports are firewalled. Default to 5000 if not specified.
-    // this serves both the API and the client.
-    // It is the only port that is not firewalled.
+// Only start HTTP server locally, not on Vercel
+if (!process.env.VERCEL) {
+  (async () => {
+    const server = createServer(app);
+    
+    // Setup Vite in development
+    if (app.get("env") === "development") {
+      await setupVite(app, server);
+    }
+
+    // Start server locally
     const port = parseInt(process.env.PORT || '5000', 10);
     server.listen({
       port,
@@ -73,5 +75,5 @@ app.use((req, res, next) => {
     }, () => {
       log(`serving on port ${port}`);
     });
-  }
-})();
+  })();
+}
