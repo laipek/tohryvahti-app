@@ -14,7 +14,11 @@
   ],
   "functions": {
     "server/index.ts": {
-      "includeFiles": "shared/**"
+      "includeFiles": [
+        "server/**",
+        "shared/**",
+        "client/dist/**"
+      ]
     }
   }
 }
