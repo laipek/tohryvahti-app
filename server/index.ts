@@ -1,13 +1,25 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { createServer } from "http";
-// Import dependencies directly to avoid ESM resolution issues
-import { storage } from "./storage";
+// Import only external dependencies - avoid all relative imports for Vercel
 import multer from "multer";
-import { insertGraffitiReportSchema } from "@shared/schema";
 import { z } from "zod";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
-import { setupVite, serveStatic, log } from "./vite";
+import pg from "pg";
+import { drizzle } from "drizzle-orm/node-postgres";
+const { Pool } = pg;
+import { graffitiReports } from "@shared/schema";
+import { desc, eq } from "drizzle-orm";
+// Inline vite functions to avoid relative imports
+import path from "path";
+const log = console.log;
+const serveStatic = (app: any) => {
+  // Serve static files from client/dist
+  app.use(express.static(path.join(process.cwd(), 'client/dist')));
+  app.use('*', (req: any, res: any) => {
+    res.sendFile(path.join(process.cwd(), 'client/dist/index.html'));
+  });
+};
 
 const app = express();
 app.use(express.json());
@@ -43,7 +55,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// Initialize Firebase for server-side storage
+// Initialize database connection directly (inline to avoid imports)
+if (!process.env.DATABASE_URL) {
+  throw new Error(
+    "DATABASE_URL must be set. Did you forget to provision a database?",
+  );
+}
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const db = drizzle({ client: pool });
+
+// Initialize Firebase for server-side storage  
 const firebaseConfig = {
   apiKey: process.env.VITE_FIREBASE_API_KEY,
   authDomain: `${process.env.VITE_FIREBASE_PROJECT_ID}.firebaseapp.com`,
@@ -85,10 +107,10 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-// Get all graffiti reports (admin only)
+// Get all graffiti reports (admin only) - inline database query
 app.get("/api/reports", async (req, res) => {
   try {
-    const reports = await storage.getAllReports();
+    const reports = await db.select().from(graffitiReports).orderBy(desc(graffitiReports.timestamp));
     res.json(reports);
   } catch (error) {
     console.error("Error fetching reports:", error);
@@ -96,10 +118,12 @@ app.get("/api/reports", async (req, res) => {
   }
 });
 
-// Get validated reports (public)
+// Get validated reports (public) - inline database query
 app.get("/api/reports/validated", async (req, res) => {
   try {
-    const reports = await storage.getValidatedReports();
+    const reports = await db.select().from(graffitiReports)
+      .where(eq(graffitiReports.validated, 'approved'))
+      .orderBy(desc(graffitiReports.timestamp));
     res.json(reports);
   } catch (error) {
     console.error("Error fetching validated reports:", error);
@@ -107,7 +131,7 @@ app.get("/api/reports/validated", async (req, res) => {
   }
 });
 
-// Get single graffiti report
+// Get single graffiti report - inline database query
 app.get("/api/reports/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -115,7 +139,7 @@ app.get("/api/reports/:id", async (req, res) => {
       return res.status(400).json({ message: "Invalid report ID" });
     }
 
-    const report = await storage.getReport(id);
+    const [report] = await db.select().from(graffitiReports).where(eq(graffitiReports.id, id));
     if (!report) {
       return res.status(404).json({ message: "Report not found" });
     }
@@ -148,9 +172,9 @@ if (!process.env.VERCEL) {
   (async () => {
     const server = createServer(app);
     
-    // Setup Vite in development
+    // Setup Vite in development (simplified for inline version)
     if (app.get("env") === "development") {
-      await setupVite(app, server);
+      log("Development mode - Vite setup skipped in inlined version");
     }
 
     // Start server locally
