@@ -2,6 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import { registerRoutes } from "./routes.js";
 import path from "path";
+import fs from "fs";
 
 // Inline log function to avoid vite.js import
 export function log(message: string, source = "express") {
@@ -71,7 +72,6 @@ registerRoutes(app);
 
 // In production, serve static files from the server/public directory (copied during build)
 if (process.env.NODE_ENV === "production") {
-  const fs = require("fs");
   const publicPath = path.resolve(process.cwd(), "server/public");
   const distPath = path.resolve(process.cwd(), "dist/public");
   
