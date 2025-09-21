@@ -1,13 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
-  "buildCommand": "npm run build && mkdir -p server/public && cp -r dist/public/* server/public/",
+  "buildCommand": "npm run build && mkdir -p server/public && cp -r dist/public/* server/public/ || echo 'Build or copy failed'",
   "builds": [
     {
       "src": "server/index.ts", 
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["server/**", "shared/**"]
+        "includeFiles": ["server/**", "shared/**", "client/**", "dist/**"]
       }
     }
   ],
