@@ -74,6 +74,26 @@ registerRoutes(app);
 if (process.env.NODE_ENV === "production") {
   const publicPath = path.resolve(process.cwd(), "server/public");
   const distPath = path.resolve(process.cwd(), "dist/public");
+  const cwd = process.cwd();
+  
+  // Debug: List what's actually in the working directory
+  log(`Current working directory: ${cwd}`);
+  try {
+    const cwdContents = fs.readdirSync(cwd);
+    log(`CWD contents: ${cwdContents.join(', ')}`);
+    
+    if (cwdContents.includes('server')) {
+      const serverContents = fs.readdirSync(path.resolve(cwd, 'server'));
+      log(`Server directory contents: ${serverContents.join(', ')}`);
+    }
+    
+    if (cwdContents.includes('dist')) {
+      const distContents = fs.readdirSync(path.resolve(cwd, 'dist'));
+      log(`Dist directory contents: ${distContents.join(', ')}`);
+    }
+  } catch (err) {
+    log(`Error reading directories: ${err}`);
+  }
   
   // Try server/public first (Vercel), then fall back to dist/public (local)
   let frontendPath = publicPath;
@@ -92,13 +112,15 @@ if (process.env.NODE_ENV === "production") {
     });
   } else {
     log(`No built frontend files found at ${publicPath} or ${distPath}`);
-    // Fallback for missing build files
+    // Fallback for missing build files with better debugging
     app.get(/^(?!\/api).*/, (_req, res) => {
       res.status(404).send(`
         <h1>Build files not found</h1>
         <p>Frontend build files are missing. Please check build configuration.</p>
         <p>Checked: ${publicPath} and ${distPath}</p>
+        <p>Working directory: ${cwd}</p>
         <p>API endpoints should still work at /api/*</p>
+        <p><strong>Check Vercel build logs for copy command success</strong></p>
       `);
     });
   }
