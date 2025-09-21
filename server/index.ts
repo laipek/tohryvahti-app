@@ -69,12 +69,16 @@ app.use((req, res, next) => {
 // Register API routes
 registerRoutes(app);
 
-// Setup server
-const server = createServer(app);
+// Handle static files in production (Vercel)
+if (process.env.NODE_ENV === "production") {
+  serveStatic(app);
+}
 
-(async () => {
-  if (app.get("env") === "development") {
-    // Only import Vite functions in development mode
+// For development (Replit), start traditional server
+if (process.env.NODE_ENV === "development") {
+  const server = createServer(app);
+  
+  (async () => {
     try {
       const { setupVite } = await import("./vite.js");
       await setupVite(app, server);
@@ -82,17 +86,17 @@ const server = createServer(app);
       console.warn("Vite setup failed, falling back to static serving:", err);
       serveStatic(app);
     }
-  } else {
-    // Production mode - serve static files (Vercel compatible)
-    serveStatic(app);
-  }
 
-  const port = parseInt(process.env.PORT || '5000', 10);
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
-  });
-})();
+    const port = parseInt(process.env.PORT || '5000', 10);
+    server.listen({
+      port,
+      host: "0.0.0.0",
+      reusePort: true,
+    }, () => {
+      log(`serving on port ${port}`);
+    });
+  })();
+}
+
+// Export Express app for Vercel serverless
+export default app;
