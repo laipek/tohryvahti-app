@@ -4,3 +4,19 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+
+# Database backups - contain sensitive data
+*.sql
+*.dump
+replit_backup.*
+replit_data.*
+replit_schema.*
+replit_current_backup.*
+
+# Environment variables
+.env*
+!.env.example
+
+# Temporary files
+/tmp/
+*.log
