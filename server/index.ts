@@ -69,17 +69,39 @@ app.use((req, res, next) => {
 // Register API routes
 registerRoutes(app);
 
-// In production, serve static files from the bundled dist/public directory
+// In production, serve static files from the server/public directory (copied during build)
 if (process.env.NODE_ENV === "production") {
-  // Serve static files from dist/public
+  const fs = require("fs");
+  const publicPath = path.resolve(process.cwd(), "server/public");
   const distPath = path.resolve(process.cwd(), "dist/public");
-  app.use(express.static(distPath));
   
-  // SPA fallback - serve index.html for non-API routes
-  app.get(/^(?!\/api).*/, (_req, res) => {
-    const indexPath = path.resolve(distPath, "index.html");
-    res.sendFile(indexPath);
-  });
+  // Try server/public first (Vercel), then fall back to dist/public (local)
+  let frontendPath = publicPath;
+  if (!fs.existsSync(publicPath) && fs.existsSync(distPath)) {
+    frontendPath = distPath;
+  }
+  
+  if (fs.existsSync(frontendPath)) {
+    log(`Found built frontend files, serving from ${frontendPath}`);
+    app.use(express.static(frontendPath));
+    
+    // SPA fallback - serve index.html for non-API routes
+    app.get(/^(?!\/api).*/, (_req, res) => {
+      const indexPath = path.resolve(frontendPath, "index.html");
+      res.sendFile(indexPath);
+    });
+  } else {
+    log(`No built frontend files found at ${publicPath} or ${distPath}`);
+    // Fallback for missing build files
+    app.get(/^(?!\/api).*/, (_req, res) => {
+      res.status(404).send(`
+        <h1>Build files not found</h1>
+        <p>Frontend build files are missing. Please check build configuration.</p>
+        <p>Checked: ${publicPath} and ${distPath}</p>
+        <p>API endpoints should still work at /api/*</p>
+      `);
+    });
+  }
 }
 
 // For development (Replit), start traditional server with Vite
