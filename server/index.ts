@@ -1,7 +1,7 @@
 import express from "express";
 import { createServer } from "http";
-import { registerRoutes } from "./routes";
-import { log, setupVite, serveStatic } from "./vite";
+import { registerRoutes } from "./routes.js";
+import { log, setupVite, serveStatic } from "./vite.js";
 
 const app = express();
 app.use(express.json());
