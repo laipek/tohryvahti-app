@@ -6,14 +6,26 @@
       "src": "server/index.ts", 
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["server/**", "shared/**"]
+        "includeFiles": ["server/**", "shared/**", "dist/public/**"]
       }
     }
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/api/(.*)",
       "dest": "/server/index.ts"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/dist/public/assets/$1"
+    },
+    {
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf))",
+      "dest": "/dist/public/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/dist/public/index.html"
     }
   ]
 }

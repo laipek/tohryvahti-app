@@ -69,12 +69,7 @@ app.use((req, res, next) => {
 // Register API routes
 registerRoutes(app);
 
-// Handle static files in production (Vercel)
-if (process.env.NODE_ENV === "production") {
-  serveStatic(app);
-}
-
-// For development (Replit), start traditional server
+// For development (Replit), start traditional server with Vite
 if (process.env.NODE_ENV === "development") {
   const server = createServer(app);
   
