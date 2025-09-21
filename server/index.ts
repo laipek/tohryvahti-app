@@ -69,6 +69,19 @@ app.use((req, res, next) => {
 // Register API routes
 registerRoutes(app);
 
+// In production, serve static files from the bundled dist/public directory
+if (process.env.NODE_ENV === "production") {
+  // Serve static files from dist/public
+  const distPath = path.resolve(process.cwd(), "dist/public");
+  app.use(express.static(distPath));
+  
+  // SPA fallback - serve index.html for non-API routes
+  app.get(/^(?!\/api).*/, (_req, res) => {
+    const indexPath = path.resolve(distPath, "index.html");
+    res.sendFile(indexPath);
+  });
+}
+
 // For development (Replit), start traditional server with Vite
 if (process.env.NODE_ENV === "development") {
   const server = createServer(app);

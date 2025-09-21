@@ -1,6 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
+  "buildCommand": "npm run build",
   "builds": [
     {
       "src": "server/index.ts", 
@@ -12,20 +13,8 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/server/index.ts"
-    },
-    {
-      "src": "/assets/(.*)",
-      "dest": "/dist/public/assets/$1"
-    },
-    {
-      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf))",
-      "dest": "/dist/public/$1"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/dist/public/index.html"
+      "dest": "/server/index.ts"
     }
   ]
 }
