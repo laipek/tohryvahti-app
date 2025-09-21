@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { storage } from "./storage.js";
 import multer from "multer";
-import { insertGraffitiReportSchema } from "@shared/schema";
+import { insertGraffitiReportSchema } from "../shared/schema.js";
 import { z } from "zod";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";

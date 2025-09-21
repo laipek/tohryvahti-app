@@ -1,4 +1,4 @@
-import { graffitiReports, reportHistory, type GraffitiReport, type InsertGraffitiReport, type ReportHistoryEntry, type InsertReportHistoryEntry } from "@shared/schema";
+import { graffitiReports, reportHistory, type GraffitiReport, type InsertGraffitiReport, type ReportHistoryEntry, type InsertReportHistoryEntry } from "../shared/schema.js";
 import { db } from "./db.js";
 import { eq, desc, asc } from "drizzle-orm";
 
