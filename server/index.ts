@@ -1,7 +1,36 @@
 import express from "express";
 import { createServer } from "http";
 import { registerRoutes } from "./routes.js";
-import { log, setupVite, serveStatic } from "./vite.js";
+import path from "path";
+
+// Inline log function to avoid vite.js import
+export function log(message: string, source = "express") {
+  const formattedTime = new Date().toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit", 
+    second: "2-digit",
+    hour12: true,
+  });
+  console.log(`${formattedTime} [${source}] ${message}`);
+}
+
+// Inline serveStatic function to avoid vite.js import
+function serveStatic(app: express.Express) {
+  const distPath = path.resolve(process.cwd(), "client/dist");
+  
+  // In Vercel, serve from public directory or fallback gracefully
+  app.use(express.static(distPath, { fallthrough: true }));
+  
+  // Fallback for SPA routing
+  app.use("*", (_req, res) => {
+    const indexPath = path.resolve(distPath, "index.html");
+    res.sendFile(indexPath, (err) => {
+      if (err) {
+        res.status(404).send("Static files not found - this is expected in serverless environment");
+      }
+    });
+  });
+}
 
 const app = express();
 app.use(express.json());
@@ -45,8 +74,16 @@ const server = createServer(app);
 
 (async () => {
   if (app.get("env") === "development") {
-    await setupVite(app, server);
+    // Only import Vite functions in development mode
+    try {
+      const { setupVite } = await import("./vite.js");
+      await setupVite(app, server);
+    } catch (err) {
+      console.warn("Vite setup failed, falling back to static serving:", err);
+      serveStatic(app);
+    }
   } else {
+    // Production mode - serve static files (Vercel compatible)
     serveStatic(app);
   }
 
