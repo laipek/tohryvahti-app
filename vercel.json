@@ -1,20 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
-  "buildCommand": "npm run build && mkdir -p server/public && cp -r dist/public/* server/public/ || echo 'Build or copy failed'",
-  "builds": [
-    {
-      "src": "server/index.ts", 
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["server/**", "shared/**", "client/**", "dist/**"]
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/server/index.ts"
-    }
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
