@@ -50,6 +50,12 @@ app.use((req, res, next) => {
     next();
 });
 
+// Sanity check
+app.all('/api/*', (req, _res, next) => {
+    console.log('API HIT ->', req.method, req.path);
+    next();
+});
+
 // always register API routes
 registerRoutes(app);
 
