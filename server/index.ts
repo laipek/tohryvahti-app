@@ -1,153 +1,109 @@
 import express from "express";
 import { createServer } from "http";
+import path from "node:path";
+import fs from "node:fs";
 import { registerRoutes } from "./routes.js";
-import path from "path";
-import fs from "fs";
 
-// Inline log function to avoid vite.js import
-export function log(message: string, source = "express") {
-  const formattedTime = new Date().toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit", 
-    second: "2-digit",
-    hour12: true,
-  });
-  console.log(`${formattedTime} [${source}] ${message}`);
-}
-
-// Inline serveStatic function to avoid vite.js import
-function serveStatic(app: express.Express) {
-  const distPath = path.resolve(process.cwd(), "client/dist");
-  
-  // In Vercel, serve from public directory or fallback gracefully
-  app.use(express.static(distPath, { fallthrough: true }));
-  
-  // Fallback for SPA routing
-  app.use("*", (_req, res) => {
-    const indexPath = path.resolve(distPath, "index.html");
-    res.sendFile(indexPath, (err) => {
-      if (err) {
-        res.status(404).send("Static files not found - this is expected in serverless environment");
-      }
+function log(message: string, source = "express") {
+    const formattedTime = new Date().toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
     });
-  });
+    console.log(`${formattedTime} [${source}] ${message}`);
 }
 
 const app = express();
+
+// basic middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+
+// simple API logging
 app.use((req, res, next) => {
-  const start = Date.now();
-  const path = req.path;
-  let capturedJsonResponse: Record<string, any> | undefined = undefined;
+    const start = Date.now();
+    let capturedJson: unknown;
 
-  const originalResJson = res.json;
-  res.json = function (bodyJson, ...args) {
-    capturedJsonResponse = bodyJson;
-    return originalResJson.apply(res, [bodyJson, ...args]);
-  };
+    const originalJson = res.json.bind(res) as (body?: any) => any;
+    res.json = (body: unknown) => {
+        capturedJson = body;
+        return originalJson(body as any);
+    };
 
-  res.on("finish", () => {
-    const duration = Date.now() - start;
-    if (path.startsWith("/api")) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
-      }
+    res.on("finish", () => {
+        if (req.path.startsWith("/api")) {
+            const ms = Date.now() - start;
+            let line = `${req.method} ${req.path} ${res.statusCode} in ${ms}ms`;
+            if (capturedJson) {
+                try {
+                    const s = JSON.stringify(capturedJson);
+                    line += ` :: ${s.length > 80 ? s.slice(0, 79) + "…" : s}`;
+                } catch {
+                    /* ignore JSON stringify errors */
+                }
+            }
+            log(line);
+        }
+    });
 
-      if (logLine.length > 80) {
-        logLine = logLine.slice(0, 79) + "…";
-      }
-
-      log(logLine);
-    }
-  });
-
-  next();
+    next();
 });
 
-// Register API routes
+// Sanity check
+app.all('/api/*', (req, _res, next) => {
+    console.log('API HIT ->', req.method, req.path);
+    next();
+});
+
+
+// always register API routes
 registerRoutes(app);
 
-// In production, serve static files from the server/public directory (copied during build)
-if (process.env.NODE_ENV === "production") {
-  const publicPath = path.resolve(process.cwd(), "server/public");
-  const distPath = path.resolve(process.cwd(), "dist/public");
-  const cwd = process.cwd();
-  
-  // Debug: List what's actually in the working directory
-  log(`Current working directory: ${cwd}`);
-  try {
-    const cwdContents = fs.readdirSync(cwd);
-    log(`CWD contents: ${cwdContents.join(', ')}`);
-    
-    if (cwdContents.includes('server')) {
-      const serverContents = fs.readdirSync(path.resolve(cwd, 'server'));
-      log(`Server directory contents: ${serverContents.join(', ')}`);
-    }
-    
-    if (cwdContents.includes('dist')) {
-      const distContents = fs.readdirSync(path.resolve(cwd, 'dist'));
-      log(`Dist directory contents: ${distContents.join(', ')}`);
-    }
-  } catch (err) {
-    log(`Error reading directories: ${err}`);
-  }
-  
-  // Try server/public first (Vercel), then fall back to dist/public (local)
-  let frontendPath = publicPath;
-  if (!fs.existsSync(publicPath) && fs.existsSync(distPath)) {
-    frontendPath = distPath;
-  }
-  
-  if (fs.existsSync(frontendPath)) {
-    log(`Found built frontend files, serving from ${frontendPath}`);
-    app.use(express.static(frontendPath));
-    
-    // SPA fallback - serve index.html for non-API routes
-    app.get(/^(?!\/api).*/, (_req, res) => {
-      const indexPath = path.resolve(frontendPath, "index.html");
-      res.sendFile(indexPath);
-    });
-  } else {
-    log(`No built frontend files found at ${publicPath} or ${distPath}`);
-    // Fallback for missing build files with better debugging
-    app.get(/^(?!\/api).*/, (_req, res) => {
-      res.status(404).send(`
-        <h1>Build files not found</h1>
-        <p>Frontend build files are missing. Please check build configuration.</p>
-        <p>Checked: ${publicPath} and ${distPath}</p>
-        <p>Working directory: ${cwd}</p>
-        <p>API endpoints should still work at /api/*</p>
-        <p><strong>Check Vercel build logs for copy command success</strong></p>
-      `);
-    });
-  }
-}
+// ─────────────────────────────────────────────────────────────────────────────
+// DIFFERENCE: Vercel (serverless) vs local development
+// ─────────────────────────────────────────────────────────────────────────────
+const isVercel = process.env.VERCEL === "1" || process.env.VERCEL === "true";
+const isDev = process.env.NODE_ENV !== "production";
 
-// For development (Replit), start traditional server with Vite
-if (process.env.NODE_ENV === "development") {
-  const server = createServer(app);
-  
-  (async () => {
-    try {
-      const { setupVite } = await import("./vite.js");
-      await setupVite(app, server);
-    } catch (err) {
-      console.warn("Vite setup failed, falling back to static serving:", err);
-      serveStatic(app);
-    }
+/**
+ * On Vercel (serverless):
+ * - DO NOT serve static frontend files via Express.
+ * - Vercel automatically hosts the `dist/` build via its CDN.
+ * - Vercel Functions call this file through the `api/index.ts` wrapper.
+ *
+ * On local development (Replit/your machine):
+ * - You can integrate the Vite dev server into Express for hot reload,
+ *   or simply run Vite separately and use a proxy for `/api`.
+ */
+if (!isVercel && isDev) {
+    // DEV: Vite integrated into Express (like before)
+    const server = createServer(app);
 
-    const port = parseInt(process.env.PORT || '5000', 10);
-    server.listen({
-      port,
-      host: "0.0.0.0",
-      reusePort: true,
-    }, () => {
-      log(`serving on port ${port}`);
-    });
-  })();
+    (async () => {
+        try {
+            const { setupVite } = await import("./vite.js");
+            await setupVite(app, server);
+        } catch (err) {
+            // fallback: try to serve local build files if available
+            log("Vite setup failed, falling back to static serving", "dev");
+            const distPath = path.resolve(process.cwd(), "dist");
+            if (fs.existsSync(distPath)) {
+                app.use(express.static(distPath));
+                app.get(/^(?!\/api).*/, (_req, res) => {
+                    res.sendFile(path.resolve(distPath, "index.html"));
+                });
+            } else {
+                log("No local dist/ found; run `vite dev` for frontend development.", "dev");
+            }
+        }
+
+        const port = parseInt(process.env.PORT || "5000", 10);
+        server.listen({ port, host: "0.0.0.0", reusePort: true }, () => {
+            log(`serving on port ${port}`);
+        });
+    })();
 }
 
 // Export Express app for Vercel serverless
