@@ -13,14 +13,14 @@ function log(message: string, source = "express") {
     });
     console.log(`${formattedTime} [${source}] ${message}`);
 }
-console.log("At server/index.ts")
+
 const app = express();
 
 // basic middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-console.log("At server/index.ts before 'simple API logging'")
+
 // simple API logging
 app.use((req, res, next) => {
     const start = Date.now();
@@ -50,14 +50,14 @@ app.use((req, res, next) => {
 
     next();
 });
-console.log("At server/index.ts before 'sanity check'")
+
 // Sanity check
 app.all('/api/*', (req, _res, next) => {
     console.log('API HIT ->', req.method, req.path);
     next();
 });
 
-console.log("At server/index.ts before 'route registering'")
+
 // always register API routes
 registerRoutes(app);
 
