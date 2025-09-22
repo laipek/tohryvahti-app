@@ -365,9 +365,10 @@ export function ReportForm({ onSubmitSuccess }: ReportFormProps) {
       });
 
       if (!response.ok) {
+        const raw = await response.text();
         let errorData: any;
-        try { errorData = await response.json(); }
-        catch { errorData = { message: await response.text() || 'Request failed' }; }
+        try { errorData = raw ? JSON.parse(raw) : {}; }
+        catch { errorData = { message: raw || 'Request failed' }; }
         console.error('API Error:', JSON.stringify(errorData));
         
         // Show appropriate error message based on current language
