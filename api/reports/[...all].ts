@@ -1,2 +1,2 @@
-import app from '../server/index.js'; // HUOM. .js-pääte ESM:ää varten
+import app from '../../server/index.js';
 export default app;
