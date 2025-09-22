@@ -4,6 +4,7 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
+    "vercel-build": "npm run db:push && vite build",
     "dev": "NODE_ENV=development tsx server/index.ts",
     "build": "vite build",
     "preview": "vite preview",
